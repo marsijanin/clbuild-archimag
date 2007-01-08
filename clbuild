@@ -44,7 +44,7 @@ case $1 in
 
         # CLX (update or checkout - I'm not good with darcs)
 	if [ -d clx ]; then
-	    (cd clx; darcs pull)
+	    (cd clx; darcs pull --all)
 	else
 	    darcs get http://common-lisp.net/~crhodes/clx
 	fi
