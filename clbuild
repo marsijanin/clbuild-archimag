@@ -1,0 +1,74 @@
+#!/bin/bash
+#
+# Script to update/install the latest versions of all the most
+# important Common Lisp packages. Uses SBCL but otherwise tries to be
+# somewhat independent of your local environment.
+#
+# Intended to quickly bootstrap a working development environment for
+# Lisp free software hackers.
+#
+# Idea from jhbuild James Henstridge (a Gnome hacker).
+#
+# Contributors:
+#   Luke Gorrie <luke@member.fsf.org> (first cut, mcclim)
+
+set -e
+if [ "$CLNET_USER" == "" ]; then
+    echo "CLNET_USER is not set. Example: jdoe"
+    exit 1
+fi
+
+cd $(dirname $0)
+system_dir="$(pwd)/systems"
+source_dir="$(pwd)/source"
+
+[ -d $system_dir ] || mkdir $system_dir
+[ -d $source_dir ] || mkdir $source_dir
+cd $source_dir
+
+case $1 in
+    build)
+
+        # flexichain
+	cvs -d ${CLNET_USER}@common-lisp.net:/project/flexichain/cvsroot co flexichain
+	ln -f -s $(pwd)/flexichain/flexichain.asd ${system_dir}/flexichain.asd
+	
+        # mcclim
+	cvs -d ${CLNET_USER}@common-lisp.net:/project/mcclim/cvsroot co mcclim
+	ln -f -s $(pwd)/mcclim/mcclim.asd ${system_dir}/mcclim.asd
+	
+        # spatial trees (does not exist in CVS so redownload each time)
+	[ -d spatial-trees*/ ] && rm -rf spatial-trees*/
+	wget -O /tmp/spatial-trees.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/spatial-trees.tar.gz
+	tar vzxf /tmp/spatial-trees.tar.gz
+	ln -f -s $(pwd)/spatial-trees*/spatial-trees.asd ${system_dir}/spatial-trees.asd
+
+        # CLX (update or checkout - I'm not good with darcs)
+	if [ -d clx ]; then
+	    (cd clx; darcs pull)
+	else
+	    darcs get http://common-lisp.net/~crhodes/clx
+	fi
+	ln -f -s $(pwd)/clx/clx.asd ${system_dir}/clx.asd
+
+	sbcl --noinform --noprint \
+	    --eval "(require :asdf)" \
+	    --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	    --eval "(asdf:oos 'asdf:load-op :mcclim)" \
+	    --eval "(asdf:oos 'asdf:load-op :clim-listener)" \
+	    --eval "(sb-ext:quit)"
+	echo "$0 ok"
+	;;
+    mcclim-listener)
+	# Somehow start McCLIM listener that has been successfully
+	# built by `build'
+	sbcl --eval "(require :asdf)" \
+	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "(require :mcclim)" \
+	     --eval "(require :clim-listener)" \
+	     --eval "(clim-listener:run-listener)"
+	;;
+    *)
+	echo "Usage: $0 build"
+esac
+
