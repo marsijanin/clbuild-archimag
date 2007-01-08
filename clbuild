@@ -14,8 +14,7 @@
 
 set -e
 if [ "$CLNET_USER" == "" ]; then
-    echo "CLNET_USER is not set. Example: jdoe"
-    exit 1
+    CLNET_USER=:pserver:anonymous:anonymous
 fi
 
 cd $(dirname $0)
