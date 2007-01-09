@@ -17,6 +17,8 @@ if [ "$CLNET_USER" == "" ]; then
     CLNET_USER=:pserver:anonymous:anonymous
 fi
 
+[ ! -z $SBCL ] || SBCL=sbcl
+
 cd $(dirname $0)
 system_dir="$(pwd)/systems"
 source_dir="$(pwd)/source"
@@ -50,7 +52,7 @@ case $1 in
 	fi
 	ln -f -s $(pwd)/clx/clx.asd ${system_dir}/clx.asd
 
-	sbcl --noinform --noprint \
+	${SBCL} --noinform --noprint \
 	    --eval "(require :asdf)" \
 	    --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
 	    --eval "(asdf:oos 'asdf:load-op :mcclim)" \
@@ -61,7 +63,7 @@ case $1 in
     mcclim-listener)
 	# Somehow start McCLIM listener that has been successfully
 	# built by `build'
-	sbcl --eval "(require :asdf)" \
+	${SBCL} --eval "(require :asdf)" \
 	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
 	     --eval "(require :mcclim)" \
 	     --eval "(require :clim-listener)" \
