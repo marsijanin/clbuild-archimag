@@ -131,7 +131,7 @@ case $1 in
 
 	# CLOSURE
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/closure/cvsroot co closure
-	ln -f -s $(pwd)/*.asd ${system_dir}/
+	ln -f -s $(pwd)/closure/*.asd ${system_dir}/
 
 	# GSHARP
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/gsharp/cvsroot co gsharp
@@ -199,7 +199,6 @@ case $1 in
 	     --eval "(require :asdf)" \
 	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
 	     --eval "(require :mcclim)" \
-	     --eval "(pushnew :rune-is-integer *features*)" \
 	     --eval "(require :closure)" \
 	     --eval "(closure:start)"
 	;;
