@@ -7,10 +7,10 @@
 # Intended to quickly bootstrap a working development environment for
 # Lisp free software hackers.
 #
-# Idea from jhbuild James Henstridge (a Gnome hacker).
+# Idea from jhbuild by James Henstridge (a Gnome hacker).
 #
 # Contributors:
-#   Luke Gorrie <luke@member.fsf.org> (first cut, mcclim)
+#   Luke Gorrie <luke@member.fsf.org>
 
 set -e
 if [ "$CLNET_USER" == "" ]; then
@@ -160,9 +160,11 @@ case $1 in
 	(cd sbcl; sh make.sh; INSTALL_ROOT=${target_dir} sh install.sh)
 	;;
     sbcl)
+	shift;
 	${sbcl} \
 	     --eval "(require :asdf)" \
-	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))"
+	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	    "$@"
 	;;
     slime)
 	shift
@@ -172,8 +174,8 @@ case $1 in
 	    -eval "(setq load-path (cons \"${source_dir}/slime\" load-path))" \
 	    -eval "(setq inhibit-splash-screen t)" \
 	    -eval "(load \"${source_dir}/slime/slime\")" \
-	    -eval "(slime-setup)" \
 	    -eval "(setq inferior-lisp-program \"$0 sbcl\")" \
+	    -eval "(slime-setup)" \
 	    -eval '(slime)' \
 	    ${emacs_args}
 	;;
@@ -205,18 +207,21 @@ case $1 in
 	cat <<EOF
 Usage:
   world         download and compile SBCL and the applications afresh
-  build         download and compile the selected applications
-  buildsbcl     download and compile SBCL
-  recompile     force recompilation of the applications
+  build         download/update and compile the applications
+  buildsbcl     download/update and compile SBCL
   clean         delete all compiled object files
   mrproper      delete all downloaded source and fasl files
 
   slime         run the Superior Lisp Interaction Mode in a fresh Emacs
   sbcl          run SBCL in the terminal (with all packages available to REQUIRE)
-  run-listener  run the McCLIM listener in X11
+  listener      run the McCLIM listener
   gsharp        run the Gsharp score editor 
   closure       run the CLOSURE web browser
                 (requires Debian packages gif2png and libjpeg-progs or equiv)
+
+If you do 'world' or 'buildsbcl' then SBCL will be installed in
+target/ and used for future commands. If you don't run these commands
+(or you remove target/) then clbuild uses the 'sbcl' in your PATH.
 
 EOF
 esac
