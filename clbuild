@@ -17,32 +17,50 @@ if [ "$CLNET_USER" == "" ]; then
     CLNET_USER=:pserver:anonymous:anonymous
 fi
 
-[ ! -z $SBCL ] || SBCL=sbcl
-
 cd $(dirname $0)
 system_dir="$(pwd)/systems"
 source_dir="$(pwd)/source"
+target_dir="$(pwd)/target"
+
+if [ ! -z $SBCL ]; then
+    sbcl=$SBCL
+elif [ -x ${target_dir}/bin/sbcl ]; then
+    sbcl="${target_dir}/bin/sbcl --core ${target_dir}/lib/sbcl/sbcl.core"
+else
+    sbcl=sbcl
+fi
 
 [ -d $system_dir ] || mkdir $system_dir
 [ -d $source_dir ] || mkdir $source_dir
-cd $source_dir
+[ -d $target_dir ] || mkdir $target_dir
 
 case $1 in
+    world)
+	"$0" clean && "$0" buildsbcl && "$0" build
+	;;
+    clean)
+	cd $source_dir
+	find . -name "*.fasl" -exec rm {} \;
+	;;
+    mrproper)
+	rm -r ${source_dir} ${target_dir}
+	;;
     build)
-
+	cd $source_dir
         # flexichain
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/flexichain/cvsroot co flexichain
-	ln -f -s $(pwd)/flexichain/flexichain.asd ${system_dir}/flexichain.asd
+	ln -f -s $(pwd)/flexichain/*.asd ${system_dir}/
 	
         # mcclim
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/mcclim/cvsroot co mcclim
-	ln -f -s $(pwd)/mcclim/mcclim.asd ${system_dir}/mcclim.asd
+	ln -f -s $(pwd)/mcclim/*.asd ${system_dir}/
 	
         # spatial trees (does not exist in CVS so redownload each time)
 	[ -d spatial-trees*/ ] && rm -rf spatial-trees*/
 	wget -O /tmp/spatial-trees.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/spatial-trees.tar.gz
 	tar vzxf /tmp/spatial-trees.tar.gz
-	ln -f -s $(pwd)/spatial-trees*/spatial-trees.asd ${system_dir}/spatial-trees.asd
+	rm /tmp/spatial-trees.tar.gz
+	ln -f -s $(pwd)/spatial-trees*/*.asd ${system_dir}/
 
         # CLX (update or checkout - I'm not good with darcs)
 	if [ -d clx ]; then
@@ -50,26 +68,156 @@ case $1 in
 	else
 	    darcs get http://common-lisp.net/~crhodes/clx
 	fi
-	ln -f -s $(pwd)/clx/clx.asd ${system_dir}/clx.asd
+	ln -f -s $(pwd)/clx/*.asd ${system_dir}/
 
-	${SBCL} --noinform --noprint \
+	# CL-PPCRE
+	wget -O /tmp/cl-ppcre.tar.gz http://weitz.de/files/cl-ppcre.tar.gz
+	tar vzxf /tmp/cl-ppcre.tar.gz
+	rm /tmp/cl-ppcre.tar.gz
+	ln -f -s $(pwd)/cl-ppcre*/*.asd ${system_dir}/
+
+	# Skippy (required by closure)
+	[ -d skippy* ] && rm -rf skippy*/
+	wget -O /tmp/skippy.tgz http://www.xach.com/lisp/skippy.tgz
+	tar vzxf /tmp/skippy.tgz
+	rm /tmp/skippy.tgz
+	ln -f -s $(pwd)/skippy*/*.asd ${system_dir}/
+
+	# FLEXI-STREAMS (for CLOSURE)
+	wget -O /tmp/flexi-streams.tar.gz http://weitz.de/files/flexi-streams.tar.gz
+	tar vzxf /tmp/flexi-streams.tar.gz
+	rm /tmp/flexi-streams.tar.gz
+	ln -f -s $(pwd)/flexi-streams*/*.asd ${system_dir}/
+
+	# TRIVIAL-GRAY-STREAMS (for CLOSURE)
+	wget -O /tmp/trivial-gray-streams.tar.gz http://common-lisp.net/project/cl-plus-ssl/download/trivial-gray-streams.tar.gz
+	tar vzxf /tmp/trivial-gray-streams.tar.gz
+	rm /tmp/trivial-gray-streams.tar.gz
+	ln -f -s $(pwd)/trivial-gray-streams*/*.asd ${system_dir}/
+
+	# ZIP (for CLOSURE)
+	cvs -d ${CLNET_USER}@common-lisp.net:/project/zip/cvsroot co zip
+	ln -f -s $(pwd)/zip/*.asd ${system_dir}/
+
+	# SALZA (for CLOSURE)
+	wget -O /tmp/salza.tar.gz http://www.xach.com/lisp/salza/salza-0.7.2.tar.gz
+	tar vzxf /tmp/salza.tar.gz
+	rm /tmp/salza.tar.gz
+	ln -f -s $(pwd)/salza*/*.asd ${system_dir}/
+
+	# TRIVIAL-SOCKETS (for CLOSURE)
+	wget -O /tmp/trivial-sockets.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/trivial-sockets.tar.gz
+	tar vzxf /tmp/trivial-sockets.tar.gz
+	rm /tmp/trivial-sockets.tar.gz
+	ln -f -s $(pwd)/trivial-sockets*/*.asd ${system_dir}/
+
+	# BORDEAUX-THREADS (for CLOSURE)
+	if [ -d bordeaux-threads ]; then
+	    (cd bordeaux-threads; darcs pull --all)
+	else
+	    darcs get http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads/
+	fi
+	ln -f -s $(pwd)/bordeaux-threads/*.asd ${system_dir}/
+
+	# CXML (for CLOSURE)
+	cvs -d ${CLNET_USER}@common-lisp.net:/project/cxml/cvsroot co cxml
+	ln -f -s $(pwd)/cxml/*.asd ${system_dir}/
+	
+	# PURI (for CLOSURE)
+	wget -O /tmp/puri.tar.gz http://files.b9.com/puri/puri-latest.tar.gz
+	tar vzxf /tmp/puri.tar.gz
+	rm /tmp/puri.tar.gz
+	ln -f -s $(pwd)/puri*/*.asd ${system_dir}/
+
+	# CLOSURE
+	cvs -d ${CLNET_USER}@common-lisp.net:/project/closure/cvsroot co closure
+	ln -f -s $(pwd)/*.asd ${system_dir}/
+
+	# GSHARP
+	cvs -d ${CLNET_USER}@common-lisp.net:/project/gsharp/cvsroot co gsharp
+	ln -f -s $(pwd)/gsharp/*.asd ${system_dir}/
+
+	# slime
+	cvs -d ${CLNET_USER}@common-lisp.net:/project/slime/cvsroot co slime
+
+	${sbcl} --noinform --noprint --disable-debugger \
 	    --eval "(require :asdf)" \
 	    --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
 	    --eval "(asdf:oos 'asdf:load-op :mcclim)" \
+	    --eval "(asdf:oos 'asdf:load-op :cl-ppcre)" \
 	    --eval "(asdf:oos 'asdf:load-op :clim-listener)" \
+	    --eval "(asdf:oos 'asdf:load-op :skippy)" \
+	    --eval "(asdf:oos 'asdf:load-op :gsharp)" \
+	    --eval "(asdf:oos 'asdf:load-op :closure)" \
 	    --eval "(sb-ext:quit)"
 	echo "$0 ok"
 	;;
-    mcclim-listener)
-	# Somehow start McCLIM listener that has been successfully
-	# built by `build'
-	${SBCL} --eval "(require :asdf)" \
+    buildsbcl)
+	cd ${source_dir}
+	cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co sbcl
+	# Enable threads
+	echo '(lambda (list) (pushnew :sb-thread list) list)' > sbcl/customize-target-features.lisp
+	(cd sbcl; sh make.sh; INSTALL_ROOT=${target_dir} sh install.sh)
+	;;
+    sbcl)
+	${sbcl} \
+	     --eval "(require :asdf)" \
+	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))"
+	;;
+    slime)
+	shift
+	emacs_args="$@"
+	emacs=${EMACS-emacs}
+	$emacs \
+	    -eval "(setq load-path (cons \"${source_dir}/slime\" load-path))" \
+	    -eval "(setq inhibit-splash-screen t)" \
+	    -eval "(load \"${source_dir}/slime/slime\")" \
+	    -eval "(slime-setup)" \
+	    -eval "(setq inferior-lisp-program \"$0 sbcl\")" \
+	    -eval '(slime)' \
+	    ${emacs_args}
+	;;
+    listener)
+	${sbcl} --disable-debugger \
+	     --eval "(require :asdf)" \
 	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
 	     --eval "(require :mcclim)" \
 	     --eval "(require :clim-listener)" \
 	     --eval "(clim-listener:run-listener)"
 	;;
+    gsharp)
+	${sbcl} \
+	     --eval "(require :asdf)" \
+	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "(require :gsharp)" \
+	     --eval "(gsharp::gsharp)"
+	;;
+    closure)
+	${sbcl} \
+	     --eval "(require :asdf)" \
+	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "(require :mcclim)" \
+	     --eval "(pushnew :rune-is-integer *features*)" \
+	     --eval "(require :closure)" \
+	     --eval "(closure:start)"
+	;;
     *)
-	echo "Usage: $0 build"
+	cat <<EOF
+Usage:
+  world         download and compile SBCL and the applications afresh
+  build         download and compile the selected applications
+  buildsbcl     download and compile SBCL
+  recompile     force recompilation of the applications
+  clean         delete all compiled object files
+  mrproper      delete all downloaded source and fasl files
+
+  slime         run the Superior Lisp Interaction Mode in a fresh Emacs
+  sbcl          run SBCL in the terminal (with all packages available to REQUIRE)
+  run-listener  run the McCLIM listener in X11
+  gsharp        run the Gsharp score editor 
+  closure       run the CLOSURE web browser
+                (requires Debian packages gif2png and libjpeg-progs or equiv)
+
+EOF
 esac
 
