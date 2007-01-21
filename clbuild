@@ -11,6 +11,7 @@
 #
 # Contributors:
 #   Luke Gorrie <luke@member.fsf.org>
+#   Anthony Chaumas-Pellet <achaumas@wispery.info>
 
 set -e
 if [ "$CLNET_USER" == "" ]; then
@@ -141,7 +142,7 @@ case $1 in
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/slime/cvsroot co slime
 
 	# tab-layout (for Beirc)
-	wget -O /tmp/tab-layout.tar.bz2 --no-check-certificate http://bl0rg.net/~mgr/flux/tab-layout_2005-09-19_02-52+0200.tar.bz2
+	wget -O /tmp/tab-layout.tar.bz2 http://bl0rg.net/~mgr/flux/tab-layout_2005-09-19_02-52+0200.tar.bz2
 	tar vjxf /tmp/tab-layout.tar.bz2
 	rm /tmp/tab-layout.tar.bz2
 	ln -f -s $(pwd)/tab-layout/*.asd ${system_dir}/
