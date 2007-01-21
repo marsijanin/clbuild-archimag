@@ -140,6 +140,36 @@ case $1 in
 	# slime
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/slime/cvsroot co slime
 
+	# tab-layout (for Beirc)
+	wget -O /tmp/tab-layout.tar.bz2 --no-check-certificate http://bl0rg.net/~mgr/flux/tab-layout_2005-09-19_02-52+0200.tar.bz2
+	tar vjxf /tmp/tab-layout.tar.bz2
+	rm /tmp/tab-layout.tar.bz2
+	ln -f -s $(pwd)/tab-layout/*.asd ${system_dir}/
+
+	# split-sequence (for Beirc; does not go through the CCLAN mirror selector because of cookies)
+	wget -O /tmp/split-sequence.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/split-sequence.tar.gz
+	tar vzxf /tmp/split-sequence.tar.gz
+	rm /tmp/split-sequence.tar.gz
+	ln -f -s $(pwd)/split-sequence/*.asd ${system_dir}/
+
+	# cl-fad (for Beirc)
+	wget -O /tmp/cl-fad.tar.gz http://weitz.de/files/cl-fad.tar.gz
+	tar vzxf /tmp/cl-fad.tar.gz
+	rm /tmp/cl-fad.tar.gz
+	ln -f -s $(pwd)/cl-fad*/*.asd ${system_dir}/
+
+	# usocket (for Beirc)
+	svn co svn://common-lisp.net/project/usocket/svn/usocket/trunk/ usocket/
+	ln -f -s $(pwd)/usocket/*.asd ${system_dir}/
+
+	# cl-irc (for Beirc)
+	svn co svn://common-lisp.net/project/cl-irc/svn/trunk/ cl-irc/
+	ln -f -s $(pwd)/cl-irc/*.asd ${system_dir}
+
+	# Beirc
+	cvs -d ${CLNET_USER}@common-lisp.net:/project/beirc/cvsroot co beirc
+	ln -f -s $(pwd)/beirc/*.asd ${system_dir}
+
 	${sbcl} --noinform --noprint --disable-debugger \
 	    --eval "(require :asdf)" \
 	    --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
@@ -202,6 +232,13 @@ case $1 in
 	     --eval "(require :closure)" \
 	     --eval "(closure:start)"
 	;;
+    beirc)
+	${sbcl} \
+	     --eval "(require :asdf)" \
+	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "(require :beirc)" \
+	     --eval "(beirc:beirc)"
+	;;
     *)
 	cat <<EOF
 Usage:
@@ -217,6 +254,7 @@ Usage:
   gsharp        run the Gsharp score editor 
   closure       run the CLOSURE web browser
                 (requires Debian packages gif2png and libjpeg-progs or equiv)
+  beirc         run the Beirc IRC client
 
 If you do 'world' or 'buildsbcl' then SBCL will be installed in
 target/ and used for future commands. If you don't run these commands
