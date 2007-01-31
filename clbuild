@@ -135,6 +135,13 @@ case $1 in
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/closure/cvsroot co closure
 	ln -f -s $(pwd)/closure/*.asd ${system_dir}/
 
+        # MIDI (for GSHARP)
+	[ -d midi*/ ] && rm -rf midi*/
+	wget -O /tmp/midi.tar.gz http://www.doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
+	tar vzxf /tmp/midi.tar.gz
+	rm /tmp/midi.tar.gz
+	ln -f -s $(pwd)/midi*/*.asd ${system_dir}/
+
 	# GSHARP
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/gsharp/cvsroot co gsharp
 	ln -f -s $(pwd)/gsharp/*.asd ${system_dir}/
