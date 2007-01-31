@@ -12,6 +12,7 @@
 # Contributors:
 #   Luke Gorrie <luke@member.fsf.org>
 #   Anthony Chaumas-Pellet <achaumas@wispery.info>
+#   Christophe Rhodes <csr21@cantab.net>
 
 set -e
 if [ "$CLNET_USER" == "" ]; then
@@ -44,7 +45,7 @@ case $1 in
 	find . -name "*.fasl" -exec rm {} \;
 	;;
     mrproper)
-	rm -r ${source_dir} ${target_dir}
+	rm -rf ${source_dir} ${target_dir}
 	;;
     build)
 	cd $source_dir
