@@ -13,6 +13,7 @@
 #   Luke Gorrie <luke@member.fsf.org>
 #   Anthony Chaumas-Pellet <achaumas@wispery.info>
 #   Christophe Rhodes <csr21@cantab.net>
+#   David Lichteblau <david@lichteblau.com>
 
 set -e
 if [ "$CLNET_USER" == "" ]; then
@@ -24,12 +25,37 @@ system_dir="$(pwd)/systems"
 source_dir="$(pwd)/source"
 target_dir="$(pwd)/target"
 
-if [ ! -z $SBCL ]; then
-    sbcl=$SBCL
+# SBCL-specific options
+build_options="--noinform --noprint --disable-debugger"
+run_options="--disable-debugger"
+quit="(sb-ext:quit)"
+
+# CLIM configuration
+case x$CLIM_BACKEND in
+    xgtkairo)
+        EXTRA_CLIM_FEATURES="(pushnew :gtkairo *features*)"
+        ;;
+    x|xclx)
+        EXTRA_CLIM_FEATURES="nil"
+        ;;
+    *)
+        echo "invalid $CLIM_BACKEND, expected clx or gtkairo." 1>&2
+        exit 1
+        ;;
+esac
+
+if [ ! -z $CCL ]; then
+    # user wants OpenMCL instead of SBCL.  Make it so.
+    lisp=$CCL
+    build_options="--batch" # fixme, that's not good enough
+    run_options="--batch"   # ditto
+    quit="(ccl:quit)"
+elif [ ! -z $SBCL ]; then
+    lisp=$SBCL
 elif [ -x ${target_dir}/bin/sbcl ]; then
-    sbcl="${target_dir}/bin/sbcl --core ${target_dir}/lib/sbcl/sbcl.core"
+    lisp="${target_dir}/bin/sbcl --core ${target_dir}/lib/sbcl/sbcl.core"
 else
-    sbcl=sbcl
+    lisp=sbcl
 fi
 
 [ -d $system_dir ] || mkdir $system_dir
@@ -43,6 +69,7 @@ case $1 in
     clean)
 	cd $source_dir
 	find . -name "*.fasl" -exec rm {} \;
+	find . -name "*.lx64fsl" -exec rm {} \;
 	;;
     mrproper)
 	rm -rf ${source_dir} ${target_dir}
@@ -179,7 +206,15 @@ case $1 in
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/beirc/cvsroot co beirc
 	ln -f -s $(pwd)/beirc/*.asd ${system_dir}
 
-	${sbcl} --noinform --noprint --disable-debugger \
+	# cffi (for gtkairo)
+	if [ -d cffi ]; then
+	    (cd cffi; darcs pull --all)
+	else
+	    darcs get http://common-lisp.net/project/cffi/darcs/cffi/
+	fi
+	ln -f -s $(pwd)/cffi/*.asd ${system_dir}
+
+	${lisp} $build_options \
 	    --eval "(require :asdf)" \
 	    --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
 	    --eval "(asdf:oos 'asdf:load-op :mcclim)" \
@@ -188,10 +223,14 @@ case $1 in
 	    --eval "(asdf:oos 'asdf:load-op :skippy)" \
 	    --eval "(asdf:oos 'asdf:load-op :gsharp)" \
 	    --eval "(asdf:oos 'asdf:load-op :closure)" \
-	    --eval "(sb-ext:quit)"
+	    --eval $quit
 	echo "$0 ok"
 	;;
     buildsbcl)
+        if [ -n "$CCL" ]; then
+            echo "Cowardly refusing to build SBCL when \$CCL is set." 1>&2
+            exit 1
+        fi
 	cd ${source_dir}
 	cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co sbcl
 	# Enable threads
@@ -199,8 +238,23 @@ case $1 in
 	(cd sbcl; sh make.sh; INSTALL_ROOT=${target_dir} sh install.sh)
 	;;
     sbcl)
+        if [ -n "$CCL" ]; then
+            echo "Cowardly refusing to run SBCL when \$CCL is set." 1>&2
+            exit 1
+        fi
 	shift;
-	${sbcl} \
+	${lisp} \
+	     --eval "(require :asdf)" \
+	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	    "$@"
+	;;
+    openmcl)
+        if [ -z "$CCL" ]; then
+            echo "Cannot run OpenMCL because \$CCL is not set." 1>&2
+            exit 1
+        fi
+	shift;
+	${lisp} \
 	     --eval "(require :asdf)" \
 	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
 	    "$@"
@@ -219,33 +273,36 @@ case $1 in
 	    ${emacs_args}
 	;;
     listener)
-	${sbcl} --disable-debugger \
+	${lisp} $run_options \
 	     --eval "(require :asdf)" \
 	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
-	     --eval "(require :mcclim)" \
-	     --eval "(require :clim-listener)" \
+	     --eval "$EXTRA_CLIM_FEATURES" \
+	     --eval "(asdf:operate 'asdf:load-op :mcclim)" \
+	     --eval "(asdf:operate 'asdf:load-op :clim-listener)" \
 	     --eval "(clim-listener:run-listener)"
 	;;
     gsharp)
-	${sbcl} \
+	${lisp} \
 	     --eval "(require :asdf)" \
 	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
-	     --eval "(require :gsharp)" \
+	     --eval "$EXTRA_CLIM_FEATURES" \
+	     --eval "(asdf:operate 'asdf:load-op :gsharp)" \
 	     --eval "(gsharp::gsharp)"
 	;;
     closure)
-	${sbcl} \
+	${lisp} \
 	     --eval "(require :asdf)" \
 	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
-	     --eval "(require :mcclim)" \
-	     --eval "(require :closure)" \
+	     --eval "$EXTRA_CLIM_FEATURES" \
+	     --eval "(asdf:operate 'asdf:load-op :closure)" \
 	     --eval "(closure:start)"
 	;;
     beirc)
-	${sbcl} \
+	${lisp} \
 	     --eval "(require :asdf)" \
 	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
-	     --eval "(require :beirc)" \
+	     --eval "$EXTRA_CLIM_FEATURES" \
+	     --eval "(asdf:operate 'asdf:load-op :beirc)" \
 	     --eval "(beirc:beirc)"
 	;;
     *)
@@ -259,6 +316,7 @@ Usage:
 
   slime         run the Superior Lisp Interaction Mode in a fresh Emacs
   sbcl          run SBCL in the terminal (with all packages available to REQUIRE)
+  openmcl       run OpenMCL in the terminal (assumes \$CCL is set)
   listener      run the McCLIM listener
   gsharp        run the Gsharp score editor 
   closure       run the CLOSURE web browser
@@ -268,6 +326,13 @@ Usage:
 If you do 'world' or 'buildsbcl' then SBCL will be installed in
 target/ and used for future commands. If you don't run these commands
 (or you remove target/) then clbuild uses the 'sbcl' in your PATH.
+
+Set CCL to your OpenMCL binary to use OpenMCL instead of SBCL. 
+Example: CCL=~/ccl/lx86cl64 ./clbuild build
+(Not supported with targets 'buildsbcl' and 'sbcl'.)
+
+Set CLIM_BACKEND=gtkairo to enable clim-gtkairo instead of clim-clx.
+(Requires GTK+ >= 2.8.)
 
 EOF
 esac
