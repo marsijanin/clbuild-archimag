@@ -223,6 +223,7 @@ case $1 in
 	    --eval "(asdf:oos 'asdf:load-op :skippy)" \
 	    --eval "(asdf:oos 'asdf:load-op :gsharp)" \
 	    --eval "(asdf:oos 'asdf:load-op :closure)" \
+	    --eval "(asdf:oos 'asdf:load-op :beirc)" \
 	    --eval $quit
 	echo "$0 ok"
 	;;
