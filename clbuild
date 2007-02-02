@@ -173,6 +173,10 @@ case $1 in
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/gsharp/cvsroot co gsharp
 	ln -f -s $(pwd)/gsharp/*.asd ${system_dir}/
 
+	# Climacs
+	cvs -d ${CLNET_USER}@common-lisp.net:/project/climacs/cvsroot co climac\s
+	ln -f -s $(pwd)/climacs/*.asd ${system_dir}
+
 	# slime
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/slime/cvsroot co slime
 
@@ -224,6 +228,7 @@ case $1 in
 	    --eval "(asdf:oos 'asdf:load-op :gsharp)" \
 	    --eval "(asdf:oos 'asdf:load-op :closure)" \
 	    --eval "(asdf:oos 'asdf:load-op :beirc)" \
+	    --eval "(asdf:oos 'asdf:load-op :climacs)" \
 	    --eval $quit
 	echo "$0 ok"
 	;;
@@ -290,6 +295,14 @@ case $1 in
 	     --eval "(asdf:operate 'asdf:load-op :gsharp)" \
 	     --eval "(gsharp::gsharp)"
 	;;
+    climacs)
+        ${lisp} \
+	     --eval "(require :asdf)" \
+	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "$EXTRA_CLIM_FEATURES" \
+	     --eval "(asdf:operate 'asdf:load-op :climacs)" \
+	     --eval "(climacs:climacs)"
+	;;
     closure)
 	${lisp} \
 	     --eval "(require :asdf)" \
@@ -318,8 +331,10 @@ Usage:
   slime         run the Superior Lisp Interaction Mode in a fresh Emacs
   sbcl          run SBCL in the terminal (with all packages available to REQUIRE)
   openmcl       run OpenMCL in the terminal (assumes \$CCL is set)
+
   listener      run the McCLIM listener
   gsharp        run the Gsharp score editor 
+  climacs       run the Climacs text editor
   closure       run the CLOSURE web browser
                 (requires Debian packages gif2png and libjpeg-progs or equiv)
   beirc         run the Beirc IRC client
@@ -337,4 +352,3 @@ Set CLIM_BACKEND=gtkairo to enable clim-gtkairo instead of clim-clx.
 
 EOF
 esac
-
