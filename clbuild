@@ -164,7 +164,7 @@ case $1 in
 
         # MIDI (for GSHARP)
 	[ -d midi*/ ] && rm -rf midi*/
-	wget -O /tmp/midi.tar.gz http://www.doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
+	wget -O /tmp/midi.tar.gz http://doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
 	tar vzxf /tmp/midi.tar.gz
 	rm /tmp/midi.tar.gz
 	ln -f -s $(pwd)/midi*/*.asd ${system_dir}/
