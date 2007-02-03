@@ -14,6 +14,7 @@
 #   Anthony Chaumas-Pellet <achaumas@wispery.info>
 #   Christophe Rhodes <csr21@cantab.net>
 #   David Lichteblau <david@lichteblau.com>
+#   Eric Marsden <eric.marsden@free.fr>
 
 set -e
 if [ "$CLNET_USER" == "" ]; then
@@ -210,6 +211,14 @@ case $1 in
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/beirc/cvsroot co beirc
 	ln -f -s $(pwd)/beirc/*.asd ${system_dir}
 
+        # CLIMPlayer
+	if [ -d climplayer ]; then
+	    (cd climplayer; darcs pull --all)
+	else
+	    darcs get http://www.spacecentre.se/thomas/repos/climplayer
+	fi
+	ln -f -s $(pwd)/climplayer/*.asd ${system_dir}/
+
 	# cffi (for gtkairo)
 	if [ -d cffi ]; then
 	    (cd cffi; darcs pull --all)
@@ -229,6 +238,7 @@ case $1 in
 	    --eval "(asdf:oos 'asdf:load-op :closure)" \
 	    --eval "(asdf:oos 'asdf:load-op :beirc)" \
 	    --eval "(asdf:oos 'asdf:load-op :climacs)" \
+	    --eval "(asdf:oos 'asdf:load-op :climplayer)" \
 	    --eval $quit
 	echo "$0 ok"
 	;;
@@ -319,6 +329,14 @@ case $1 in
 	     --eval "(asdf:operate 'asdf:load-op :beirc)" \
 	     --eval "(beirc:beirc)"
 	;;
+    climplayer)
+	${lisp} \
+	     --eval "(require :asdf)" \
+	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "$EXTRA_CLIM_FEATURES" \
+	     --eval "(asdf:operate 'asdf:load-op :climplayer)" \
+	     --eval "(climplayer:climplayer)"
+	;;
     *)
 	cat <<EOF
 Usage:
@@ -336,8 +354,10 @@ Usage:
   gsharp        run the Gsharp score editor 
   climacs       run the Climacs text editor
   closure       run the CLOSURE web browser
-                (requires Debian packages gif2png and libjpeg-progs or equiv)
+                (required Debian packages: gif2png,libjpeg-progs)
   beirc         run the Beirc IRC client
+  climplayer    run the CLIMPlayer music player
+                (required Debian packages: mplayer, fileschanged, fam)
 
 If you do 'world' or 'buildsbcl' then SBCL will be installed in
 target/ and used for future commands. If you don't run these commands
