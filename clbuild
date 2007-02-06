@@ -54,6 +54,7 @@ if [ ! -z $CCL ]; then
 elif [ ! -z $SBCL ]; then
     lisp=$SBCL
 elif [ -x ${target_dir}/bin/sbcl ]; then
+    export SBCL_HOME=${target_dir}/lib/sbcl/
     lisp="${target_dir}/bin/sbcl --core ${target_dir}/lib/sbcl/sbcl.core"
 else
     lisp=sbcl
@@ -251,7 +252,7 @@ case $1 in
 	cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co sbcl
 	# Enable threads
 	echo '(lambda (list) (pushnew :sb-thread list) list)' > sbcl/customize-target-features.lisp
-	(cd sbcl; sh make.sh; INSTALL_ROOT=${target_dir} sh install.sh)
+	(cd sbcl; sh make.sh; SBCL_HOME= INSTALL_ROOT=${target_dir} sh install.sh)
 	;;
     sbcl)
         if [ -n "$CCL" ]; then
