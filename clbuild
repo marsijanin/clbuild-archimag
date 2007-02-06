@@ -64,6 +64,14 @@ fi
 [ -d $source_dir ] || mkdir $source_dir
 [ -d $target_dir ] || mkdir $target_dir
 
+clbuild_lisp() {
+    ${lisp} \
+	--eval "(require :asdf)" \
+	--eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	--eval "$EXTRA_CLIM_FEATURES" \
+	"$@"
+}
+
 case $1 in
     world)
 	"$0" clean && "$0" buildsbcl && "$0" build
@@ -255,17 +263,17 @@ case $1 in
 	echo '(lambda (list) (pushnew :sb-thread list) list)' > sbcl/customize-target-features.lisp
 	(cd sbcl; sh make.sh; SBCL_HOME= INSTALL_ROOT=${target_dir} sh install.sh)
 	;;
+    lisp)
+	shift;
+        clbuild_lisp "$@"
+        ;;
     sbcl)
         if [ -n "$CCL" ]; then
             echo "Cowardly refusing to run SBCL when \$CCL is set." 1>&2
             exit 1
         fi
 	shift;
-	${lisp} \
-	     --eval "(require :asdf)" \
-	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
-	     --eval "$EXTRA_CLIM_FEATURES" \
-	    "$@"
+        clbuild_lisp "$@"
 	;;
     openmcl)
         if [ -z "$CCL" ]; then
@@ -273,11 +281,7 @@ case $1 in
             exit 1
         fi
 	shift;
-	${lisp} \
-	     --eval "(require :asdf)" \
-	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
-	     --eval "$EXTRA_CLIM_FEATURES" \
-	    "$@"
+        clbuild_lisp "$@"
 	;;
     slime)
 	shift
@@ -287,7 +291,7 @@ case $1 in
 	    -eval "(setq load-path (cons \"${source_dir}/slime\" load-path))" \
 	    -eval "(setq inhibit-splash-screen t)" \
 	    -eval "(load \"${source_dir}/slime/slime\")" \
-	    -eval "(setq inferior-lisp-program \"$0 sbcl\")" \
+	    -eval "(setq inferior-lisp-program \"$0 lisp\")" \
 	    -eval "(slime-setup)" \
 	    -eval '(slime)' \
 	    ${emacs_args}
@@ -351,8 +355,9 @@ Usage:
   mrproper      delete all downloaded source and fasl files
 
   slime         run the Superior Lisp Interaction Mode in a fresh Emacs
-  sbcl          run SBCL in the terminal (with all packages available to REQUIRE)
-  openmcl       run OpenMCL in the terminal (assumes \$CCL is set)
+  lisp          run Lisp in the terminal
+  sbcl          alias for "lisp" (with all packages available to REQUIRE)
+  openmcl       alias for "lisp"
 
   listener      run the McCLIM listener
   gsharp        run the Gsharp score editor 
