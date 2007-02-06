@@ -231,6 +231,7 @@ case $1 in
 	${lisp} $build_options \
 	    --eval "(require :asdf)" \
 	    --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+            --eval "$EXTRA_CLIM_FEATURES" \
 	    --eval "(asdf:oos 'asdf:load-op :mcclim)" \
 	    --eval "(asdf:oos 'asdf:load-op :cl-ppcre)" \
 	    --eval "(asdf:oos 'asdf:load-op :clim-listener)" \
@@ -263,6 +264,7 @@ case $1 in
 	${lisp} \
 	     --eval "(require :asdf)" \
 	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "$EXTRA_CLIM_FEATURES" \
 	    "$@"
 	;;
     openmcl)
@@ -274,6 +276,7 @@ case $1 in
 	${lisp} \
 	     --eval "(require :asdf)" \
 	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "$EXTRA_CLIM_FEATURES" \
 	    "$@"
 	;;
     slime)
