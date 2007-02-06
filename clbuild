@@ -85,6 +85,13 @@ case $1 in
 	rm -rf ${source_dir} ${target_dir}
 	;;
     build)
+        TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
+
+        cleanup() {
+            rm -rf $TMPDIR
+        }
+        trap cleanup exit
+
 	cd $source_dir
         # flexichain
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/flexichain/cvsroot co flexichain
@@ -96,9 +103,9 @@ case $1 in
 	
         # spatial trees (does not exist in CVS so redownload each time)
 	[ -d spatial-trees*/ ] && rm -rf spatial-trees*/
-	wget -O /tmp/spatial-trees.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/spatial-trees.tar.gz
-	tar vzxf /tmp/spatial-trees.tar.gz
-	rm /tmp/spatial-trees.tar.gz
+	wget -O $TMPDIR/spatial-trees.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/spatial-trees.tar.gz
+	tar vzxf $TMPDIR/spatial-trees.tar.gz
+	rm $TMPDIR/spatial-trees.tar.gz
 	ln -f -s $(pwd)/spatial-trees*/*.asd ${system_dir}/
 
         # CLX (update or checkout - I'm not good with darcs)
@@ -110,28 +117,28 @@ case $1 in
 	ln -f -s $(pwd)/clx/*.asd ${system_dir}/
 
 	# CL-PPCRE
-	wget -O /tmp/cl-ppcre.tar.gz http://weitz.de/files/cl-ppcre.tar.gz
-	tar vzxf /tmp/cl-ppcre.tar.gz
-	rm /tmp/cl-ppcre.tar.gz
+	wget -O $TMPDIR/cl-ppcre.tar.gz http://weitz.de/files/cl-ppcre.tar.gz
+	tar vzxf $TMPDIR/cl-ppcre.tar.gz
+	rm $TMPDIR/cl-ppcre.tar.gz
 	ln -f -s $(pwd)/cl-ppcre*/*.asd ${system_dir}/
 
 	# Skippy (required by closure)
 	[ -d skippy* ] && rm -rf skippy*/
-	wget -O /tmp/skippy.tgz http://www.xach.com/lisp/skippy.tgz
-	tar vzxf /tmp/skippy.tgz
-	rm /tmp/skippy.tgz
+	wget -O $TMPDIR/skippy.tgz http://www.xach.com/lisp/skippy.tgz
+	tar vzxf $TMPDIR/skippy.tgz
+	rm $TMPDIR/skippy.tgz
 	ln -f -s $(pwd)/skippy*/*.asd ${system_dir}/
 
 	# FLEXI-STREAMS (for CLOSURE)
-	wget -O /tmp/flexi-streams.tar.gz http://weitz.de/files/flexi-streams.tar.gz
-	tar vzxf /tmp/flexi-streams.tar.gz
-	rm /tmp/flexi-streams.tar.gz
+	wget -O $TMPDIR/flexi-streams.tar.gz http://weitz.de/files/flexi-streams.tar.gz
+	tar vzxf $TMPDIR/flexi-streams.tar.gz
+	rm $TMPDIR/flexi-streams.tar.gz
 	ln -f -s $(pwd)/flexi-streams*/*.asd ${system_dir}/
 
 	# TRIVIAL-GRAY-STREAMS (for CLOSURE)
-	wget -O /tmp/trivial-gray-streams.tar.gz http://common-lisp.net/project/cl-plus-ssl/download/trivial-gray-streams.tar.gz
-	tar vzxf /tmp/trivial-gray-streams.tar.gz
-	rm /tmp/trivial-gray-streams.tar.gz
+	wget -O $TMPDIR/trivial-gray-streams.tar.gz http://common-lisp.net/project/cl-plus-ssl/download/trivial-gray-streams.tar.gz
+	tar vzxf $TMPDIR/trivial-gray-streams.tar.gz
+	rm $TMPDIR/trivial-gray-streams.tar.gz
 	ln -f -s $(pwd)/trivial-gray-streams*/*.asd ${system_dir}/
 
 	# ZIP (for CLOSURE)
@@ -139,15 +146,15 @@ case $1 in
 	ln -f -s $(pwd)/zip/*.asd ${system_dir}/
 
 	# SALZA (for CLOSURE)
-	wget -O /tmp/salza.tar.gz http://www.xach.com/lisp/salza/salza-0.7.2.tar.gz
-	tar vzxf /tmp/salza.tar.gz
-	rm /tmp/salza.tar.gz
+	wget -O $TMPDIR/salza.tar.gz http://www.xach.com/lisp/salza/salza-0.7.2.tar.gz
+	tar vzxf $TMPDIR/salza.tar.gz
+	rm $TMPDIR/salza.tar.gz
 	ln -f -s $(pwd)/salza*/*.asd ${system_dir}/
 
 	# TRIVIAL-SOCKETS (for CLOSURE)
-	wget -O /tmp/trivial-sockets.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/trivial-sockets.tar.gz
-	tar vzxf /tmp/trivial-sockets.tar.gz
-	rm /tmp/trivial-sockets.tar.gz
+	wget -O $TMPDIR/trivial-sockets.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/trivial-sockets.tar.gz
+	tar vzxf $TMPDIR/trivial-sockets.tar.gz
+	rm $TMPDIR/trivial-sockets.tar.gz
 	ln -f -s $(pwd)/trivial-sockets*/*.asd ${system_dir}/
 
 	# BORDEAUX-THREADS (for CLOSURE)
@@ -163,9 +170,9 @@ case $1 in
 	ln -f -s $(pwd)/cxml/*.asd ${system_dir}/
 	
 	# PURI (for CLOSURE)
-	wget -O /tmp/puri.tar.gz http://files.b9.com/puri/puri-latest.tar.gz
-	tar vzxf /tmp/puri.tar.gz
-	rm /tmp/puri.tar.gz
+	wget -O $TMPDIR/puri.tar.gz http://files.b9.com/puri/puri-latest.tar.gz
+	tar vzxf $TMPDIR/puri.tar.gz
+	rm $TMPDIR/puri.tar.gz
 	ln -f -s $(pwd)/puri*/*.asd ${system_dir}/
 
 	# CLOSURE
@@ -174,9 +181,9 @@ case $1 in
 
         # MIDI (for GSHARP)
 	[ -d midi*/ ] && rm -rf midi*/
-	wget -O /tmp/midi.tar.gz http://doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
-	tar vzxf /tmp/midi.tar.gz
-	rm /tmp/midi.tar.gz
+	wget -O $TMPDIR/midi.tar.gz http://doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
+	tar vzxf $TMPDIR/midi.tar.gz
+	rm $TMPDIR/midi.tar.gz
 	ln -f -s $(pwd)/midi*/*.asd ${system_dir}/
 
 	# GSHARP
@@ -191,21 +198,21 @@ case $1 in
 	cvs -d ${CLNET_USER}@common-lisp.net:/project/slime/cvsroot co slime
 
 	# tab-layout (for Beirc)
-	wget -O /tmp/tab-layout.tar.bz2 --no-check-certificate http://bl0rg.net/~mgr/flux/tab-layout_2005-09-19_02-52+0200.tar.bz2
-	tar vjxf /tmp/tab-layout.tar.bz2
-	rm /tmp/tab-layout.tar.bz2
+	wget -O $TMPDIR/tab-layout.tar.bz2 --no-check-certificate http://bl0rg.net/~mgr/flux/tab-layout_2005-09-19_02-52+0200.tar.bz2
+	tar vjxf $TMPDIR/tab-layout.tar.bz2
+	rm $TMPDIR/tab-layout.tar.bz2
 	ln -f -s $(pwd)/tab-layout/*.asd ${system_dir}/
 
 	# split-sequence (for Beirc; does not go through the CCLAN mirror selector because of cookies)
-	wget -O /tmp/split-sequence.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/split-sequence.tar.gz
-	tar vzxf /tmp/split-sequence.tar.gz
-	rm /tmp/split-sequence.tar.gz
+	wget -O $TMPDIR/split-sequence.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/split-sequence.tar.gz
+	tar vzxf $TMPDIR/split-sequence.tar.gz
+	rm $TMPDIR/split-sequence.tar.gz
 	ln -f -s $(pwd)/split-sequence/*.asd ${system_dir}/
 
 	# cl-fad (for Beirc)
-	wget -O /tmp/cl-fad.tar.gz http://weitz.de/files/cl-fad.tar.gz
-	tar vzxf /tmp/cl-fad.tar.gz
-	rm /tmp/cl-fad.tar.gz
+	wget -O $TMPDIR/cl-fad.tar.gz http://weitz.de/files/cl-fad.tar.gz
+	tar vzxf $TMPDIR/cl-fad.tar.gz
+	rm $TMPDIR/cl-fad.tar.gz
 	ln -f -s $(pwd)/cl-fad*/*.asd ${system_dir}/
 
 	# usocket (for Beirc)
