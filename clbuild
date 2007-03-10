@@ -265,7 +265,7 @@ case $1 in
 
 	${lisp} $build_options \
 	    --eval "(require :asdf)" \
-	    --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	    --eval "$set_central_registry" \
             --eval "$EXTRA_CLIM_FEATURES" \
 	    --eval "(asdf:oos 'asdf:load-op :mcclim)" \
 	    --eval "(asdf:oos 'asdf:load-op :cl-ppcre)" \
