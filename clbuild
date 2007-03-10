@@ -64,10 +64,30 @@ fi
 [ -d $source_dir ] || mkdir $source_dir
 [ -d $target_dir ] || mkdir $target_dir
 
+if test x`uname -o` = xCygwin; then
+        # need to translate cygwin's system_dir into a real Windows namestring
+        # for use with SBCL below
+	echo Cygwin detected, computing Windows pathname...
+	sbcl --noinform --no-userinit --nosysinit >/dev/null 2>&1 <<eof
+(with-open-file (s "cygwin.tmp"
+                 :direction :output
+                 :if-exists :rename-and-delete
+                 :if-does-not-exist :create)
+  (write-string
+    (substitute #\\/ #\\\\ (namestring (merge-pathnames "systems/")))
+    s))
+eof
+	system_namestring="`cat cygwin.tmp`"
+	echo "done -- systems located in $system_namestring"
+else
+	system_namestring="$system_dir/"
+fi
+set_central_registry="(setq asdf:*central-registry* '(#p\"${system_namestring}\"))"
+
 clbuild_lisp() {
     ${lisp} \
 	--eval "(require :asdf)" \
-	--eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	--eval "$set_central_registry" \
 	--eval "$EXTRA_CLIM_FEATURES" \
 	"$@"
 }
@@ -306,7 +326,7 @@ case $1 in
     listener)
 	${lisp} $run_options \
 	     --eval "(require :asdf)" \
-	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "$set_central_registry" \
 	     --eval "$EXTRA_CLIM_FEATURES" \
 	     --eval "(asdf:operate 'asdf:load-op :mcclim)" \
 	     --eval "(asdf:operate 'asdf:load-op :clim-listener)" \
@@ -315,7 +335,7 @@ case $1 in
     gsharp)
 	${lisp} \
 	     --eval "(require :asdf)" \
-	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "$set_central_registry" \
 	     --eval "$EXTRA_CLIM_FEATURES" \
 	     --eval "(asdf:operate 'asdf:load-op :gsharp)" \
 	     --eval "(gsharp::gsharp)"
@@ -323,7 +343,7 @@ case $1 in
     climacs)
         ${lisp} \
 	     --eval "(require :asdf)" \
-	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "$set_central_registry" \
 	     --eval "$EXTRA_CLIM_FEATURES" \
 	     --eval "(asdf:operate 'asdf:load-op :climacs)" \
 	     --eval "(climacs:climacs)"
@@ -331,7 +351,7 @@ case $1 in
     closure)
 	${lisp} \
 	     --eval "(require :asdf)" \
-	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "$set_central_registry" \
 	     --eval "$EXTRA_CLIM_FEATURES" \
 	     --eval "(asdf:operate 'asdf:load-op :closure)" \
 	     --eval "(closure:start)"
@@ -339,7 +359,7 @@ case $1 in
     beirc)
 	${lisp} \
 	     --eval "(require :asdf)" \
-	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "$set_central_registry" \
 	     --eval "$EXTRA_CLIM_FEATURES" \
 	     --eval "(asdf:operate 'asdf:load-op :beirc)" \
 	     --eval "(beirc:beirc)"
@@ -347,7 +367,7 @@ case $1 in
     climplayer)
 	${lisp} \
 	     --eval "(require :asdf)" \
-	     --eval "(setq asdf:*central-registry* '(\"${system_dir}/\"))" \
+	     --eval "$set_central_registry" \
 	     --eval "$EXTRA_CLIM_FEATURES" \
 	     --eval "(asdf:operate 'asdf:load-op :climplayer)" \
 	     --eval "(climplayer:climplayer)"
