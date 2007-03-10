@@ -259,7 +259,8 @@ case $1 in
 	if [ -d cffi ]; then
 	    (cd cffi; darcs pull --all)
 	else
-	    darcs get http://common-lisp.net/project/cffi/darcs/cffi/
+	    # darcs get http://common-lisp.net/project/cffi/darcs/cffi/
+	    darcs get http://common-lisp.net/~loliveira/darcs/cffi-newtypes/ cffi
 	fi
 	ln -f -s $(pwd)/cffi/*.asd ${system_dir}
 
