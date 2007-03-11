@@ -74,13 +74,17 @@ if test x`uname -o` = xCygwin; then
                  :if-exists :rename-and-delete
                  :if-does-not-exist :create)
   (write-string
-    (substitute #\\/ #\\\\ (namestring (merge-pathnames "systems/")))
+    (substitute #\\/ #\\\\ (namestring *default-pathname-defaults*))
     s))
 eof
-	system_namestring="`cat cygwin.tmp`"
+	system_namestring="`cat cygwin.tmp`systems/"
+	source_namestring="`cat cygwin.tmp`source/"
+	self="c:/cygwin/bin/bash $0"
 	echo "done -- systems located in $system_namestring"
 else
 	system_namestring="$system_dir/"
+	source_namestring="$source_dir/"
+	self="$0"
 fi
 set_central_registry="(setq asdf:*central-registry* '(#p\"${system_namestring}\"))"
 
@@ -316,10 +320,10 @@ case $1 in
 	emacs_args="$@"
 	emacs=${EMACS-emacs}
 	$emacs \
-	    -eval "(setq load-path (cons \"${source_dir}/slime\" load-path))" \
+	    -eval "(setq load-path (cons \"${source_namestring}slime\" load-path))" \
 	    -eval "(setq inhibit-splash-screen t)" \
-	    -eval "(load \"${source_dir}/slime/slime\")" \
-	    -eval "(setq inferior-lisp-program \"$0 lisp\")" \
+	    -eval "(load \"${source_namestring}slime/slime\")" \
+	    -eval "(setq inferior-lisp-program \"$self lisp\")" \
 	    -eval "(slime-setup)" \
 	    -eval '(slime)' \
 	    ${emacs_args}
