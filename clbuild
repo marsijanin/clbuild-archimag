@@ -33,6 +33,9 @@ quit="(sb-ext:quit)"
 
 # CLIM configuration
 case x$CLIM_BACKEND in
+    xgraphic-forms)
+        EXTRA_CLIM_FEATURES="(pushnew :clim-graphic-forms *features*)"
+        ;;
     xgtkairo)
         EXTRA_CLIM_FEATURES="(pushnew :gtkairo *features*)"
         ;;
@@ -40,7 +43,7 @@ case x$CLIM_BACKEND in
         EXTRA_CLIM_FEATURES="nil"
         ;;
     *)
-        echo "invalid $CLIM_BACKEND, expected clx or gtkairo." 1>&2
+        echo "invalid $CLIM_BACKEND, expected clx, gtkairo, or graphic-forms." 1>&2
         exit 1
         ;;
 esac
@@ -104,6 +107,24 @@ clbuild_lisp() {
 	--eval "$set_central_registry" \
 	--eval "$EXTRA_CLIM_FEATURES" \
 	"$@"
+}
+
+get_darcs() {
+    name="$1"
+    url="$2"
+    if [ -d $name ]; then
+	(cd $name; darcs pull --all)
+    else
+	darcs get $url $name
+    fi
+    ln -f -s $(pwd)/$name/*.asd ${system_dir}
+}
+
+get_svn() {
+    name="$1"
+    url="$2"
+    svn co $url $name
+    ln -f -s $(pwd)/$name/*.asd ${system_dir}/
 }
 
 case $1 in
@@ -270,13 +291,20 @@ case $1 in
 	ln -f -s $(pwd)/climplayer/*.asd ${system_dir}/
 
 	# cffi (for gtkairo)
-	if [ -d cffi ]; then
-	    (cd cffi; darcs pull --all)
-	else
-	    # darcs get http://common-lisp.net/project/cffi/darcs/cffi/
-	    darcs get http://common-lisp.net/~loliveira/darcs/cffi-newtypes/ cffi
-	fi
-	ln -f -s $(pwd)/cffi/*.asd ${system_dir}
+#	get_darcs cffi http://common-lisp.net/project/cffi/darcs/cffi/
+	get_darcs cffi http://common-lisp.net/~loliveira/darcs/cffi-newtypes/
+
+	# graphic-forms
+	get_svn graphic-forms/ \
+	    svn://common-lisp.net/project/graphic-forms/svn/trunk/
+	# some .asd files are hidden:
+	ln -f -s $(pwd)/graphic-forms/src/external-libraries/*/*/*.asd ${system_dir}
+
+	# closer-* (for graphic-forms)
+	get_darcs closer-mop \
+	    http://common-lisp.net/project/closer/repos/closer-mop/
+	get_darcs lw-compat \
+	    http://common-lisp.net/project/closer/repos/lw-compat/
 
 	${lisp} $build_options \
 	    --eval "(require :asdf)" \
@@ -291,6 +319,7 @@ case $1 in
 	    --eval "(asdf:oos 'asdf:load-op :beirc)" \
 	    --eval "(asdf:oos 'asdf:load-op :climacs)" \
 	    --eval "(asdf:oos 'asdf:load-op :climplayer)" \
+	    --eval "(asdf:oos 'asdf:load-op :graphic-forms-uitoolkit)" \
 	    --eval $quit
 	echo "$0 ok"
 	;;
