@@ -45,30 +45,17 @@ case x$CLIM_BACKEND in
         ;;
 esac
 
-if [ ! -z $CCL ]; then
-    # user wants OpenMCL instead of SBCL.  Make it so.
-    lisp=$CCL
-    build_options="--batch" # fixme, that's not good enough
-    run_options="--batch"   # ditto
-    quit="(ccl:quit)"
-elif [ ! -z $SBCL ]; then
-    lisp=$SBCL
-elif [ -x ${target_dir}/bin/sbcl ]; then
-    export SBCL_HOME=${target_dir}/lib/sbcl/
-    lisp="${target_dir}/bin/sbcl --core ${target_dir}/lib/sbcl/sbcl.core"
-else
-    lisp=sbcl
-fi
-
-[ -d $system_dir ] || mkdir $system_dir
-[ -d $source_dir ] || mkdir $source_dir
-[ -d $target_dir ] || mkdir $target_dir
-
 if test x`uname -o` = xCygwin; then
         # need to translate cygwin's system_dir into a real Windows namestring
         # for use with SBCL below
 	echo Cygwin detected, computing Windows pathname...
-	sbcl --noinform --no-userinit --nosysinit >/dev/null 2>&1 <<eof
+	# preliminary sbcl command line, gets reset later
+	if test -x target/bin/sbcl; then
+	    lisp="target/bin/sbcl --core target/lib/sbcl/sbcl.core"
+	else
+	    lisp=sbcl
+	fi
+	$lisp --noinform --no-userinit --nosysinit >/dev/null 2>&1 <<eof
 (with-open-file (s "cygwin.tmp"
                  :direction :output
                  :if-exists :rename-and-delete
@@ -79,14 +66,37 @@ if test x`uname -o` = xCygwin; then
 eof
 	system_namestring="`cat cygwin.tmp`systems/"
 	source_namestring="`cat cygwin.tmp`source/"
+	target_namestring="`cat cygwin.tmp`target/"
 	self="c:/cygwin/bin/bash $0"
+	windowsp=windowsp
 	echo "done -- systems located in $system_namestring"
 else
 	system_namestring="$system_dir/"
 	source_namestring="$source_dir/"
+	target_namestring="$target_dir/"
 	self="$0"
+	unset windowsp
 fi
 set_central_registry="(setq asdf:*central-registry* '(#p\"${system_namestring}\"))"
+
+if [ ! -z $CCL ]; then
+    # user wants OpenMCL instead of SBCL.  Make it so.
+    lisp=$CCL
+    build_options="--batch" # fixme, that's not good enough
+    run_options="--batch"   # ditto
+    quit="(ccl:quit)"
+elif [ ! -z $SBCL ]; then
+    lisp=$SBCL
+elif [ -x ${target_dir}/bin/sbcl ]; then
+    export SBCL_HOME=${target_dir}/lib/sbcl/
+    lisp="${target_dir}/bin/sbcl --core ${target_namestring}lib/sbcl/sbcl.core"
+else
+    lisp=sbcl
+fi
+
+[ -d $system_dir ] || mkdir $system_dir
+[ -d $source_dir ] || mkdir $source_dir
+[ -d $target_dir ] || mkdir $target_dir
 
 clbuild_lisp() {
     ${lisp} \
@@ -292,7 +302,9 @@ case $1 in
 	cd ${source_dir}
 	cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co sbcl
 	# Enable threads
-	echo '(lambda (list) (pushnew :sb-thread list) list)' > sbcl/customize-target-features.lisp
+	if test -z "$windowsp"; then
+	    echo '(lambda (list) (pushnew :sb-thread list) list)' > sbcl/customize-target-features.lisp
+	fi
 	(cd sbcl; sh make.sh; SBCL_HOME= INSTALL_ROOT=${target_dir} sh install.sh)
 	;;
     lisp)
