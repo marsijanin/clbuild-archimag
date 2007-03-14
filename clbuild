@@ -25,6 +25,7 @@ cd $(dirname $0)
 system_dir="$(pwd)/systems"
 source_dir="$(pwd)/source"
 target_dir="$(pwd)/target"
+self="`readlink -f $0`"
 
 # SBCL-specific options
 build_options="--noinform --noprint --disable-debugger"
@@ -70,14 +71,13 @@ eof
 	system_namestring="`cat cygwin.tmp`systems/"
 	source_namestring="`cat cygwin.tmp`source/"
 	target_namestring="`cat cygwin.tmp`target/"
-	self="c:/cygwin/bin/bash $0"
+	self="c:/cygwin/bin/bash $self"
 	windowsp=windowsp
 	echo "done -- systems located in $system_namestring"
 else
 	system_namestring="$system_dir/"
 	source_namestring="$source_dir/"
 	target_namestring="$target_dir/"
-	self="$0"
 	unset windowsp
 fi
 set_central_registry="(setq asdf:*central-registry* '(#p\"${system_namestring}\"))"
@@ -91,7 +91,7 @@ if [ ! -z $CCL ]; then
 elif [ ! -z $SBCL ]; then
     lisp=$SBCL
 elif [ -x ${target_dir}/bin/sbcl ]; then
-    export SBCL_HOME=${target_dir}/lib/sbcl/
+    export SBCL_HOME=${target_namestring}lib/sbcl/
     lisp="${target_dir}/bin/sbcl --core ${target_namestring}lib/sbcl/sbcl.core"
 else
     lisp=sbcl
