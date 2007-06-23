@@ -411,6 +411,7 @@ case $1 in
 	     --eval "(require :asdf)" \
 	     --eval "$set_central_registry" \
 	     --eval "$EXTRA_CLIM_FEATURES" \
+	     --eval "(asdf:operate 'asdf:load-op :mcclim)" \
 	     --eval "(asdf:operate 'asdf:load-op :closure)" \
 	     --eval "(closure:start)"
 	;;
