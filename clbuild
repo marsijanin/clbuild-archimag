@@ -292,7 +292,7 @@ update() {
 	if [ -d climplayer ]; then
 	    (cd climplayer; darcs pull --all)
 	else
-	    darcs get http://common-lisp.net/project/climplayer/darcs/climplayer
+	    darcs get http://www.spacecentre.se/thomas/repos/climplayer
 	fi
 	ln -f -s $(pwd)/climplayer/*.asd ${system_dir}/
 
