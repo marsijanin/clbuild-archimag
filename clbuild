@@ -127,19 +127,26 @@ get_svn() {
     ln -f -s $(pwd)/$name/*.asd ${system_dir}/
 }
 
-case $1 in
-    world)
-	"$0" clean && "$0" buildsbcl && "$0" build
-	;;
-    clean)
-	cd $source_dir
-	find . -name "*.fasl" -exec rm {} \;
-	find . -name "*.lx64fsl" -exec rm {} \;
-	;;
-    mrproper)
-	rm -rf ${source_dir} ${target_dir}
-	;;
-    build)
+recompile() {
+	${lisp} $build_options \
+	    --eval "(require :asdf)" \
+	    --eval "$set_central_registry" \
+            --eval "$EXTRA_CLIM_FEATURES" \
+	    --eval "(asdf:oos 'asdf:load-op :mcclim)" \
+	    --eval "(asdf:oos 'asdf:load-op :cl-ppcre)" \
+	    --eval "(asdf:oos 'asdf:load-op :clim-listener)" \
+	    --eval "(asdf:oos 'asdf:load-op :skippy)" \
+	    --eval "(asdf:oos 'asdf:load-op :gsharp)" \
+	    --eval "(asdf:oos 'asdf:load-op :closure)" \
+	    --eval "(asdf:oos 'asdf:load-op :beirc)" \
+	    --eval "(asdf:oos 'asdf:load-op :climacs)" \
+	    --eval "(asdf:oos 'asdf:load-op :climplayer)" \
+	    --eval "(asdf:oos 'asdf:load-op :graphic-forms-uitoolkit)" \
+	    --eval $quit
+	echo "$0 ok"
+}
+
+update() {
         TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
 
         cleanup() {
@@ -305,23 +312,29 @@ case $1 in
 	    http://common-lisp.net/project/closer/repos/closer-mop/
 	get_darcs lw-compat \
 	    http://common-lisp.net/project/closer/repos/lw-compat/
+}
 
-	${lisp} $build_options \
-	    --eval "(require :asdf)" \
-	    --eval "$set_central_registry" \
-            --eval "$EXTRA_CLIM_FEATURES" \
-	    --eval "(asdf:oos 'asdf:load-op :mcclim)" \
-	    --eval "(asdf:oos 'asdf:load-op :cl-ppcre)" \
-	    --eval "(asdf:oos 'asdf:load-op :clim-listener)" \
-	    --eval "(asdf:oos 'asdf:load-op :skippy)" \
-	    --eval "(asdf:oos 'asdf:load-op :gsharp)" \
-	    --eval "(asdf:oos 'asdf:load-op :closure)" \
-	    --eval "(asdf:oos 'asdf:load-op :beirc)" \
-	    --eval "(asdf:oos 'asdf:load-op :climacs)" \
-	    --eval "(asdf:oos 'asdf:load-op :climplayer)" \
-	    --eval "(asdf:oos 'asdf:load-op :graphic-forms-uitoolkit)" \
-	    --eval $quit
-	echo "$0 ok"
+case $1 in
+    world)
+	"$0" clean && "$0" buildsbcl && "$0" build
+	;;
+    clean)
+	cd $source_dir
+	find . -name "*.fasl" -exec rm {} \;
+	find . -name "*.lx64fsl" -exec rm {} \;
+	;;
+    mrproper)
+	rm -rf ${source_dir} ${target_dir}
+	;;
+    update)
+	update
+	;;
+    recompile)
+	recompile
+	;;
+    build)
+	update
+	recompile
 	;;
     buildsbcl)
         if [ -n "$CCL" ]; then
@@ -421,9 +434,13 @@ case $1 in
     *)
 	cat <<EOF
 Usage:
-  world         download and compile SBCL and the applications afresh
-  build         download/update and compile the applications
+  update        download/update all applications
+  recompile     recompile all applications
+  build         update && recompile
+
   buildsbcl     download/update and compile SBCL
+  world         buildsbcl && build
+
   clean         delete all compiled object files
   mrproper      delete all downloaded source and fasl files
 
