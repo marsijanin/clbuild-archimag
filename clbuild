@@ -141,7 +141,6 @@ recompile() {
 	    --eval "(asdf:oos 'asdf:load-op :beirc)" \
 	    --eval "(asdf:oos 'asdf:load-op :climacs)" \
 	    --eval "(asdf:oos 'asdf:load-op :climplayer)" \
-	    --eval "(asdf:oos 'asdf:load-op :graphic-forms-uitoolkit)" \
 	    --eval $quit
 	echo "$0 ok"
 }
