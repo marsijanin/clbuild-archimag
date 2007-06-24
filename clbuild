@@ -101,6 +101,28 @@ fi
 [ -d $source_dir ] || mkdir $source_dir
 [ -d $target_dir ] || mkdir $target_dir
 
+
+blank_line="                                                                  "
+tail_last() {
+    i=0
+    if tty 0>&1 >/dev/null; then
+	while read line; do
+	    i=`expr $i + 1`
+	    echo -e '\r\c'
+	    echo -n "$blank_line"
+	    echo -e '\r\c'
+	    echo -n $line | cut -b 1-65 | tr -d '\n'
+	done
+	echo -e '\r\c'
+	echo -n "$blank_line"
+	echo -e '\r\c'
+    else
+	while read line; do
+	    echo $line
+	done
+    fi
+}
+
 clbuild_lisp() {
     ${lisp} \
 	--eval "(require :asdf)" \
@@ -112,9 +134,13 @@ clbuild_lisp() {
 get_darcs() {
     name="$1"
     url="$2"
+
+    # don't use tail_last, since darcs already has this kind of progress bar
     if [ -d $name ]; then
+	echo "darcs pull $name..."
 	(cd $name; darcs pull --all)
     else
+	echo "darcs get $name..."
 	darcs get $url $name
     fi
     ln -f -s $(pwd)/$name/*.asd ${system_dir}
@@ -123,8 +149,67 @@ get_darcs() {
 get_svn() {
     name="$1"
     url="$2"
-    svn co $url $name
+
+    echo "svn co $name..."
+
+    svn co $url $name | tail_last
     ln -f -s $(pwd)/$name/*.asd ${system_dir}/
+}
+
+get_cvs() {
+    module="$1"
+    repository="$2"
+
+    echo "cvs co $module..."
+
+    cvs -d $repository co $module | tail_last
+    ln -f -s $(pwd)/$name/*.asd ${system_dir}/
+}
+
+# zzz I don't like the way the existing directory is removed completely.
+get_tarball() {
+    name="$1"
+    url="$2"
+    flags="${3:-z}"
+
+    tmp=$TMPDIR/${name}.tar.gz
+
+    echo "wget $name..."
+
+    [ -d ${name}*/ ] && rm -rf ${name}*/
+    wget \
+	--no-check-certificate \
+	--progress=dot \
+	-O "$tmp" \
+	$url \
+	2>&1 | tail_last
+    tar v${flags}xf "$tmp" | tail_last
+    rm "$tmp"
+    ln -f -s $(pwd)/${name}*/*.asd ${system_dir}/
+}
+
+get_svn_clnet() {
+    name="$1"
+    path="$2"
+
+    get_svn $name svn://common-lisp.net/project/$name/svn/$2
+}
+
+get_cvs_clnet() {
+    module="$1"
+    project="${2:-$1}"
+
+    get_cvs $module ${CLNET_USER}@common-lisp.net:/project/$project/cvsroot
+}
+
+get_ediware() {
+    name="$1"
+
+    get_tarball $name http://weitz.de/files/${name}.tar.gz
+}
+
+get_tarball_bz2() {
+    get_tarball "$1" "$2" j
 }
 
 recompile() {
@@ -154,166 +239,146 @@ update() {
         trap cleanup exit
 
 	cd $source_dir
-        # flexichain
-	cvs -d ${CLNET_USER}@common-lisp.net:/project/flexichain/cvsroot co flexichain
-	ln -f -s $(pwd)/flexichain/*.asd ${system_dir}/
-	
-        # mcclim
-	cvs -d ${CLNET_USER}@common-lisp.net:/project/mcclim/cvsroot co mcclim
-	ln -f -s $(pwd)/mcclim/*.asd ${system_dir}/
-	
-        # spatial trees (does not exist in CVS so redownload each time)
-	[ -d spatial-trees*/ ] && rm -rf spatial-trees*/
-	wget -O $TMPDIR/spatial-trees.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/spatial-trees.tar.gz
-	tar vzxf $TMPDIR/spatial-trees.tar.gz
-	rm $TMPDIR/spatial-trees.tar.gz
-	ln -f -s $(pwd)/spatial-trees*/*.asd ${system_dir}/
 
-        # CLX (update or checkout - I'm not good with darcs)
-	if [ -d clx ]; then
-	    (cd clx; darcs pull --all)
-	else
-	    darcs get http://common-lisp.net/~crhodes/clx
-	fi
-	ln -f -s $(pwd)/clx/*.asd ${system_dir}/
+	get_cvs_clnet flexichain
+	get_cvs_clnet mcclim
+	get_cvs_clnet zip
+	get_cvs_clnet cxml
+	get_cvs_clnet closure
+	get_cvs_clnet gsharp
+	get_cvs_clnet climacs
+	get_cvs_clnet slime
+	get_cvs_clnet beirc
 
-	# CL-PPCRE
-	wget -O $TMPDIR/cl-ppcre.tar.gz http://weitz.de/files/cl-ppcre.tar.gz
-	tar vzxf $TMPDIR/cl-ppcre.tar.gz
-	rm $TMPDIR/cl-ppcre.tar.gz
-	ln -f -s $(pwd)/cl-ppcre*/*.asd ${system_dir}/
+	get_svn_clnet usocket usocket/trunk
+	get_svn_clnet cl-irc trunk
 
-	# Skippy (required by closure)
-	[ -d skippy* ] && rm -rf skippy*/
-	wget -O $TMPDIR/skippy.tgz http://www.xach.com/lisp/skippy.tgz
-	tar vzxf $TMPDIR/skippy.tgz
-	rm $TMPDIR/skippy.tgz
-	ln -f -s $(pwd)/skippy*/*.asd ${system_dir}/
+	get_ediware cl-ppcre
+	get_ediware flexi-streams
+	get_ediware cl-fad
 
-	# FLEXI-STREAMS (for CLOSURE)
-	wget -O $TMPDIR/flexi-streams.tar.gz http://weitz.de/files/flexi-streams.tar.gz
-	tar vzxf $TMPDIR/flexi-streams.tar.gz
-	rm $TMPDIR/flexi-streams.tar.gz
-	ln -f -s $(pwd)/flexi-streams*/*.asd ${system_dir}/
-
-	# TRIVIAL-GRAY-STREAMS (for CLOSURE)
-	wget -O $TMPDIR/trivial-gray-streams.tar.gz http://common-lisp.net/project/cl-plus-ssl/download/trivial-gray-streams.tar.gz
-	tar vzxf $TMPDIR/trivial-gray-streams.tar.gz
-	rm $TMPDIR/trivial-gray-streams.tar.gz
-	ln -f -s $(pwd)/trivial-gray-streams*/*.asd ${system_dir}/
-
-	# ZIP (for CLOSURE)
-	cvs -d ${CLNET_USER}@common-lisp.net:/project/zip/cvsroot co zip
-	ln -f -s $(pwd)/zip/*.asd ${system_dir}/
-
-	# SALZA (for CLOSURE)
-	wget -O $TMPDIR/salza.tar.gz http://www.xach.com/lisp/salza/salza-0.7.2.tar.gz
-	tar vzxf $TMPDIR/salza.tar.gz
-	rm $TMPDIR/salza.tar.gz
-	ln -f -s $(pwd)/salza*/*.asd ${system_dir}/
-
-	# TRIVIAL-SOCKETS (for CLOSURE)
-	wget -O $TMPDIR/trivial-sockets.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/trivial-sockets.tar.gz
-	tar vzxf $TMPDIR/trivial-sockets.tar.gz
-	rm $TMPDIR/trivial-sockets.tar.gz
-	ln -f -s $(pwd)/trivial-sockets*/*.asd ${system_dir}/
-
-	# BORDEAUX-THREADS (for CLOSURE)
-	if [ -d bordeaux-threads ]; then
-	    (cd bordeaux-threads; darcs pull --all)
-	else
-	    darcs get http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads/
-	fi
-	ln -f -s $(pwd)/bordeaux-threads/*.asd ${system_dir}/
-
-	# CXML (for CLOSURE)
-	cvs -d ${CLNET_USER}@common-lisp.net:/project/cxml/cvsroot co cxml
-	ln -f -s $(pwd)/cxml/*.asd ${system_dir}/
-	
-	# PURI (for CLOSURE)
-	wget -O $TMPDIR/puri.tar.gz http://files.b9.com/puri/puri-latest.tar.gz
-	tar vzxf $TMPDIR/puri.tar.gz
-	rm $TMPDIR/puri.tar.gz
-	ln -f -s $(pwd)/puri*/*.asd ${system_dir}/
-
-	# CLOSURE
-	cvs -d ${CLNET_USER}@common-lisp.net:/project/closure/cvsroot co closure
-	ln -f -s $(pwd)/closure/*.asd ${system_dir}/
-
-        # MIDI (for GSHARP)
-	[ -d midi*/ ] && rm -rf midi*/
-	wget -O $TMPDIR/midi.tar.gz http://doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
-	tar vzxf $TMPDIR/midi.tar.gz
-	rm $TMPDIR/midi.tar.gz
-	ln -f -s $(pwd)/midi*/*.asd ${system_dir}/
-
-	# GSHARP
-	cvs -d ${CLNET_USER}@common-lisp.net:/project/gsharp/cvsroot co gsharp
-	ln -f -s $(pwd)/gsharp/*.asd ${system_dir}/
-
-	# Climacs
-	cvs -d ${CLNET_USER}@common-lisp.net:/project/climacs/cvsroot co climac\s
-	ln -f -s $(pwd)/climacs/*.asd ${system_dir}
-
-	# slime
-	cvs -d ${CLNET_USER}@common-lisp.net:/project/slime/cvsroot co slime
-
-	# tab-layout (for Beirc)
-	wget -O $TMPDIR/tab-layout.tar.bz2 --no-check-certificate http://bl0rg.net/~mgr/flux/tab-layout_2005-09-19_02-52+0200.tar.bz2
-	tar vjxf $TMPDIR/tab-layout.tar.bz2
-	rm $TMPDIR/tab-layout.tar.bz2
-	ln -f -s $(pwd)/tab-layout/*.asd ${system_dir}/
-
-	# split-sequence (for Beirc; does not go through the CCLAN mirror selector because of cookies)
-	wget -O $TMPDIR/split-sequence.tar.gz http://ftp.linux.org.uk/pub/lisp/cclan/split-sequence.tar.gz
-	tar vzxf $TMPDIR/split-sequence.tar.gz
-	rm $TMPDIR/split-sequence.tar.gz
-	ln -f -s $(pwd)/split-sequence/*.asd ${system_dir}/
-
-	# cl-fad (for Beirc)
-	wget -O $TMPDIR/cl-fad.tar.gz http://weitz.de/files/cl-fad.tar.gz
-	tar vzxf $TMPDIR/cl-fad.tar.gz
-	rm $TMPDIR/cl-fad.tar.gz
-	ln -f -s $(pwd)/cl-fad*/*.asd ${system_dir}/
-
-	# usocket (for Beirc)
-	svn co svn://common-lisp.net/project/usocket/svn/usocket/trunk/ usocket/
-	ln -f -s $(pwd)/usocket/*.asd ${system_dir}/
-
-	# cl-irc (for Beirc)
-	svn co svn://common-lisp.net/project/cl-irc/svn/trunk/ cl-irc/
-	ln -f -s $(pwd)/cl-irc/*.asd ${system_dir}
-
-	# Beirc
-	cvs -d ${CLNET_USER}@common-lisp.net:/project/beirc/cvsroot co beirc
-	ln -f -s $(pwd)/beirc/*.asd ${system_dir}
-
-        # CLIMPlayer
-	if [ -d climplayer ]; then
-	    (cd climplayer; darcs pull --all)
-	else
-	    darcs get http://common-lisp.net/project/climplayer/darcs/climplayer
-	fi
-	ln -f -s $(pwd)/climplayer/*.asd ${system_dir}/
-
-	# cffi (for gtkairo)
+	get_darcs clx http://common-lisp.net/~crhodes/clx
+	# need cffi's newtypes branch for gtkairo:
 #	get_darcs cffi http://common-lisp.net/project/cffi/darcs/cffi/
 	get_darcs cffi http://common-lisp.net/~loliveira/darcs/cffi-newtypes/
-
-	# graphic-forms
-	get_svn graphic-forms/ \
-	    svn://common-lisp.net/project/graphic-forms/svn/trunk/
-	# some .asd files are hidden:
-	ln -f -s $(pwd)/graphic-forms/src/external-libraries/*/*/*.asd ${system_dir}
-
+	get_darcs bordeaux-threads \
+	    http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads/
+	get_darcs climplayer \
+	    http://common-lisp.net/project/climplayer/darcs/climplayer/
 	# closer-* (for graphic-forms)
 	get_darcs closer-mop \
 	    http://common-lisp.net/project/closer/repos/closer-mop/
 	get_darcs lw-compat \
 	    http://common-lisp.net/project/closer/repos/lw-compat/
+
+	get_tarball skippy http://www.xach.com/lisp/skippy.tgz
+	get_tarball salza http://www.xach.com/lisp/salza/salza-0.7.2.tar.gz
+	get_tarball puri http://files.b9.com/puri/puri-latest.tar.gz
+	get_tarball midi http://doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
+	get_tarball spatial-trees \
+	    http://ftp.linux.org.uk/pub/lisp/cclan/spatial-trees.tar.gz
+	get_tarball trivial-gray-streams \
+	    http://common-lisp.net/project/cl-plus-ssl/download/trivial-gray-streams.tar.gz
+	get_tarball trivial-sockets \
+	    http://ftp.linux.org.uk/pub/lisp/cclan/trivial-sockets.tar.gz
+	get_tarball split-sequence \
+	    http://ftp.linux.org.uk/pub/lisp/cclan/split-sequence.tar.gz
+
+	# old standalone tab-layout (for climplayer?)
+	get_tarball_bz2 tab-layout http://bl0rg.net/~mgr/flux/tab-layout_2005-09-19_02-52+0200.tar.bz2
+
+	# graphic-forms
+	get_svn_clnet graphic-forms trunk
+	# some .asd files are hidden:
+	ln -f -s $(pwd)/graphic-forms/src/external-libraries/*/*/*.asd ${system_dir}
+}
+
+help() {
+	cat <<EOF
+Usage:
+  check         check availability of all necessary helper applications
+
+  update        download/update all applications
+  recompile     recompile all applications
+  build         update && recompile
+
+  buildsbcl     download/update and compile SBCL
+  world         buildsbcl && build
+
+  clean         delete all compiled object files
+  mrproper      delete all downloaded source and fasl files
+
+  slime         run the Superior Lisp Interaction Mode in a fresh Emacs
+  lisp          run Lisp in the terminal
+  sbcl          alias for "lisp" (with all packages available to REQUIRE)
+  openmcl       alias for "lisp"
+
+  listener      run the McCLIM listener
+  gsharp        run the Gsharp score editor 
+  climacs       run the Climacs text editor
+  closure       run the CLOSURE web browser
+                (required Debian packages: gif2png,libjpeg-progs)
+  beirc         run the Beirc IRC client
+  climplayer    run the CLIMPlayer music player
+                (required Debian packages: mplayer, fileschanged, fam)
+
+If you do 'world' or 'buildsbcl' then SBCL will be installed in
+target/ and used for future commands. If you don't run these commands
+(or you remove target/) then clbuild uses the 'sbcl' in your PATH.
+
+Set CCL to your OpenMCL binary to use OpenMCL instead of SBCL. 
+Example: CCL=~/ccl/lx86cl64 ./clbuild build
+(Not supported with targets 'buildsbcl' and 'sbcl'.)
+
+Set CLIM_BACKEND=gtkairo to enable clim-gtkairo instead of clim-clx.
+(Requires GTK+ >= 2.8.)
+
+        # CLIMPlayer
+	if [ -d climplayer ]; then
+	    (cd climplayer; darcs pull --all)
+	else
+	    darcs get http://www.spacecentre.se/thomas/repos/climplayer
+	fi
+	ln -f -s $(pwd)/climplayer/*.asd ${system_dir}/
+
+check_program() {
+    if ! "$1" --help >/dev/null; then
+	echo Error: Cannot find a working installation of "$1"
+	exit 1
+    fi
+    echo "found `which $1`"
+}
+
+# for programs that don't understand --help, or (like cvs) are stupid enough
+# to return a failure code when invocated using a correct --help option... 
+check_misdesigned_program() {
+    if ! which "$1" >/dev/null; then
+	echo Error: Cannot find a working installation of "$1"
+	exit 1
+    fi
+    echo "found `which $1`"
+}
+
+check() {
+    check_misdesigned_program cvs
+    check_program svn
+    check_program darcs
+    check_program wget
+    check_program tar
+    check_misdesigned_program mktemp
 }
 
 case $1 in
+    check)
+	check
+	echo "Success: All helper applications found."
+	if ${lisp} --eval $quit >/dev/null; then
+	    echo "Success: Lisp starts up using \"$lisp\""
+	else
+	    echo "Error: Cannot run Lisp using \"$lisp\""
+	    exit 1
+	fi
+	;;
     world)
 	"$0" clean && "$0" buildsbcl && "$0" build
 	;;
@@ -431,43 +496,12 @@ case $1 in
 	     --eval "(asdf:operate 'asdf:load-op :climplayer)" \
 	     --eval "(climplayer:climplayer)"
 	;;
+    help|--help|-h|-H)
+        help
+	exit 0
+	;;
     *)
-	cat <<EOF
-Usage:
-  update        download/update all applications
-  recompile     recompile all applications
-  build         update && recompile
-
-  buildsbcl     download/update and compile SBCL
-  world         buildsbcl && build
-
-  clean         delete all compiled object files
-  mrproper      delete all downloaded source and fasl files
-
-  slime         run the Superior Lisp Interaction Mode in a fresh Emacs
-  lisp          run Lisp in the terminal
-  sbcl          alias for "lisp" (with all packages available to REQUIRE)
-  openmcl       alias for "lisp"
-
-  listener      run the McCLIM listener
-  gsharp        run the Gsharp score editor 
-  climacs       run the Climacs text editor
-  closure       run the CLOSURE web browser
-                (required Debian packages: gif2png,libjpeg-progs)
-  beirc         run the Beirc IRC client
-  climplayer    run the CLIMPlayer music player
-                (required Debian packages: mplayer, fileschanged, fam)
-
-If you do 'world' or 'buildsbcl' then SBCL will be installed in
-target/ and used for future commands. If you don't run these commands
-(or you remove target/) then clbuild uses the 'sbcl' in your PATH.
-
-Set CCL to your OpenMCL binary to use OpenMCL instead of SBCL. 
-Example: CCL=~/ccl/lx86cl64 ./clbuild build
-(Not supported with targets 'buildsbcl' and 'sbcl'.)
-
-Set CLIM_BACKEND=gtkairo to enable clim-gtkairo instead of clim-clx.
-(Requires GTK+ >= 2.8.)
-
-EOF
+        help
+	exit 1
+	;;
 esac
