@@ -32,6 +32,8 @@ build_options="--noinform --noprint --disable-debugger"
 run_options="--disable-debugger"
 quit="(sb-ext:quit)"
 
+source clbuild.conf
+
 # CLIM configuration
 case x$CLIM_BACKEND in
     xgraphic-forms)
@@ -302,7 +304,7 @@ check_program() {
 }
 
 # for programs that don't understand --help, or (like cvs) are stupid enough
-# to return a failure code when invocated using a correct --help option... 
+# to return a failure code when invoked using a correct --help option... 
 check_misdesigned_program() {
     if ! which "$1" >/dev/null; then
 	echo Error: Cannot find a working installation of "$1"
