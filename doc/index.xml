@@ -1,0 +1,182 @@
+<page>
+  <p>
+    A script to update/install the latest versions of all the most
+    important Common Lisp packages.
+  </p>
+
+  <h3>About</h3>
+
+  <p>
+    clbuild is a shell script helping with the download, compilation, an
+    invocation of Common Lisp applications.  It defaults to SBCL but
+    otherwise tries to be somewhat independent of your local
+    environment.
+  </p>
+
+  <p>
+    clbuild was originally written by Luke Gorrie.
+    (Idea from jhbuild by James Henstridge, a Gnome hacker).
+  </p>
+
+  <p>
+    Currently, the following libraries and applications are supported
+    (2007-06-24):
+  </p>
+  <div style="border: 1px dotted #55a6e0;
+	      padding: 1em;">
+    beirc, clx, salza, bordeaux-threads, cxml, skippy, cffi,
+    flexi-streams, slime, cl-fad, flexichain, spatial-trees, cl-irc,
+    graphic-forms, split-sequence, cl-ppcre, gsharp, tab-layout,
+    climacs, lw-compat, trivial-gray-streams, climplayer, mcclim,
+    trivial-sockets, closer-mop, midi, usocket, closure, puri, zip
+  </div> 
+
+  <p>
+    Please send patches bug reports
+    to <a href="mailto:clbuild-devel@common-lisp.net">
+      clbuild-devel@common-lisp.net</a>
+    (<a href="http://common-lisp.net/cgi-bin/mailman/listinfo/clbuild-devel">list information</a>).
+  </p>
+
+  <h3>FAQ</h3>
+
+  <p>
+    <b>Q</b>&#160; How does clbuild differ from asdf-install?
+  </p>
+  <p>
+    <b>A</b>&#160; clbuild includes a list of <x>selected</x> libraries
+    and applications and their <x>well-known locations</x>, and
+    downloads the <x>newest version or CVS/SVN/darcs repositories</x> if
+    possible.  It can also build SBCL for you and includes convenient
+    commands to start various applications.
+  </p>
+  <p>
+    <i>In contrast</i>, asdf-install can install <x>any software</x>
+    listed on Cliki.  It always downloads <x>release tarballs</x>.  (It
+    is up to the user to hunt down the trustworthy <x>PGP keys as a
+    protection agains malicous wiki entries</x>.)
+  </p>
+
+  <p>
+    <div>
+      <b>Q</b>&#160; My favourite application is not supported.  How can I
+      add it?
+    </div>
+    <div>
+      <b>A</b>&#160; Just add it to <tt>clbuild/update.sh</tt>.  Please
+      send a note to the mailing list so that we can include it, too.
+    </div>
+  </p>
+
+  <p>
+    <div>
+      <b>Q</b>&#160; Does it work on cygwin?
+    </div>
+    <div>
+      <b>A</b>&#160; Yes, but you need to recompile SBCL with
+	an <a href="http://www.lichteblau.com/blubba/shortcut/">ASDF
+	patch for shortcut support</a> first.
+    </div>
+  </p>
+  <p>
+    To starts clbuild's slime, make sure to use the Windows version of
+    Emacs, not cygwin's Emacs.
+  </p>
+  
+
+  <h3>Download and Usage</h3>
+
+  <p>
+    At this point, clbuild is maintained in darcs.  There are several
+    branches of clbuild, the most recent of which is probably David's:
+  </p>
+  <pre>$ <b>darcs get http://www.lichteblau.com/blubba/clbuild</b></pre>
+  <p>
+    Other repositories are Christophe's
+    tree at <tt>http://common-lisp.net/~crhodes/clbuild</tt> and Luke's
+    original
+    repository at <tt>http://fresh.homeunix.net/~luke/misc/repo/clbuild</tt>
+  </p>
+
+  <p>You might want to make the shell script executable:</p>
+  <pre>$ <b>cd clbuild</b>
+clbuild$ <b>chmod +x chbuild</b></pre>
+
+  <p>
+    clbuild depends on various helper applications.
+    Try <tt>check</tt> to make sure they are installed:
+  </p>
+  <pre>clbuild$ <b>./clbuild check</b>
+Checking for helper applications...
+found /usr/bin/X11/cvs
+found /usr/bin/X11/svn
+found /usr/bin/X11/darcs
+found /usr/bin/X11/wget
+found /bin/tar
+found /bin/mktemp
+Success: All helper applications found.
+
+Checking Lisp startup...
+Success: Lisp starts up using "sbcl"
+
+Looking for installable systems...
+0 systems definition files registered</pre>
+
+  <p>
+    If that worked, run <tt>update</tt> or <tt>build</tt> to download
+    (and optionally also build) the userland:
+  </p>
+  <pre>clbuild$ <b>./clbuild update</b>
+cvs co flexichain...
+cvs co mcclim...
+<i>... lots of output not shown ...</i>
+update complete                                                   
+46 systems definition files registered</pre>
+
+  <p>
+    You can also download and recompile SBCL using <tt>buildsbcl</tt>
+    or <tt>buildworld</tt>:
+  </p>
+  <pre>clbuild$ <b>./clbuild buildsbcl</b></pre>
+  <p>
+    For other options, see <tt>help</tt>:
+  </p>
+  <pre>clbuild$ <b>./clbuild help</b>
+Usage:
+  check         check availability of all necessary helper applications
+
+  update        download/update all applications
+  recompile     recompile all applications
+  build         update &amp;&amp; recompile
+
+  buildsbcl     download/update and compile SBCL
+  world         buildsbcl &amp;&amp; build
+
+  clean         delete all compiled object files
+  mrproper      delete all downloaded source and fasl files
+
+  slime         run the Superior Lisp Interaction Mode in a fresh Emacs
+  lisp          run Lisp in the terminal
+  sbcl          alias for "lisp" (with all packages available to REQUIRE)
+  openmcl       alias for "lisp"
+
+  listener      run the McCLIM listener
+  gsharp        run the Gsharp score editor 
+  climacs       run the Climacs text editor
+  closure       run the CLOSURE web browser
+                (required Debian packages: gif2png,libjpeg-progs)
+  beirc         run the Beirc IRC client
+  climplayer    run the CLIMPlayer music player
+                (required Debian packages: mplayer, fileschanged, fam)
+
+If you do 'world' or 'buildsbcl' then SBCL will be installed in
+target/ and used for future commands. If you don't run these commands
+(or you remove target/) then clbuild uses the 'sbcl' in your PATH.
+
+Set CCL to your OpenMCL binary to use OpenMCL instead of SBCL. 
+Example: CCL=~/ccl/lx86cl64 ./clbuild build
+(Not supported with targets 'buildsbcl' and 'sbcl'.)
+
+Set CLIM_BACKEND=gtkairo to enable clim-gtkairo instead of clim-clx.
+(Requires GTK+ >= 2.8.)</pre>
+</page>
