@@ -333,13 +333,8 @@ Example: CCL=~/ccl/lx86cl64 ./clbuild build
 Set CLIM_BACKEND=gtkairo to enable clim-gtkairo instead of clim-clx.
 (Requires GTK+ >= 2.8.)
 
-        # CLIMPlayer
-	if [ -d climplayer ]; then
-	    (cd climplayer; darcs pull --all)
-	else
-	    darcs get http://www.spacecentre.se/thomas/repos/climplayer
-	fi
-	ln -f -s $(pwd)/climplayer/*.asd ${system_dir}/
+EOF
+}
 
 check_program() {
     if ! "$1" --help >/dev/null; then
