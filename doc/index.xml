@@ -32,7 +32,7 @@
   </div> 
 
   <p>
-    Please send patches bug reports
+    Please send patches and bug reports
     to <a href="mailto:clbuild-devel@common-lisp.net">
       clbuild-devel@common-lisp.net</a>
     (<a href="http://common-lisp.net/cgi-bin/mailman/listinfo/clbuild-devel">list information</a>).
