@@ -7,7 +7,7 @@
   <h3>About</h3>
 
   <p>
-    clbuild is a shell script helping with the download, compilation, an
+    clbuild is a shell script helping with the download, compilation, and
     invocation of Common Lisp applications.  It defaults to SBCL but
     otherwise tries to be somewhat independent of your local
     environment.
