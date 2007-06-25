@@ -100,7 +100,7 @@
 
   <p>You might want to make the shell script executable:</p>
   <pre>$ <b>cd clbuild</b>
-clbuild$ <b>chmod +x chbuild</b></pre>
+clbuild$ <b>chmod +x clbuild</b></pre>
 
   <p>
     clbuild depends on various helper applications.
