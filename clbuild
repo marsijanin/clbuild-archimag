@@ -165,7 +165,7 @@ get_cvs() {
     echo "cvs co $module..."
 
     cvs -d $repository co $module | tail_last
-    ln -f -s $(pwd)/$name/*.asd ${system_dir}/
+    ln -f -s $(pwd)/$module/*.asd ${system_dir}/
 }
 
 # zzz I don't like the way the existing directory is removed completely.
