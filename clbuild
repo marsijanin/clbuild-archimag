@@ -106,10 +106,8 @@ fi
 
 blank_line="                                                                  "
 tail_last() {
-    i=0
     if tty 0>&1 >/dev/null; then
 	while read line; do
-	    i=`expr $i + 1`
 	    echo -e '\r\c'
 	    echo -n "$blank_line"
 	    echo -e '\r\c'
