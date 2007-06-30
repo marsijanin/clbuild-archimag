@@ -311,6 +311,19 @@ check_misdesigned_program() {
     echo "found `which $1`"
 }
 
+start_clim() {
+    system=$1
+    cmd="$2"
+
+    ${lisp} $run_options \
+	--eval "(require :asdf)" \
+	--eval "$set_central_registry" \
+	--eval "$EXTRA_CLIM_FEATURES" \
+	--eval "(asdf:operate 'asdf:load-op :mcclim)" \
+	--eval "(asdf:operate 'asdf:load-op $system)" \
+	--eval "$cmd"
+}
+
 case $1 in
     check)
 	echo "Checking for helper applications..."
@@ -403,54 +416,22 @@ case $1 in
 	    ${emacs_args}
 	;;
     listener)
-	${lisp} $run_options \
-	     --eval "(require :asdf)" \
-	     --eval "$set_central_registry" \
-	     --eval "$EXTRA_CLIM_FEATURES" \
-	     --eval "(asdf:operate 'asdf:load-op :mcclim)" \
-	     --eval "(asdf:operate 'asdf:load-op :clim-listener)" \
-	     --eval "(clim-listener:run-listener)"
+	start_clim :clim-listener "(clim-listener:run-listener)"
 	;;
     gsharp)
-	${lisp} \
-	     --eval "(require :asdf)" \
-	     --eval "$set_central_registry" \
-	     --eval "$EXTRA_CLIM_FEATURES" \
-	     --eval "(asdf:operate 'asdf:load-op :gsharp)" \
-	     --eval "(gsharp::gsharp)"
+	start_clim :gsharp "(gsharp::gsharp)"
 	;;
     climacs)
-        ${lisp} \
-	     --eval "(require :asdf)" \
-	     --eval "$set_central_registry" \
-	     --eval "$EXTRA_CLIM_FEATURES" \
-	     --eval "(asdf:operate 'asdf:load-op :climacs)" \
-	     --eval "(climacs:climacs)"
+	start_clim :climacs "(climacs:climacs)"
 	;;
     closure)
-	${lisp} \
-	     --eval "(require :asdf)" \
-	     --eval "$set_central_registry" \
-	     --eval "$EXTRA_CLIM_FEATURES" \
-	     --eval "(asdf:operate 'asdf:load-op :mcclim)" \
-	     --eval "(asdf:operate 'asdf:load-op :closure)" \
-	     --eval "(closure:start)"
+	start_clim :closure "(closure:start)"
 	;;
     beirc)
-	${lisp} \
-	     --eval "(require :asdf)" \
-	     --eval "$set_central_registry" \
-	     --eval "$EXTRA_CLIM_FEATURES" \
-	     --eval "(asdf:operate 'asdf:load-op :beirc)" \
-	     --eval "(beirc:beirc)"
+	start_clim :beirc "(beirc:beirc)"
 	;;
     climplayer)
-	${lisp} \
-	     --eval "(require :asdf)" \
-	     --eval "$set_central_registry" \
-	     --eval "$EXTRA_CLIM_FEATURES" \
-	     --eval "(asdf:operate 'asdf:load-op :climplayer)" \
-	     --eval "(climplayer:climplayer)"
+	start_clim :climplayer "(climplayer:climplayer)"
 	;;
     help|--help|-h|-H)
         help
