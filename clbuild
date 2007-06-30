@@ -279,6 +279,10 @@ Usage:
   climplayer    run the CLIMPlayer music player
                 (required Debian packages: mplayer, fileschanged, fam)
 
+  dialog        show an interactive menu 
+
+Default when started without arguments is 'dialog'.
+
 If you do 'world' or 'buildsbcl' then SBCL will be installed in
 target/ and used for future commands. If you don't run these commands
 (or you remove target/) then clbuild uses the 'sbcl' in your PATH.
@@ -321,32 +325,85 @@ start_clim() {
 	--eval "$EXTRA_CLIM_FEATURES" \
 	--eval "(asdf:operate 'asdf:load-op :mcclim)" \
 	--eval "(asdf:operate 'asdf:load-op $system)" \
-	--eval "$cmd"
+	--eval "$cmd" \
+	--eval "$quit"
+}
+
+interactive_menu() {
+    if ! dialog --clear --title "clbuild" \
+	--menu "Welcome to clbuild's interactive menu.\n\n\
+If unsure, choose 'update' to download the userland, then try\n\
+running one of applications." \
+	24 74 14 \
+	"update" "download/update all applications" \
+	"recompile" "recompile all applications" \
+	"" "" \
+	"buildsbcl" "download/update and compile SBCL" \
+	"world" "buildsbcl && update && recompile" \
+	"" "" \
+	"slime" "run the Superior Lisp Interaction Mode in a fresh Emacs" \
+	"slime -nw" "run the Superior Lisp Interaction Mode (in this TTY)" \
+	"lisp" "run Lisp in the terminal" \
+	"" "" \
+	"gsharp" "run the Gsharp score editor" \
+	"climacs" "run the Climacs text editor" \
+	"closure" "run the CLOSURE web browser" \
+	"beirc" "run the Beirc IRC client" \
+	"climplayer" "run the CLIMPlayer music player" \
+	"" "" \
+	"clear" "Delete all fasls" \
+	"mrproper" "Delete all downloaded source and fasls" \
+	"" "" \
+	"quit" "Exit clbuild" \
+	2>$TMPDIR/choice
+    then
+	echo menu aborted
+	exit 0
+    fi
+    choice="`cat $TMPDIR/choice`"
+    case $choice in
+	"")
+	    ;;
+	quit)
+	    exit 0
+	    ;;
+	*)
+	    echo
+	    "$0" $choice || echo clbuild: $choice failed
+	    echo
+	    echo Type RET to continue
+	    read
+	    ;;
+    esac
+}
+
+check() {
+    echo "Checking for helper applications..."
+    check_misdesigned_program cvs
+    check_program svn
+    check_program darcs
+    check_program wget
+    check_program tar
+    check_misdesigned_program mktemp
+    echo "Success: All helper applications found."
+	
+    echo
+    echo "Checking Lisp startup..."
+    if ${lisp} --eval $quit >/dev/null; then
+	echo "Success: Lisp starts up using \"$lisp\""
+    else
+	echo "Error: Cannot run Lisp using \"$lisp\""
+	exit 1
+    fi
+
+    echo
+    echo "Looking for installable systems..."
+    count_systems
 }
 
 case $1 in
     check)
-	echo "Checking for helper applications..."
-	check_misdesigned_program cvs
-	check_program svn
-	check_program darcs
-	check_program wget
-	check_program tar
-	check_misdesigned_program mktemp
-	echo "Success: All helper applications found."
-	
-	echo
-	echo "Checking Lisp startup..."
-	if ${lisp} --eval $quit >/dev/null; then
-	    echo "Success: Lisp starts up using \"$lisp\""
-	else
-	    echo "Error: Cannot run Lisp using \"$lisp\""
-	    exit 1
-	fi
-
-	echo
-	echo "Looking for installable systems..."
-	count_systems
+	check
 	;;
     world)
 	"$0" clean && "$0" buildsbcl && "$0" build
@@ -425,20 +482,45 @@ case $1 in
 	start_clim :climacs "(climacs:climacs)"
 	;;
     closure)
-	start_clim :closure "(closure:start)"
+	start_clim :closure "(clim-user::run-closure :new-process nil)"
 	;;
     beirc)
-	start_clim :beirc "(beirc:beirc)"
+	start_clim :beirc "(beirc:beirc :new-process nil)"
 	;;
     climplayer)
+	check_program fileschanged
+	check_misdesigned_program mplayer
 	start_clim :climplayer "(climplayer:climplayer)"
 	;;
     help|--help|-h|-H)
         help
-	exit 0
+	;;
+    ""|dialog)
+        if ! dialog --help >/dev/null; then
+	    cat <<EOF
+
+error: dialog(1) not found.  Cannot start interactive menu.
+Install dialog or try clbuild --help instead.
+EOF
+	    exit 1
+	fi
+
+	# always run check first to avoid unpleasant surprises
+	check
+
+
+        TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
+
+        cleanup() {
+            rm -rf $TMPDIR
+        }
+        trap cleanup exit
+
+	while :; do
+	    interactive_menu
+	done
 	;;
     *)
         help
 	exit 1
-	;;
 esac
