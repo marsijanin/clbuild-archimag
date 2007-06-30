@@ -22,13 +22,45 @@
     Currently, the following libraries and applications are supported
     (2007-06-24):
   </p>
-  <div style="border: 1px dotted #55a6e0;
-	      padding: 1em;">
-    beirc, clx, salza, bordeaux-threads, cxml, skippy, cffi,
-    flexi-streams, slime, cl-fad, flexichain, spatial-trees, cl-irc,
-    graphic-forms, split-sequence, cl-ppcre, gsharp, tab-layout,
-    climacs, lw-compat, trivial-gray-streams, climplayer, mcclim,
-    trivial-sockets, closer-mop, midi, usocket, closure, puri, zip
+  <div style="border: 1px dotted #55a6e0; padding: 1em;">
+    beirc,
+    bordeaux-threads,
+    cffi,
+    chunga,
+    cl+ssl,
+    cl-base64,
+    cl-fad,
+    cl-irc,
+    cl-ppcre,
+    cl-who,
+    climacs,
+    climplayer,
+    closer-mop,
+    closure,
+    clx,
+    cxml,
+    flexi-streams,
+    flexichain,
+    graphic-forms,
+    gsharp,
+    hunchentoot,
+    lw-compat,
+    mcclim,
+    md5,
+    midi,
+    puri,
+    rfc2388,
+    salza,
+    skippy,
+    slime,
+    spatial-trees,
+    split-sequence,
+    tab-layout,
+    trivial-gray-streams,
+    trivial-sockets,
+    url-rewrite,
+    usocket,
+    zip
   </div> 
 
   <p>
@@ -103,6 +135,13 @@
 clbuild$ <b>chmod +x clbuild</b></pre>
 
   <p>
+    Try the interactive dialog if you have <tt>dialog</tt>(1):
+  </p>
+  <pre>clbuild$ <b>./clbuild dialog</b></pre>
+  <p>
+    Without the dialog, use command line arguments:
+  </p>
+  <p>
     clbuild depends on various helper applications.
     Try <tt>check</tt> to make sure they are installed:
   </p>
@@ -168,6 +207,12 @@ Usage:
   beirc         run the Beirc IRC client
   climplayer    run the CLIMPlayer music player
                 (required Debian packages: mplayer, fileschanged, fam)
+  hunchentoot   run the Hunchentoot web server test
+                (required Debian packages: libssl-dev)
+
+  dialog        show an interactive menu 
+
+Default when started without arguments is 'dialog'.
 
 If you do 'world' or 'buildsbcl' then SBCL will be installed in
 target/ and used for future commands. If you don't run these commands

@@ -226,6 +226,7 @@ recompile() {
 	    --eval "(asdf:oos 'asdf:load-op :beirc)" \
 	    --eval "(asdf:oos 'asdf:load-op :climacs)" \
 	    --eval "(asdf:oos 'asdf:load-op :climplayer)" \
+	    --eval "(asdf:oos 'asdf:load-op :hunchentoot-test)" \
 	    --eval $quit
 	echo "$0 ok"
 }
@@ -278,6 +279,8 @@ Usage:
   beirc         run the Beirc IRC client
   climplayer    run the CLIMPlayer music player
                 (required Debian packages: mplayer, fileschanged, fam)
+  hunchentoot   run the Hunchentoot web server test
+                (required Debian packages: libssl-dev)
 
   dialog        show an interactive menu 
 
@@ -334,7 +337,7 @@ interactive_menu() {
 	--menu "Welcome to clbuild's interactive menu.\n\n\
 If unsure, choose 'update' to download the userland, then try\n\
 running one of applications." \
-	24 74 14 \
+	0 0 0 \
 	"update" "download/update all applications" \
 	"recompile" "recompile all applications" \
 	"" "" \
@@ -350,6 +353,7 @@ running one of applications." \
 	"closure" "run the CLOSURE web browser" \
 	"beirc" "run the Beirc IRC client" \
 	"climplayer" "run the CLIMPlayer music player" \
+	"hunchentoot" "run the Hunchentoot web server test" \
 	"" "" \
 	"clear" "Delete all fasls" \
 	"mrproper" "Delete all downloaded source and fasls" \
@@ -491,6 +495,21 @@ case $1 in
 	check_program fileschanged
 	check_misdesigned_program mplayer
 	start_clim :climplayer "(climplayer:climplayer)"
+	;;
+    hunchentoot)
+	if ! test -f /usr/lib/libssl.so; then
+	    echo "WARNING: /usr/lib/libssl.so not found, did you install OpenSSL?"
+	    echo "(type RET to continue anyway)"
+	fi
+	${lisp} $run_options \
+	    --eval "(require :asdf)" \
+	    --eval "$set_central_registry" \
+	    --eval "(asdf:operate 'asdf:load-op :hunchentoot-test)" \
+	    --eval "(hunchentoot:start-server :port 4242)" \
+	    --eval '(format t "~%Webserver is running at http://localhost:4242/hunchentoot/test~%")' \
+	    --eval '(format t "Type RET to quit~%")' \
+	    --eval '(read-line)' \
+	    --eval "$quit"
 	;;
     help|--help|-h|-H)
         help
