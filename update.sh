@@ -20,6 +20,7 @@ get_ediware hunchentoot
 get_ediware chunga
 get_ediware url-rewrite
 get_ediware cl-who
+get_ediware cl-webdav
 
 get_darcs clx http://common-lisp.net/~crhodes/clx
 #get_darcs cffi http://common-lisp.net/project/cffi/darcs/cffi/

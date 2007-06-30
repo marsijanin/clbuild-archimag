@@ -32,6 +32,7 @@
     cl-fad,
     cl-irc,
     cl-ppcre,
+    cl-webdav,
     cl-who,
     climacs,
     climplayer,
@@ -208,6 +209,7 @@ Usage:
   climplayer    run the CLIMPlayer music player
                 (required Debian packages: mplayer, fileschanged, fam)
   hunchentoot   run the Hunchentoot web server test
+  webdav DIR    run the CL-WEBDAV server, serving directory DIR
                 (required Debian packages: libssl-dev)
 
   dialog        show an interactive menu 

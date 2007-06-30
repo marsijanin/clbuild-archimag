@@ -227,6 +227,7 @@ recompile() {
 	    --eval "(asdf:oos 'asdf:load-op :climacs)" \
 	    --eval "(asdf:oos 'asdf:load-op :climplayer)" \
 	    --eval "(asdf:oos 'asdf:load-op :hunchentoot-test)" \
+	    --eval "(asdf:oos 'asdf:load-op :cl-webdav)" \
 	    --eval $quit
 	echo "$0 ok"
 }
@@ -279,7 +280,9 @@ Usage:
   beirc         run the Beirc IRC client
   climplayer    run the CLIMPlayer music player
                 (required Debian packages: mplayer, fileschanged, fam)
+
   hunchentoot   run the Hunchentoot web server test
+  webdav DIR    run the CL-WEBDAV server, serving directory DIR
                 (required Debian packages: libssl-dev)
 
   dialog        show an interactive menu 
@@ -354,6 +357,7 @@ running one of applications." \
 	"beirc" "run the Beirc IRC client" \
 	"climplayer" "run the CLIMPlayer music player" \
 	"hunchentoot" "run the Hunchentoot web server test" \
+	"webdav" "run the CL-WEBDAV server" \
 	"" "" \
 	"clear" "Delete all fasls" \
 	"mrproper" "Delete all downloaded source and fasls" \
@@ -365,6 +369,26 @@ running one of applications." \
 	exit 0
     fi
     choice="`cat $TMPDIR/choice`"
+    if test x$choice = xwebdav; then
+	if dialog --title "clbuild webdav" --clear --inputbox \
+	    "A WebDAV server will be started on http://localhost:4242.\n\n\
+Files will be served for read and write operations without authentication.\n\n\
+Please choose a directory to be exported." \
+	    16 72 /tmp 2>$TMPDIR/choice
+	then
+	    directory=`cat $TMPDIR/choice`
+	    if test -d $directory; then
+		choice="webdav $directory"
+	    else
+		$DIALOG --title "clbuild webdav" --clear \
+		    --msgbox "Error: Directory not found: $directory" \
+		    10 41
+		choice=""
+	    fi
+	else
+	    choice=""
+	fi
+    fi
     case $choice in
 	"")
 	    ;;
@@ -500,13 +524,40 @@ case $1 in
 	if ! test -f /usr/lib/libssl.so; then
 	    echo "WARNING: /usr/lib/libssl.so not found, did you install OpenSSL?"
 	    echo "(type RET to continue anyway)"
+	    read
 	fi
 	${lisp} $run_options \
 	    --eval "(require :asdf)" \
 	    --eval "$set_central_registry" \
 	    --eval "(asdf:operate 'asdf:load-op :hunchentoot-test)" \
+	    --eval "(setf tbnl:*catch-errors-p* nil)" \
 	    --eval "(hunchentoot:start-server :port 4242)" \
 	    --eval '(format t "~%Webserver is running at http://localhost:4242/hunchentoot/test~%")' \
+	    --eval '(format t "Type RET to quit~%")' \
+	    --eval '(read-line)' \
+	    --eval "$quit"
+	;;
+    webdav)
+	if ! test -f /usr/lib/libssl.so; then
+	    echo "WARNING: /usr/lib/libssl.so not found, did you install OpenSSL?"
+	    echo "(type RET to continue anyway)"
+	    read
+	fi
+	directory="$2/"
+	if ! test -d "$directory"; then
+	    echo Error: Expected directory as an argument.
+	    echo usage: clbuild webdav DIRECTORY
+	    exit 1
+	fi
+	${lisp} $run_options \
+	    --eval "(require :asdf)" \
+	    --eval "$set_central_registry" \
+	    --eval "(asdf:operate 'asdf:load-op :cl-webdav)" \
+	    --eval "(setf tbnl:*catch-errors-p* nil)" \
+	    --eval "(setf dav:*file-resource-base-path-namestring* \"$directory\")" \
+	    --eval "(push (dav:create-dav-dispatcher 'dav:file-resource) tbnl:*dispatch-table*)" \
+	    --eval "(hunchentoot:start-server :port 4242)" \
+	    --eval "(format t \"~%WebDAV server for $directory is running at http://localhost:4242/~%\")" \
 	    --eval '(format t "Type RET to quit~%")' \
 	    --eval '(read-line)' \
 	    --eval "$quit"
