@@ -172,7 +172,20 @@ cvs co mcclim...
 <i>... lots of output not shown ...</i>
 update complete                                                   
 46 systems definition files registered</pre>
-
+  <p>
+    Use dumpcore <tt>update</tt> to create a core file containing all
+    applications, accelerating application startup considerably.
+  </p>
+  <pre>clbuild$ <b>./clbuild dumpcore</b>
+<i>... lots of output not shown ...</i>
+[undoing binding stack and other enclosing state... done]
+[saving current Lisp image into /home/david/clbuild/monster.core:
+writing 1664 bytes from the read-only space at 0x20000000
+writing 5024 bytes from the static space at 0x20100000
+writing 181661696 bytes from the dynamic space at 0x1000000000
+done]
+./clbuild ok
+monster.core dumped</pre>
   <p>
     You can also download and recompile SBCL using <tt>buildsbcl</tt>
     or <tt>buildworld</tt>:
@@ -187,7 +200,8 @@ Usage:
 
   update        download/update all applications
   recompile     recompile all applications
-  build         update &amp;&amp; recompile
+  dumpcore      recompile and dump a core file for faster startup
+  build         update &amp;&amp; dumpcore
 
   buildsbcl     download/update and compile SBCL
   world         buildsbcl &amp;&amp; build
@@ -208,6 +222,7 @@ Usage:
   beirc         run the Beirc IRC client
   climplayer    run the CLIMPlayer music player
                 (required Debian packages: mplayer, fileschanged, fam)
+
   hunchentoot   run the Hunchentoot web server test
   webdav DIR    run the CL-WEBDAV server, serving directory DIR
                 (required Debian packages: libssl-dev)

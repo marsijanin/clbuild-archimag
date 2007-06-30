@@ -94,7 +94,10 @@ elif [ ! -z $SBCL ]; then
     lisp=$SBCL
 elif [ -x ${target_dir}/bin/sbcl ]; then
     export SBCL_HOME=${target_namestring}lib/sbcl/
-    lisp="${target_dir}/bin/sbcl --core ${target_namestring}lib/sbcl/sbcl.core"
+    lisp="${target_dir}/bin/sbcl"
+    if ! test -f monster.core; then
+	lisp="$lisp --core ${target_namestring}lib/sbcl/sbcl.core"
+    fi
 else
     lisp=sbcl
 fi
@@ -213,6 +216,9 @@ get_tarball_bz2() {
 }
 
 recompile() {
+	rm -f monster.core
+
+        cmd="${1:-$quit}"
 	${lisp} $build_options \
 	    --eval "(require :asdf)" \
 	    --eval "$set_central_registry" \
@@ -228,7 +234,7 @@ recompile() {
 	    --eval "(asdf:oos 'asdf:load-op :climplayer)" \
 	    --eval "(asdf:oos 'asdf:load-op :hunchentoot-test)" \
 	    --eval "(asdf:oos 'asdf:load-op :cl-webdav)" \
-	    --eval $quit
+	    --eval "$cmd"
 	echo "$0 ok"
 }
 
@@ -238,6 +244,8 @@ count_systems() {
 }
 
 update() {
+	rm -f monster.core
+
         TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
 
         cleanup() {
@@ -259,7 +267,8 @@ Usage:
 
   update        download/update all applications
   recompile     recompile all applications
-  build         update && recompile
+  dumpcore      recompile and dump a core file for faster startup
+  build         update && dumpcore
 
   buildsbcl     download/update and compile SBCL
   world         buildsbcl && build
@@ -343,6 +352,7 @@ running one of applications." \
 	0 0 0 \
 	"update" "download/update all applications" \
 	"recompile" "recompile all applications" \
+	"dumpcore" "recompile and dump a core file for faster startup" \
 	"" "" \
 	"buildsbcl" "download/update and compile SBCL" \
 	"world" "buildsbcl && update && recompile" \
@@ -429,6 +439,16 @@ check() {
     count_systems
 }
 
+dumpcore() {
+    recompile '(sb-ext:save-lisp-and-die "monster.core")'
+    echo "monster.core dumped"
+}
+
+if test -f monster.core; then
+    # echo "using `pwd`/monster.core"
+    run_options="--core monster.core $run_options"
+fi
+
 case $1 in
     check)
 	check
@@ -437,12 +457,13 @@ case $1 in
 	"$0" clean && "$0" buildsbcl && "$0" build
 	;;
     clean)
+	rm -f monster.core
 	cd $source_dir
 	find . -name "*.fasl" -exec rm {} \;
 	find . -name "*.lx64fsl" -exec rm {} \;
 	;;
     mrproper)
-	rm -rf ${source_dir} ${target_dir}
+	rm -rf monster.core ${source_dir} ${target_dir}
 	;;
     update)
 	update
@@ -452,7 +473,14 @@ case $1 in
 	;;
     build)
 	update
-	recompile
+	dumpcore
+	;;
+    dumpcore)
+        if [ -n "$CCL" ]; then
+            echo "Sorry, dumpcore not implemented for OpenMCL yet." 1>&2
+            exit 1
+        fi
+	dumpcore
 	;;
     buildsbcl)
         if [ -n "$CCL" ]; then
