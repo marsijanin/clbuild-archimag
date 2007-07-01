@@ -9,6 +9,8 @@ get_cvs_clnet slime
 get_cvs_clnet beirc
 get_cvs_clnet cl+ssl cl-plus-ssl
 get_cvs_clnet trivial-gray-streams cl-plus-ssl
+get_cvs_clnet eclipse
+ln -sf $(pwd)/eclipse/system.lisp ${system_dir}/eclipse.asd
 
 get_svn_clnet usocket usocket/trunk
 get_svn_clnet cl-irc trunk

@@ -222,6 +222,7 @@ Usage:
   beirc         run the Beirc IRC client
   climplayer    run the CLIMPlayer music player
                 (required Debian packages: mplayer, fileschanged, fam)
+  eclipse       run the eclipse window manager
 
   hunchentoot   run the Hunchentoot web server test
   webdav DIR    run the CL-WEBDAV server, serving directory DIR

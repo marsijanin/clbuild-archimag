@@ -234,6 +234,8 @@ recompile() {
 	    --eval "(asdf:oos 'asdf:load-op :climplayer)" \
 	    --eval "(asdf:oos 'asdf:load-op :hunchentoot-test)" \
 	    --eval "(asdf:oos 'asdf:load-op :cl-webdav)" \
+	    --eval "(asdf:oos 'asdf:load-op :eclipse)" \
+	    --eval "(eclipse-system:compile-themes \"source/eclipse/themes/microGUI/\" \"source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\")" \
 	    --eval "$cmd"
 	echo "$0 ok"
 }
@@ -289,6 +291,7 @@ Usage:
   beirc         run the Beirc IRC client
   climplayer    run the CLIMPlayer music player
                 (required Debian packages: mplayer, fileschanged, fam)
+  eclipse [DPY] run the eclipse window manager
 
   hunchentoot   run the Hunchentoot web server test
   webdav DIR    run the CL-WEBDAV server, serving directory DIR
@@ -355,7 +358,7 @@ running one of applications." \
 	"dumpcore" "recompile and dump a core file for faster startup" \
 	"" "" \
 	"buildsbcl" "download/update and compile SBCL" \
-	"world" "buildsbcl && update && recompile" \
+	"world" "buildsbcl && update && dumpcore" \
 	"" "" \
 	"slime" "run the Superior Lisp Interaction Mode in a fresh Emacs" \
 	"slime -nw" "run the Superior Lisp Interaction Mode (in this TTY)" \
@@ -368,6 +371,7 @@ running one of applications." \
 	"climplayer" "run the CLIMPlayer music player" \
 	"hunchentoot" "run the Hunchentoot web server test" \
 	"webdav" "run the CL-WEBDAV server" \
+	"eclipse" "run the eclipse window manager" \
 	"" "" \
 	"clear" "Delete all fasls" \
 	"mrproper" "Delete all downloaded source and fasls" \
@@ -379,26 +383,38 @@ running one of applications." \
 	exit 0
     fi
     choice="`cat $TMPDIR/choice`"
-    if test x$choice = xwebdav; then
-	if dialog --title "clbuild webdav" --clear --inputbox \
-	    "A WebDAV server will be started on http://localhost:4242.\n\n\
+    case $choice in
+	webdav)
+	    if dialog --title "clbuild webdav" --clear --inputbox \
+		"A WebDAV server will be started on http://localhost:4242.\n\n\
 Files will be served for read and write operations without authentication.\n\n\
 Please choose a directory to be exported." \
-	    16 72 /tmp 2>$TMPDIR/choice
-	then
-	    directory=`cat $TMPDIR/choice`
-	    if test -d $directory; then
-		choice="webdav $directory"
+		16 72 /tmp 2>$TMPDIR/choice
+	    then
+		directory=`cat $TMPDIR/choice`
+		if test -d $directory; then
+		    choice="webdav $directory"
+		else
+		    $DIALOG --title "clbuild webdav" --clear \
+			--msgbox "Error: Directory not found: $directory" \
+			10 41
+		    choice=""
+		fi
 	    else
-		$DIALOG --title "clbuild webdav" --clear \
-		    --msgbox "Error: Directory not found: $directory" \
-		    10 41
 		choice=""
 	    fi
-	else
-	    choice=""
-	fi
-    fi
+	    ;;
+	eclipse)
+	    if dialog --title "clbuild webdav" --clear --inputbox \
+		"Please enter the X11 display to run eclipse on." \
+		16 72 ${DISPLAY:-:0} 2>$TMPDIR/choice
+	    then
+		choice="eclipse `cat $TMPDIR/choice`"
+	    else
+		choice=""
+	    fi
+	    ;;
+    esac
     case $choice in
 	"")
 	    ;;
@@ -588,6 +604,25 @@ case $1 in
 	    --eval "(format t \"~%WebDAV server for $directory is running at http://localhost:4242/~%\")" \
 	    --eval '(format t "Type RET to quit~%")' \
 	    --eval '(read-line)' \
+	    --eval "$quit"
+	;;
+    eclipse)
+	options=""
+	if test -n "$2"; then
+	    options=":display \"$2\""
+	fi
+	touch source/eclipse/config.lisp
+	# zzz cl-user::*eclipse-initfile*?!
+	# zzz cl-user::*eclipse-eclipsedir*?!
+	${lisp} $run_options \
+	    --eval "(require :asdf)" \
+	    --eval "$set_central_registry" \
+	    --eval "(unless (find-package :eclipse) (asdf:operate 'asdf:load-op :eclipse))" \
+	    --eval "(defparameter cl-user::*eclipse-initfile* \".eclipse.lisp\")" \
+	    --eval "(defparameter cl-user::*eclipse-eclipsedir* nil)" \
+	    --eval "(unless (find-package :eclipse) (eclipse-system:compile-themes \"source/eclipse/themes/microGUI/\" \"source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\"))" \
+	    --eval "(load (compile-file \"source/eclipse/lib/clx-ext/event.lisp\"))" \
+	    --eval "(eclipse:eclipse $options)" \
 	    --eval "$quit"
 	;;
     help|--help|-h|-H)
