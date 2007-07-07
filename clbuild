@@ -139,16 +139,28 @@ clbuild_lisp() {
 	"$@"
 }
 
+dribble_get() {
+    label="$1"
+    name="$2"
+
+    if test -d `echo ${name}*/ | awk '{print $1;}'`; then
+	echo -n "UPDATE "
+    else
+	echo -n "NEW "
+    fi
+    echo "$label $name"
+}
+
 get_darcs() {
     name="$1"
     url="$2"
 
     # don't use tail_last, since darcs already has this kind of progress bar
     if [ -d $name ]; then
-	echo "darcs pull $name..."
+	dribble_get "darcs pull" $name
 	(cd $name; darcs pull --all)
     else
-	echo "darcs get $name..."
+	dribble_get "darcs get" $name
 	darcs get $url $name
     fi
     ln -f -s $(pwd)/$name/*.asd ${system_dir}
@@ -158,7 +170,7 @@ get_svn() {
     name="$1"
     url="$2"
 
-    echo "svn co $name..."
+    dribble_get "svn co" $name
 
     svn co $url $name | tail_last
     ln -f -s $(pwd)/$name/*.asd ${system_dir}/
@@ -168,7 +180,7 @@ get_cvs() {
     module="$1"
     repository="$2"
 
-    echo "cvs co $module..."
+    dribble_get "cvs co" $module
 
     cvs -d $repository co $module | tail_last
     ln -f -s $(pwd)/$module/*.asd ${system_dir}/
@@ -182,7 +194,7 @@ get_tarball() {
 
     tmp=$TMPDIR/${name}.tar.gz
 
-    echo "wget $name..."
+    dribble_get wget $name
 
     [ -d ${name}*/ ] && rm -rf ${name}*/
     wget \
