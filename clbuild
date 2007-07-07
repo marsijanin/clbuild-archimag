@@ -38,17 +38,22 @@ fi
 build_options="--noinform --noprint --disable-debugger $common_options"
 run_options="--disable-debugger $common_options"
 quit="(sb-ext:quit)"
+eval="--eval"
+require_asdf="(require :asdf)"
 
 # CLIM configuration
 case x$CLIM_BACKEND in
     xgraphic-forms)
         EXTRA_CLIM_FEATURES="(pushnew :clim-graphic-forms *features*)"
+	maybe_load_clx="nil"
         ;;
     xgtkairo)
         EXTRA_CLIM_FEATURES="(pushnew :gtkairo *features*)"
+	maybe_load_clx="nil"
         ;;
     x|xclx)
         EXTRA_CLIM_FEATURES="nil"
+	maybe_load_clx="(unless (find-package :xlib) (asdf:operate 'asdf:load-op :clx))"
         ;;
     *)
         echo "invalid $CLIM_BACKEND, expected clx, gtkairo, or graphic-forms." 1>&2
@@ -95,6 +100,33 @@ if [ ! -z $CCL ]; then
     build_options="--batch" # fixme, that's not good enough
     run_options="--batch"   # ditto
     quit="(ccl:quit)"
+elif [ ! -z $CLISP ]; then
+    # user wants CLISP instead of SBCL.  Make it so.
+    cat <<EOF
+*** clbuild starting up using CLISP
+*** Please note that CLISP support is experimental and not all applications
+*** are expected to compile properly yet.
+
+EOF
+    lisp="$CLISP -repl"
+    eval="-x"
+    if test -n "$USER_INIT"; then
+	common_options="-norc -i $USER_INIT"
+    else
+	common_options=""
+    fi
+    build_options="-on-error exit $common_options"
+    run_options="-on-error exit $common_options"
+    quit="(ext:quit)"
+    require_asdf="(load \"source/asdf-for-clisp/asdf.lisp\")"
+
+    if test -d source/asdf-for-clisp; then
+	echo "*** asdf checkout found"
+	echo
+    else
+	echo "NEW checking out asdf for use with clisp"
+	(cd source && cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -d asdf-for-clisp sbcl/contrib/asdf)
+    fi
 elif [ ! -z $SBCL ]; then
     lisp=$SBCL
 elif [ -x ${target_dir}/bin/sbcl ]; then
@@ -133,9 +165,9 @@ tail_last() {
 
 clbuild_lisp() {
     ${lisp} $common_options \
-	--eval "(require :asdf)" \
-	--eval "$set_central_registry" \
-	--eval "$EXTRA_CLIM_FEATURES" \
+	$eval "$require_asdf" \
+	$eval "$set_central_registry" \
+	$eval "$EXTRA_CLIM_FEATURES" \
 	"$@"
 }
 
@@ -237,23 +269,25 @@ recompile() {
 
         cmd="${1:-$quit}"
 	${lisp} $build_options \
-	    --eval "(require :asdf)" \
-	    --eval "$set_central_registry" \
-            --eval "$EXTRA_CLIM_FEATURES" \
-	    --eval "(asdf:oos 'asdf:load-op :mcclim)" \
-	    --eval "(asdf:oos 'asdf:load-op :cl-ppcre)" \
-	    --eval "(asdf:oos 'asdf:load-op :clim-listener)" \
-	    --eval "(asdf:oos 'asdf:load-op :skippy)" \
-	    --eval "(asdf:oos 'asdf:load-op :gsharp)" \
-	    --eval "(asdf:oos 'asdf:load-op :closure)" \
-	    --eval "(asdf:oos 'asdf:load-op :beirc)" \
-	    --eval "(asdf:oos 'asdf:load-op :climacs)" \
-	    --eval "(asdf:oos 'asdf:load-op :climplayer)" \
-	    --eval "(asdf:oos 'asdf:load-op :hunchentoot-test)" \
-	    --eval "(asdf:oos 'asdf:load-op :cl-webdav)" \
-	    --eval "(asdf:oos 'asdf:load-op :eclipse)" \
-	    --eval "(eclipse-system:compile-themes \"source/eclipse/themes/microGUI/\" \"source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\")" \
-	    --eval "$cmd"
+	    $eval "$require_asdf" \
+	    $eval "$set_central_registry" \
+            $eval "$EXTRA_CLIM_FEATURES" \
+	    $eval "$maybe_load_clx" \
+	    $eval "(asdf:oos 'asdf:load-op :mcclim)" \
+	    $eval "(asdf:oos 'asdf:load-op :cl-ppcre)" \
+	    $eval "(asdf:oos 'asdf:load-op :clim-listener)" \
+	    $eval "(asdf:oos 'asdf:load-op :skippy)" \
+	    $eval "(asdf:oos 'asdf:load-op :gsharp)" \
+	    $eval "(asdf:oos 'asdf:load-op :clim-examples)" \
+	    $eval "(asdf:oos 'asdf:load-op :closure)" \
+	    $eval "(asdf:oos 'asdf:load-op :beirc)" \
+	    $eval "(asdf:oos 'asdf:load-op :climacs)" \
+	    $eval "(asdf:oos 'asdf:load-op :climplayer)" \
+	    $eval "(asdf:oos 'asdf:load-op :hunchentoot-test)" \
+	    $eval "(asdf:oos 'asdf:load-op :cl-webdav)" \
+	    $eval "(asdf:oos 'asdf:load-op :eclipse)" \
+	    $eval "(eclipse-system:compile-themes \"source/eclipse/themes/microGUI/\" \"source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\")" \
+	    $eval "$cmd"
 	echo "$0 ok"
 }
 
@@ -308,6 +342,7 @@ Usage:
   beirc         run the Beirc IRC client
   climplayer    run the CLIMPlayer music player
                 (required Debian packages: mplayer, fileschanged, fam)
+  demodemo      run some random CLIM examples
   eclipse [DPY] run the eclipse window manager
 
   hunchentoot   run the Hunchentoot web server test
@@ -355,13 +390,14 @@ start_clim() {
     cmd="$2"
 
     ${lisp} $run_options \
-	--eval "(require :asdf)" \
-	--eval "$set_central_registry" \
-	--eval "$EXTRA_CLIM_FEATURES" \
-	--eval "(asdf:operate 'asdf:load-op :mcclim)" \
-	--eval "(asdf:operate 'asdf:load-op $system)" \
-	--eval "$cmd" \
-	--eval "$quit"
+	$eval "$require_asdf" \
+	$eval "$set_central_registry" \
+	$eval "$EXTRA_CLIM_FEATURES" \
+	$eval "$maybe_load_clx" \
+	$eval "(asdf:operate 'asdf:load-op :mcclim)" \
+	$eval "(asdf:operate 'asdf:load-op $system)" \
+	$eval "$cmd" \
+	$eval "$quit"
 }
 
 interactive_menu() {
@@ -386,6 +422,7 @@ running one of applications." \
 	"closure" "run the CLOSURE web browser" \
 	"beirc" "run the Beirc IRC client" \
 	"climplayer" "run the CLIMPlayer music player" \
+	"demodemo" "run some random CLIM examples" \
 	"hunchentoot" "run the Hunchentoot web server test" \
 	"webdav" "run the CL-WEBDAV server" \
 	"eclipse" "run the eclipse window manager" \
@@ -460,7 +497,7 @@ check() {
 	
     echo
     echo "Checking Lisp startup..."
-    if ${lisp} $run_options --eval $quit >/dev/null; then
+    if ${lisp} $run_options $eval $quit >/dev/null; then
 	echo "Success: Lisp starts up using \"$lisp\""
     else
 	echo "Error: Cannot run Lisp using \"$lisp\""
@@ -563,9 +600,12 @@ case $1 in
 	;;
     listener)
 	start_clim :clim-listener "(clim-listener:run-listener)"
-	;;
+	;; 
     gsharp)
 	start_clim :gsharp "(gsharp::gsharp)"
+	;;
+    demodemo)
+	start_clim :clim-examples "(clim-demo::demodemo)"
 	;;
     climacs)
 	start_clim :climacs "(climacs:climacs)"
@@ -588,15 +628,15 @@ case $1 in
 	    read
 	fi
 	${lisp} $run_options \
-	    --eval "(require :asdf)" \
-	    --eval "$set_central_registry" \
-	    --eval "(asdf:operate 'asdf:load-op :hunchentoot-test)" \
-	    --eval "(setf tbnl:*catch-errors-p* nil)" \
-	    --eval "(hunchentoot:start-server :port 4242)" \
-	    --eval '(format t "~%Webserver is running at http://localhost:4242/hunchentoot/test~%")' \
-	    --eval '(format t "Type RET to quit~%")' \
-	    --eval '(read-line)' \
-	    --eval "$quit"
+	    $eval "$require_asdf" \
+	    $eval "$set_central_registry" \
+	    $eval "(asdf:operate 'asdf:load-op :hunchentoot-test)" \
+	    $eval "(setf tbnl:*catch-errors-p* nil)" \
+	    $eval "(hunchentoot:start-server :port 4242)" \
+	    $eval '(format t "~%Webserver is running at http://localhost:4242/hunchentoot/test~%")' \
+	    $eval '(format t "Type RET to quit~%")' \
+	    $eval '(read-line)' \
+	    $eval "$quit"
 	;;
     webdav)
 	if ! test -f /usr/lib/libssl.so; then
@@ -611,17 +651,17 @@ case $1 in
 	    exit 1
 	fi
 	${lisp} $run_options \
-	    --eval "(require :asdf)" \
-	    --eval "$set_central_registry" \
-	    --eval "(asdf:operate 'asdf:load-op :cl-webdav)" \
-	    --eval "(setf tbnl:*catch-errors-p* nil)" \
-	    --eval "(setf dav:*file-resource-base-path-namestring* \"$directory\")" \
-	    --eval "(push (dav:create-dav-dispatcher 'dav:file-resource) tbnl:*dispatch-table*)" \
-	    --eval "(hunchentoot:start-server :port 4242)" \
-	    --eval "(format t \"~%WebDAV server for $directory is running at http://localhost:4242/~%\")" \
-	    --eval '(format t "Type RET to quit~%")' \
-	    --eval '(read-line)' \
-	    --eval "$quit"
+	    $eval "$require_asdf" \
+	    $eval "$set_central_registry" \
+	    $eval "(asdf:operate 'asdf:load-op :cl-webdav)" \
+	    $eval "(setf tbnl:*catch-errors-p* nil)" \
+	    $eval "(setf dav:*file-resource-base-path-namestring* \"$directory\")" \
+	    $eval "(push (dav:create-dav-dispatcher 'dav:file-resource) tbnl:*dispatch-table*)" \
+	    $eval "(hunchentoot:start-server :port 4242)" \
+	    $eval "(format t \"~%WebDAV server for $directory is running at http://localhost:4242/~%\")" \
+	    $eval '(format t "Type RET to quit~%")' \
+	    $eval '(read-line)' \
+	    $eval "$quit"
 	;;
     eclipse)
 	options=""
@@ -632,15 +672,15 @@ case $1 in
 	# zzz cl-user::*eclipse-initfile*?!
 	# zzz cl-user::*eclipse-eclipsedir*?!
 	${lisp} $run_options \
-	    --eval "(require :asdf)" \
-	    --eval "$set_central_registry" \
-	    --eval "(unless (find-package :eclipse) (asdf:operate 'asdf:load-op :eclipse))" \
-	    --eval "(defparameter cl-user::*eclipse-initfile* \".eclipse.lisp\")" \
-	    --eval "(defparameter cl-user::*eclipse-eclipsedir* nil)" \
-	    --eval "(unless (find-package :eclipse) (eclipse-system:compile-themes \"source/eclipse/themes/microGUI/\" \"source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\"))" \
-	    --eval "(load (compile-file \"source/eclipse/lib/clx-ext/event.lisp\"))" \
-	    --eval "(eclipse:eclipse $options)" \
-	    --eval "$quit"
+	    $eval "$require_asdf" \
+	    $eval "$set_central_registry" \
+	    $eval "(unless (find-package :eclipse) (asdf:operate 'asdf:load-op :eclipse))" \
+	    $eval "(defparameter cl-user::*eclipse-initfile* \".eclipse.lisp\")" \
+	    $eval "(defparameter cl-user::*eclipse-eclipsedir* nil)" \
+	    $eval "(unless (find-package :eclipse) (eclipse-system:compile-themes \"source/eclipse/themes/microGUI/\" \"source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\"))" \
+	    $eval "(load (compile-file \"source/eclipse/lib/clx-ext/event.lisp\"))" \
+	    $eval "(eclipse:eclipse $options)" \
+	    $eval "$quit"
 	;;
     help|--help|-h|-H)
         help
