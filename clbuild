@@ -27,12 +27,17 @@ source_dir="$(pwd)/source"
 target_dir="$(pwd)/target"
 self="`readlink -f $0`"
 
-# SBCL-specific options
-build_options="--noinform --noprint --disable-debugger"
-run_options="--disable-debugger"
-quit="(sb-ext:quit)"
-
 source clbuild.conf
+if test -n "$USER_INIT"; then
+    common_options="--userinit $USER_INIT"
+else
+    common_options=""
+fi
+
+# SBCL-specific options
+build_options="--noinform --noprint --disable-debugger $common_options"
+run_options="--disable-debugger $common_options"
+quit="(sb-ext:quit)"
 
 # CLIM configuration
 case x$CLIM_BACKEND in
@@ -127,7 +132,7 @@ tail_last() {
 }
 
 clbuild_lisp() {
-    ${lisp} \
+    ${lisp} $common_options \
 	--eval "(require :asdf)" \
 	--eval "$set_central_registry" \
 	--eval "$EXTRA_CLIM_FEATURES" \
@@ -443,7 +448,7 @@ check() {
 	
     echo
     echo "Checking Lisp startup..."
-    if ${lisp} --eval $quit >/dev/null; then
+    if ${lisp} $run_options --eval $quit >/dev/null; then
 	echo "Success: Lisp starts up using \"$lisp\""
     else
 	echo "Error: Cannot run Lisp using \"$lisp\""
