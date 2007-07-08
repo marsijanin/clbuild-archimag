@@ -27,7 +27,17 @@ source_dir="$(pwd)/source"
 target_dir="$(pwd)/target"
 self="`readlink -f $0`"
 
+if test x`uname -o` = xCygwin; then
+	windowsp=1
+else
+	windowsp=""
+fi
+
 source clbuild.conf
+if test -n $windowsp -a x$USER_INIT = x/dev/null; then
+	USER_INIT=NUL
+fi
+
 if test -n "$USER_INIT"; then
     common_options="--userinit $USER_INIT"
 else
@@ -61,36 +71,15 @@ case x$CLIM_BACKEND in
         ;;
 esac
 
-if test x`uname -o` = xCygwin; then
-        # need to translate cygwin's system_dir into a real Windows namestring
-        # for use with SBCL below
-	echo Cygwin detected, computing Windows pathname...
-	# preliminary sbcl command line, gets reset later
-	if test -x target/bin/sbcl; then
-	    lisp="target/bin/sbcl --core target/lib/sbcl/sbcl.core"
-	else
-	    lisp=sbcl
-	fi
-	$lisp --noinform --no-userinit --nosysinit >/dev/null 2>&1 <<eof
-(with-open-file (s "cygwin.tmp"
-                 :direction :output
-                 :if-exists :rename-and-delete
-                 :if-does-not-exist :create)
-  (write-string
-    (substitute #\\/ #\\\\ (namestring *default-pathname-defaults*))
-    s))
-eof
-	system_namestring="`cat cygwin.tmp`systems/"
-	source_namestring="`cat cygwin.tmp`source/"
-	target_namestring="`cat cygwin.tmp`target/"
+if test -n "$windowsp"; then
+	system_namestring="`cygpath -m $system_dir`/"
+	source_namestring="`cygpath -m $source_dir`/"
+	target_namestring="`cygpath -m $target_dir`/"
 	self="c:/cygwin/bin/bash $self"
-	windowsp=windowsp
-	echo "done -- systems located in $system_namestring"
 else
 	system_namestring="$system_dir/"
 	source_namestring="$source_dir/"
 	target_namestring="$target_dir/"
-	unset windowsp
 fi
 set_central_registry="(setq asdf:*central-registry* '(#p\"${system_namestring}\"))"
 
@@ -215,7 +204,7 @@ get_cvs() {
     dribble_get "cvs co" $module
 
     cvs -d $repository co $module | tail_last
-    ln -f -s $(pwd)/$module/*.asd ${system_dir}/
+    ln -f -s $(pwd)/$module/*.asd ${system_dir}/ || true
 }
 
 # zzz I don't like the way the existing directory is removed completely.
