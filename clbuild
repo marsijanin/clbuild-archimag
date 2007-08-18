@@ -25,7 +25,9 @@ cd $(dirname $0)
 system_dir="$(pwd)/systems"
 source_dir="$(pwd)/source"
 target_dir="$(pwd)/target"
-self="`readlink -f $0`"
+# the following was readlink -f for proper symlink support, but only GNU
+# supports that, causing too much portability trouble
+self="`readlink $0`"
 
 if test x`uname -o` = xCygwin; then
 	windowsp=1
