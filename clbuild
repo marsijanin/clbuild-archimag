@@ -34,7 +34,7 @@ else
 fi
 
 source clbuild.conf
-if test -n $windowsp -a x$USER_INIT = x/dev/null; then
+if test -n "$windowsp" -a x$USER_INIT = x/dev/null; then
 	USER_INIT=NUL
 fi
 
