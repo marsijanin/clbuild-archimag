@@ -255,6 +255,7 @@ get_tarball_bz2() {
 
 recompile() {
 	rm -f monster.core
+	touch source/eclipse/config.lisp
 
         cmd="${1:-$quit}"
 	${lisp} $build_options \
