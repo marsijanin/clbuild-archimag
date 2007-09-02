@@ -42,7 +42,7 @@ while test -h "$self"; do
 	self=`readlink "$self"`
 done
 
-if test x`uname -o` = xCygwin; then
+if test x`uname -o 2>/dev/null` = xCygwin; then
 	windowsp=1
 else
 	windowsp=""
