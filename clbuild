@@ -494,6 +494,7 @@ case $1 in
 	emacs=${EMACS-emacs}
 	$emacs \
 	    -eval "(setq load-path (cons \"${source_namestring}slime\" load-path))" \
+	    -eval "(setq load-path (cons \"${source_namestring}slime/contrib\" load-path))" \
 	    -eval "(setq inhibit-splash-screen t)" \
 	    -eval "(load \"${source_namestring}slime/slime\")" \
 	    -eval "(setq inferior-lisp-program \"$self lisp\")" \
