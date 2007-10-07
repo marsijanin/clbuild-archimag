@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Script to update/install the latest versions of all the most
-# important Common Lisp packages. Uses SBCL but otherwise tries to be
+# important Common Lisp projects. Uses SBCL but otherwise tries to be
 # somewhat independent of your local environment.
 #
 # Intended to quickly bootstrap a working development environment for
@@ -17,9 +17,18 @@
 #   Eric Marsden <eric.marsden@free.fr>
 
 set -e
+
+all_projects="flexichain mcclim zip cxml closure gsharp climacs slime beirc
+eclipse cl+ssl trivial-gray-streams usocket cl-irc cl-ppcre flexi-streams
+cl-fad hunchentoot chunga url-rewrite cl-who cl-webdav clx cffi
+bordeaux-threads climplayer closer-mop lw-compat skippy salza puri midi md5
+cl-base64 spatial-trees trivial-sockets split-sequence rfc2388 tab-layout
+graphic-forms"
+
 if [ "$CLNET_USER" == "" ]; then
     CLNET_USER=:pserver:anonymous:anonymous
 fi
+export CLNET_USER
 
 cd $(dirname $0)
 system_dir="$(pwd)/systems"
@@ -135,125 +144,12 @@ fi
 [ -d $source_dir ] || mkdir $source_dir
 [ -d $target_dir ] || mkdir $target_dir
 
-
-blank_line="                                                                  "
-tail_last() {
-    if tty 0>&1 >/dev/null; then
-	while read line; do
-	    echo -e '\r\c'
-	    echo -n "$blank_line"
-	    echo -e '\r\c'
-	    echo -n $line | cut -b 1-65 | tr -d '\n'
-	done
-	echo -e '\r\c'
-	echo -n "$blank_line"
-	echo -e '\r\c'
-    else
-	while read line; do
-	    echo $line
-	done
-    fi
-}
-
 clbuild_lisp() {
     ${lisp} $common_options \
 	$eval "$require_asdf" \
 	$eval "$set_central_registry" \
 	$eval "$EXTRA_CLIM_FEATURES" \
 	"$@"
-}
-
-dribble_get() {
-    label="$1"
-    name="$2"
-
-    if test -d `echo ${name}*/ | awk '{print $1;}'`; then
-	echo -n "UPDATE "
-    else
-	echo -n "NEW "
-    fi
-    echo "$label $name"
-}
-
-get_darcs() {
-    name="$1"
-    url="$2"
-
-    # don't use tail_last, since darcs already has this kind of progress bar
-    if [ -d $name ]; then
-	dribble_get "darcs pull" $name
-	(cd $name; darcs pull --all)
-    else
-	dribble_get "darcs get" $name
-	darcs get $url $name
-    fi
-    ln -f -s $(pwd)/$name/*.asd ${system_dir}
-}
-
-get_svn() {
-    name="$1"
-    url="$2"
-
-    dribble_get "svn co" $name
-
-    svn co $url $name | tail_last
-    ln -f -s $(pwd)/$name/*.asd ${system_dir}/
-}
-
-get_cvs() {
-    module="$1"
-    repository="$2"
-
-    dribble_get "cvs co" $module
-
-    cvs -d $repository co $module | tail_last
-    ln -f -s $(pwd)/$module/*.asd ${system_dir}/ || true
-}
-
-# zzz I don't like the way the existing directory is removed completely.
-get_tarball() {
-    name="$1"
-    url="$2"
-    flags="${3:-z}"
-
-    tmp=$TMPDIR/${name}.tar.gz
-
-    dribble_get wget $name
-
-    [ -d ${name}*/ ] && rm -rf ${name}*/
-    wget \
-	--no-check-certificate \
-	--progress=dot \
-	-O "$tmp" \
-	$url \
-	2>&1 | tail_last
-    tar v${flags}xf "$tmp" | tail_last
-    rm "$tmp"
-    ln -f -s $(pwd)/${name}*/*.asd ${system_dir}/
-}
-
-get_svn_clnet() {
-    name="$1"
-    path="$2"
-
-    get_svn $name svn://common-lisp.net/project/$name/svn/$2
-}
-
-get_cvs_clnet() {
-    module="$1"
-    project="${2:-$1}"
-
-    get_cvs $module ${CLNET_USER}@common-lisp.net:/project/$project/cvsroot
-}
-
-get_ediware() {
-    name="$1"
-
-    get_tarball $name http://weitz.de/files/${name}.tar.gz
-}
-
-get_tarball_bz2() {
-    get_tarball "$1" "$2" j
 }
 
 recompile() {
@@ -293,6 +189,7 @@ update() {
 	rm -f monster.core
 
         TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
+	export TMPDIR
 
         cleanup() {
             rm -rf $TMPDIR
@@ -300,7 +197,16 @@ update() {
         trap cleanup exit
 
 	cd $source_dir
-	source ../update.sh
+	chmod +x ../update.sh
+	for project in ${1:-$all_projects}; do
+	    ${UPDATE_SCRIPT} ${UPDATE_ARGS} $project
+	    ln -f -s $(pwd)/${project}*/*.asd ${system_dir}/
+	done
+
+	# some .asd files are hidden:
+	ln -sf $(pwd)/eclipse/system.lisp ${system_dir}/eclipse.asd
+	ln -f -s $(pwd)/graphic-forms/src/external-libraries/*/*/*.asd \
+	    ${system_dir}
 
 	echo "update complete"
 	count_systems
@@ -311,10 +217,13 @@ help() {
 Usage:
   check         check availability of all necessary helper applications
 
+  update PROJECT_NAME  download/update this project
+
   update        download/update all applications
   recompile     recompile all applications
   dumpcore      recompile and dump a core file for faster startup
   build         update && dumpcore
+
 
   buildsbcl     download/update and compile SBCL
   world         buildsbcl && build
@@ -324,7 +233,7 @@ Usage:
 
   slime         run the Superior Lisp Interaction Mode in a fresh Emacs
   lisp          run Lisp in the terminal
-  sbcl          alias for "lisp" (with all packages available to REQUIRE)
+  sbcl          alias for "lisp" (with all systems available to REQUIRE)
   openmcl       alias for "lisp"
 
   listener      run the McCLIM listener
@@ -529,7 +438,7 @@ case $1 in
 	rm -rf monster.core ${source_dir} ${target_dir}
 	;;
     update)
-	update
+	update $2
 	;;
     recompile)
 	recompile
