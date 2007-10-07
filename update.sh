@@ -62,6 +62,19 @@ get_darcs() {
     fi
 }
 
+get_git() {
+    name="$1"
+    url="$2"
+
+    if [ -d $name ]; then
+	dribble_get "git pull" $name
+	(cd $name; git pull)
+    else
+	dribble_get "git clone" $name
+	git clone $url $name
+    fi
+}
+
 get_svn() {
     name="$1"
     url="$2"
