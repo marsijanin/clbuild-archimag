@@ -141,6 +141,10 @@ case $1 in
 	get_cvs_clnet cl+ssl cl-plus-ssl
 	;;
 
+    closure-common)
+	get_cvs_clnet closure-common cxml
+	;;
+
     trivial-gray-streams)
 	get_cvs_clnet trivial-gray-streams cl-plus-ssl
 	;;
