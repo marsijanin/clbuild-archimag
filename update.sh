@@ -203,6 +203,10 @@ case $1 in
 	    http://common-lisp.net/project/closer/repos/lw-compat/
 	;;
 
+    closure-html)
+	get_git closure-html git://repo.or.cz/closure-html.git
+	;;
+
     skippy)
 	get_tarball skippy http://www.xach.com/lisp/skippy.tgz
 	;;
