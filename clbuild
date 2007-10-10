@@ -56,7 +56,7 @@ make_absolute_pn() {
 UPDATE_SCRIPT="$(make_absolute_pn "$UPDATE_SCRIPT")"
 USER_INIT="$(make_absolute_pn "$USER_INIT")"
 
-if test -n "$windowsp" -a x$USER_INIT = x/dev/null; then
+if test -n $windowsp -a x$USER_INIT = x/dev/null; then
 	USER_INIT=NUL
 fi
 
