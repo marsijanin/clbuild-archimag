@@ -531,8 +531,7 @@ case $1 in
 	    -eval "(setq inhibit-splash-screen t)" \
 	    -eval "(load \"${source_namestring}slime/slime\")" \
 	    -eval "(setq inferior-lisp-program \"$self lisp\")" \
-	    -eval "(setq slime-use-autodoc-mode nil)" \
-            -eval "(slime-setup '(slime-fancy slime-tramp slime-asdf))" \
+	    -eval "(slime-setup)" \
 	    -eval '(slime)' \
 	    ${emacs_args}
 	;;
