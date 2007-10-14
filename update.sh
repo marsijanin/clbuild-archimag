@@ -207,6 +207,10 @@ case $1 in
 	get_git closure-html git://repo.or.cz/closure-html.git
 	;;
 
+    cxml-rng|cxml-stp)
+	get_git $1 http://www.lichteblau.com/git/$1.git
+	;;
+
     skippy)
 	get_tarball skippy http://www.xach.com/lisp/skippy.tgz
 	;;
