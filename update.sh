@@ -170,7 +170,7 @@ case $1 in
 	get_svn_clnet cl-irc trunk
 	;;
 
-    cl-ppcre|flexi-streams|cl-fad|hunchentoot|chunga|url-rewrite|cl-who|cl-webdav)
+    cl-ppcre|flexi-streams|cl-fad|hunchentoot|chunga|url-rewrite|cl-who|cl-webdav|drakma)
 	get_ediware $1
 	;;
 
