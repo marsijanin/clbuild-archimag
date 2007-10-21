@@ -219,23 +219,14 @@ case $1 in
 	get_tarball salza http://www.xach.com/lisp/salza/salza-0.7.2.tar.gz
 	;;
 
-    puri)
-	get_tarball puri http://files.b9.com/puri/puri-latest.tar.gz
-	;;
-
     midi)
 	get_tarball midi http://doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
 	;;
 
-    md5)
-	get_tarball md5 http://files.b9.com/md5/md5-1.8.5.tar.gz
+    puri|md5|cl-base64)
+	get_git $1 git://git.b9.com/$1.git
 	;;
-	
-    cl-base64)
-	get_tarball cl-base64 \
-	    http://files.b9.com/cl-base64/cl-base64-latest.tar.gz
-	;;
-	
+
     spatial-trees)
 	get_tarball spatial-trees \
 	    http://ftp.linux.org.uk/pub/lisp/cclan/spatial-trees.tar.gz
