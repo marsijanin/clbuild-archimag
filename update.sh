@@ -247,13 +247,6 @@ case $1 in
 	    http://common-lisp.net/project/rfc2388/rfc2388_latest.tar.gz
 	;;
 
-    tab-layout)
-	# old standalone tab-layout (for climplayer?)
-	get_tarball_bz2 \
-	    tab-layout \
-	    http://bl0rg.net/~mgr/flux/tab-layout_2005-09-19_02-52+0200.tar.bz2
-	;;
-
     graphic-forms)
 	get_svn_clnet graphic-forms trunk
 	;;
