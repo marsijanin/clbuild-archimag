@@ -93,7 +93,6 @@ get_cvs() {
     cvs -d $repository co $module | tail_last
 }
 
-# zzz I don't like the way the existing directory is removed completely.
 get_tarball() {
     name="$1"
     url="$2"
@@ -103,7 +102,15 @@ get_tarball() {
 
     dribble_get wget $name
 
-    [ -d ${name}*/ ] && rm -rf ${name}*/
+    # We used to delete old directories completely here.  Unfortunately,
+    # that can easily lead to loss of changes, a problem all the VC checkout
+    # method do not have to the extent.  Save all old data instead.  Users
+    # can delete the resulting backup directories easily enough themselves.
+    if ls ${name}* >/dev/null; then
+	echo got here
+	backup=`mktemp -d backup_${name}_XXXXXXXXXX`
+	mv ${name}* "$backup/"
+    fi
     wget \
 	--no-check-certificate \
 	--progress=dot \
