@@ -230,7 +230,8 @@ case $1 in
 	;;
 
     midi)
-	get_tarball midi http://doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
+	#get_tarball midi http://doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
+	get_darcs midi http://rvw.doc.gold.ac.uk/sullivan/darcs/midi
 	;;
 
     puri|md5|cl-base64)
