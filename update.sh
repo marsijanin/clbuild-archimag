@@ -129,9 +129,7 @@ get_cvs_clnet() {
 }
 
 get_ediware() {
-    name="$1"
-
-    get_tarball $name http://weitz.de/files/${name}.tar.gz
+    get_darcs $1 http://common-lisp.net/~loliveira/ediware/$1
 }
 
 get_tarball_bz2() {
@@ -170,8 +168,13 @@ case $1 in
 	get_svn_clnet cl-irc trunk
 	;;
 
-    cl-ppcre|flexi-streams|cl-fad|hunchentoot|chunga|url-rewrite|cl-who|cl-webdav|drakma)
+    cl-ppcre|flexi-streams|cl-fad|hunchentoot|chunga|url-rewrite|cl-who|drakma)
 	get_ediware $1
+	;;
+
+    cl-webdav)
+	# not in the darcs mirror yet
+	get_tarball $1 http://weitz.de/files/$1.tar.gz
 	;;
 
     clx)
