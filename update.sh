@@ -235,7 +235,7 @@ case $1 in
 	;;
 
     puri|md5|cl-base64)
-	get_git $1 git://git.b9.com/$1.git
+	get_git $1 http://git.b9.com/$1.git
 	;;
 
     spatial-trees)
