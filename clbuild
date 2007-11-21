@@ -225,6 +225,7 @@ Usage:
   dumpcore      recompile and dump a core file for faster startup
   build         update && dumpcore
 
+  diff          show local changes (for all version-controlled projects)
 
   buildsbcl     download/update and compile SBCL
   world         buildsbcl && build
@@ -587,6 +588,34 @@ case $1 in
 	    $eval "(load (compile-file \"source/eclipse/lib/clx-ext/event.lisp\"))" \
 	    $eval "(eclipse:eclipse $options)" \
 	    $eval "$quit"
+	;;
+    diff)
+	diff="${source_dir}/.diff"
+	cp /dev/null "$diff"
+	cd "${source_dir}"
+	set +e
+	for f in *; do
+	    g="${source_dir}/$f"
+	    if test -d "$g"; then
+		cd "$g"
+		echo -n diffing $f... 1>&2
+		if test -d CVS; then
+		    cvs diff -u 2>/dev/null | grep -v '^?' >>"$diff"
+		elif test -d .svn; then
+		    svn diff >>"$diff"
+		elif test -d '{arch}'; then
+		    baz diff >>"$diff"
+		elif test -d _darcs; then
+		    darcs diff -u >>"$diff"
+		elif test -d .git; then
+		    git diff >>"$diff"
+		else
+		    echo -n " FAILED" 1>&2
+		fi
+		echo
+	    fi
+	done
+	less "$diff"
 	;;
     help|--help|-h|-H)
         help
