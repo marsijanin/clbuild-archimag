@@ -239,8 +239,8 @@ case $1 in
 	;;
 
     spatial-trees)
-	get_tarball spatial-trees \
-	    http://ftp.linux.org.uk/pub/lisp/cclan/spatial-trees.tar.gz
+	get_darcs spatial-trees \
+		http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees
 	;;
 
     trivial-sockets)
