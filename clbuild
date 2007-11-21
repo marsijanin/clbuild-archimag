@@ -182,7 +182,7 @@ recompile() {
 
 count_systems() {
 	n_asd=`ls -1 $system_dir/*.asd | wc -l`
-	echo "$n_asd systems definition files registered"
+	echo "$n_asd system definition files registered"
 }
 
 update() {
