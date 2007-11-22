@@ -258,6 +258,7 @@ Usage:
   build         update && dumpcore
 
   diff          show local changes (for all version-controlled projects)
+  check-urls    compared installed repository urls agains current locations
 
   buildsbcl [XC_HOST]  download/update and compile SBCL
   world         buildsbcl && build
@@ -620,6 +621,13 @@ case $1 in
 	    $eval "(load (compile-file \"source/eclipse/lib/clx-ext/event.lisp\"))" \
 	    $eval "(eclipse:eclipse $options)" \
 	    $eval "$quit"
+	;;
+    check-urls)
+	cd "$source_dir"
+	chmod +x ../update.sh
+	for project in ${2:-$all_projects}; do
+	    ${UPDATE_SCRIPT} --dry-run $project
+	done
 	;;
     diff)
 	diff="${source_dir}/.diff"

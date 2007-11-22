@@ -52,6 +52,20 @@ get_darcs() {
     name="$1"
     url="$2"
 
+    if test -n "$dry_run"; then
+	if [ -d $name ]; then
+	    actual="`cat $name/_darcs/prefs/defaultrepo`"
+	    if test "x$actual" = "x$url"; then
+		echo "OK: $1"
+	    else
+		echo "MISMATCH: $1 was installed from $actual, current is $url"
+	    fi
+	else
+	    echo "MISSING: $1"
+	fi
+	exit 0
+    fi
+
     # don't use tail_last, since darcs already has this kind of progress bar
     if [ -d $name ]; then
 	dribble_get "darcs pull" $name
@@ -66,6 +80,20 @@ get_git() {
     name="$1"
     url="$2"
 
+    if test -n "$dry_run"; then
+	if [ -d $name ]; then
+	    actual="`cd $name && git config --get remote.origin.url`"
+	    if test "x$actual" = "x$url"; then
+		echo "OK: $1"
+	    else
+		echo "MISMATCH: $1 was installed from $actual, current is $url"
+	    fi
+	else
+	    echo "MISSING: $1"
+	fi
+	exit 0
+    fi
+
     if [ -d $name ]; then
 	dribble_get "git pull" $name
 	(cd $name; git pull)
@@ -79,6 +107,20 @@ get_svn() {
     name="$1"
     url="$2"
 
+    if test -n "$dry_run"; then
+	if [ -d $name ]; then
+	    actual="`cd $name && svn info | grep ^URL: | awk '{print $2;}'`"
+	    if test "x$actual" = "x$url"; then
+		echo "OK: $1"
+	    else
+		echo "MISMATCH: $1 was installed from $actual, current is $url"
+	    fi
+	else
+	    echo "MISSING: $1"
+	fi
+	exit 0
+    fi
+
     dribble_get "svn co" $name
 
     svn co $url $name | tail_last
@@ -87,6 +129,20 @@ get_svn() {
 get_cvs() {
     module="$1"
     repository="$2"
+
+    if test -n "$dry_run"; then
+	if [ -d $module ]; then
+	    actual="`cat $module/CVS/Root`"
+	    if test "x$actual" = "x$repository"; then
+		echo "OK: $1"
+	    else
+		echo "MISMATCH: $1 was installed from $actual, current is $repository"
+	    fi
+	else
+	    echo "MISSING: $1"
+	fi
+	exit 0
+    fi
 
     dribble_get "cvs co" $module
 
@@ -97,6 +153,16 @@ get_tarball() {
     name="$1"
     url="$2"
     flags="${3:-z}"
+
+    if test -n "$dry_run"; then
+	if ls -d ${name}* >/dev/null; then
+	    directories="`ls -d ${name}*`"
+	    echo "TARBALL: $directories installed from a tarball, cannot check"
+	else
+	    echo "MISSING: $1"
+	fi
+	exit 0
+    fi
 
     tmp=$TMPDIR/${name}.tar.gz
 
@@ -143,10 +209,17 @@ get_tarball_bz2() {
     get_tarball "$1" "$2" j
 }
 
+if test x$1 = x--dry-run; then
+    shift
+    dry_run=1
+else
+    unset dry_run
+fi
+
 if test $# -ne 1; then
     exec 1>&2
     echo error: invalid number of arguments
-    echo usage: ./update.sh PROJECT_NAME
+    echo usage: ./update.sh [--dry-run] PROJECT_NAME
     exit 1
 fi
 
@@ -162,7 +235,7 @@ case $1 in
 
     trivial-features)
 	get_darcs trivial-features \
-	    http://common-lisp.net/~loliveira/soc07/trivial-features/
+	    http://common-lisp.net/~loliveira/soc07/trivial-features
 	;;
 
     cl+ssl)
@@ -199,32 +272,32 @@ case $1 in
 	;;
 
     babel)
-	get_darcs babel http://common-lisp.net/~loliveira/soc07/babel/
+	get_darcs babel http://common-lisp.net/~loliveira/soc07/babel
 	;;
 
     cffi)
 	#get_darcs cffi http://common-lisp.net/project/cffi/darcs/cffi/
-	get_darcs cffi http://common-lisp.net/~loliveira/soc07/cffi+grovel+babel+stuff/
+	get_darcs cffi http://common-lisp.net/~loliveira/soc07/cffi+grovel+babel+stuff
 	;;
 	
     bordeaux-threads)
 	get_darcs bordeaux-threads \
-	    http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads/
+	    http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads
 	;;
 
     climplayer)
 	get_darcs climplayer \
-	    http://common-lisp.net/project/climplayer/darcs/climplayer/
+	    http://common-lisp.net/project/climplayer/darcs/climplayer
 	;;
 
     closer-mop)
 	get_darcs closer-mop \
-	    http://common-lisp.net/project/closer/repos/closer-mop/
+	    http://common-lisp.net/project/closer/repos/closer-mop
 	;;
 
     lw-compat)
 	get_darcs lw-compat \
-	    http://common-lisp.net/project/closer/repos/lw-compat/
+	    http://common-lisp.net/project/closer/repos/lw-compat
 	;;
 
     closure-html)
