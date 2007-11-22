@@ -215,6 +215,27 @@ update() {
 
 help() {
 	cat <<EOF
+Short usage:
+
+  update [PROJECT] download/update project or all projects
+  buildsbcl        download/update and compile SBCL
+  build            update, rebuild all applications, and dump a core file
+  diff             show local changes (for all version-controlled projects)
+  clean            delete all compiled object files
+ 
+  slime            run the Superior Lisp Interaction Mode in a fresh Emacs
+  lisp             run Lisp in the terminal
+ 
+  listener         run the McCLIM listener
+  hunchentoot      run the Hunchentoot web server test
+ 
+  dialog           show an interactive menu - requires dialog(1)
+
+EOF
+}
+
+long_help() {
+	cat <<EOF
 Usage:
   check         check availability of all necessary helper applications
 
@@ -617,8 +638,11 @@ case $1 in
 	done
 	less "$diff"
 	;;
-    help|--help|-h|-H)
-        help
+    help|--long-help|-H)
+        long_help
+	;;
+    --help|-h)
+	help
 	;;
     ""|dialog)
         if ! dialog --help >/dev/null; then
@@ -627,6 +651,7 @@ case $1 in
 error: dialog(1) not found.  Cannot start interactive menu.
 Install dialog or try clbuild --help instead.
 EOF
+	    help
 	    exit 1
 	fi
 
