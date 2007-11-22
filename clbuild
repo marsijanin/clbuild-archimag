@@ -23,7 +23,8 @@ eclipse cl+ssl trivial-gray-streams usocket cl-irc cl-ppcre flexi-streams
 cl-fad hunchentoot chunga url-rewrite cl-who cl-webdav clx cffi
 bordeaux-threads climplayer closer-mop lw-compat skippy salza puri midi md5
 cl-base64 spatial-trees trivial-sockets split-sequence rfc2388
-graphic-forms closure-common closure-html cxml-rng cxml-stp drakma"
+graphic-forms closure-common closure-html cxml-rng cxml-stp drakma babel
+alexandria"
 
 if [ "$CLNET_USER" == "" ]; then
     CLNET_USER=:pserver:anonymous:anonymous

@@ -155,6 +155,16 @@ case $1 in
 	get_cvs_clnet $1
 	;;
 
+    alexandria)
+	get_darcs alexandria \
+	    http://common-lisp.net/project/alexandria/darcs/alexandria
+	;;
+
+    trivial-features)
+	get_darcs trivial-features \
+	    http://common-lisp.net/~loliveira/soc07/trivial-features/
+	;;
+
     cl+ssl)
 	get_cvs_clnet cl+ssl cl-plus-ssl
 	;;
@@ -188,9 +198,13 @@ case $1 in
 	get_darcs clx http://common-lisp.net/~crhodes/clx
 	;;
 
+    babel)
+	get_darcs babel http://common-lisp.net/~loliveira/soc07/babel/
+	;;
+
     cffi)
 	#get_darcs cffi http://common-lisp.net/project/cffi/darcs/cffi/
-	get_darcs cffi http://common-lisp.net/~loliveira/darcs/cffi-newtypes/
+	get_darcs cffi http://common-lisp.net/~loliveira/soc07/cffi+grovel+babel+stuff/
 	;;
 	
     bordeaux-threads)
