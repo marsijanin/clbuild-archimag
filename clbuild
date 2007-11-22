@@ -30,10 +30,10 @@ if [ "$CLNET_USER" == "" ]; then
 fi
 export CLNET_USER
 
-cd $(dirname $0)
-system_dir="$(pwd)/systems"
-source_dir="$(pwd)/source"
-target_dir="$(pwd)/target"
+BASE="$(cd "$(dirname $0)" && pwd)"
+system_dir="$BASE/systems"
+source_dir="$BASE/source"
+target_dir="$BASE/target"
 self="$0"
 while test -h "$self"; do
 	self=`readlink "$self"`
@@ -45,7 +45,17 @@ else
 	windowsp=""
 fi
 
-source clbuild.conf
+source "$BASE/clbuild.conf"
+# Fix up pathnames
+make_absolute_pn() {
+	if [ -n "$1" ] ; then
+		(cd "$BASE"
+		echo "$(cd "$(dirname "$1")" ; pwd)/$(basename "$1")")
+	fi
+}
+UPDATE_SCRIPT="$(make_absolute_pn "$UPDATE_SCRIPT")"
+USER_INIT="$(make_absolute_pn "$USER_INIT")"
+
 if test -n "$windowsp" -a x$USER_INIT = x/dev/null; then
 	USER_INIT=NUL
 fi
@@ -119,14 +129,14 @@ EOF
     build_options="-on-error exit $common_options"
     run_options="-on-error exit $common_options"
     quit="(ext:quit)"
-    require_asdf="(load \"source/asdf-for-clisp/asdf.lisp\")"
+    require_asdf="(load \"$BASE/source/asdf-for-clisp/asdf.lisp\")"
 
-    if test -d source/asdf-for-clisp; then
+    if test -d "$BASE/source/asdf-for-clisp"; then
 	echo "*** asdf checkout found"
 	echo
     else
 	echo "NEW checking out asdf for use with clisp"
-	(cd source && cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -d asdf-for-clisp sbcl/contrib/asdf)
+	(cd "$BASE/source" && cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -d asdf-for-clisp sbcl/contrib/asdf)
     fi
 elif [ ! -z $SBCL ]; then
     lisp=$SBCL
@@ -140,9 +150,9 @@ else
     lisp=sbcl
 fi
 
-[ -d $system_dir ] || mkdir $system_dir
-[ -d $source_dir ] || mkdir $source_dir
-[ -d $target_dir ] || mkdir $target_dir
+[ -d "$system_dir" ] || mkdir "$system_dir"
+[ -d "$source_dir" ] || mkdir "$source_dir"
+[ -d "$target_dir" ] || mkdir "$target_dir"
 
 clbuild_lisp() {
     ${lisp} $common_options \
@@ -175,13 +185,13 @@ recompile() {
 	    $eval "(asdf:oos 'asdf:load-op :hunchentoot-test)" \
 	    $eval "(asdf:oos 'asdf:load-op :cl-webdav)" \
 	    $eval "(asdf:oos 'asdf:load-op :eclipse)" \
-	    $eval "(eclipse-system:compile-themes \"source/eclipse/themes/microGUI/\" \"source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\")" \
+	    $eval "(eclipse-system:compile-themes \"$BASE/source/eclipse/themes/microGUI/\" \"$BASE/source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\")" \
 	    $eval "$cmd"
 	echo "$0 ok"
 }
 
 count_systems() {
-	n_asd=`ls -1 $system_dir/*.asd | wc -l`
+	n_asd=`ls -1 "$system_dir"/*.asd | wc -l`
 	echo "$n_asd system definition files registered"
 }
 
@@ -196,11 +206,11 @@ update() {
         }
         trap cleanup exit
 
-	cd $source_dir
+	cd "$source_dir"
 	chmod +x ../update.sh
 	for project in ${1:-$all_projects}; do
 	    ${UPDATE_SCRIPT} ${UPDATE_ARGS} $project
-	    ln -f -s $(pwd)/${project}*/*.asd ${system_dir}/
+	    ln -f -s $(pwd)/${project}*/*.asd "${system_dir}"/
 	done
 
 	# some .asd files are hidden:
