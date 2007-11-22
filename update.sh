@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Simple script to download latest versions of all the most important
 # Common Lisp projects.
