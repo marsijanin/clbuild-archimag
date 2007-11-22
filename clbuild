@@ -258,7 +258,7 @@ Usage:
 
   diff          show local changes (for all version-controlled projects)
 
-  buildsbcl     download/update and compile SBCL
+  buildsbcl [XC_HOST]  download/update and compile SBCL
   world         buildsbcl && build
 
   clean         delete all compiled object files
@@ -499,7 +499,7 @@ case $1 in
 	if test -z "$windowsp"; then
 	    echo '(lambda (list) (pushnew :sb-thread list) list)' > sbcl/customize-target-features.lisp
 	fi
-	(cd sbcl; sh make.sh; SBCL_HOME= INSTALL_ROOT=${target_dir} sh install.sh)
+	(cd sbcl; sh make.sh "$2"; SBCL_HOME= INSTALL_ROOT=${target_dir} sh install.sh)
 	;;
     lisp)
 	shift;
