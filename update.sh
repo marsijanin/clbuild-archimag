@@ -180,6 +180,8 @@ get_tarball() {
     url="$2"
     flags="${3:-z}"
 
+    echo "Warning: Using deprecated method get_tarball."
+
     if test -n "$dry_run"; then
 	if ls -d ${name}* >/dev/null; then
 	    directories="`ls -d ${name}*`"
@@ -288,11 +290,6 @@ case $1 in
 	get_ediware $1
 	;;
 
-    cl-webdav)
-	# not in the darcs mirror yet
-	get_tarball $1 http://weitz.de/files/$1.tar.gz
-	;;
-
     clx)
 	get_darcs clx http://common-lisp.net/~crhodes/clx
 	;;
@@ -334,16 +331,7 @@ case $1 in
 	get_git $1 http://www.lichteblau.com/git/$1.git
 	;;
 
-    skippy)
-	get_tarball skippy http://www.xach.com/lisp/skippy.tgz
-	;;
-
-    salza)
-	get_tarball salza http://www.xach.com/lisp/salza/salza-0.7.2.tar.gz
-	;;
-
     midi)
-	#get_tarball midi http://doc.gold.ac.uk/isms/lisp/midi/midi.tar.gz
 	get_darcs midi http://rvw.doc.gold.ac.uk/sullivan/darcs/midi
 	;;
 
@@ -356,19 +344,8 @@ case $1 in
 		http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees
 	;;
 
-    trivial-sockets)
-	get_tarball trivial-sockets \
-	    http://ftp.linux.org.uk/pub/lisp/cclan/trivial-sockets.tar.gz
-	;;
-	
-    split-sequence)
-	get_tarball split-sequence \
-	    http://ftp.linux.org.uk/pub/lisp/cclan/split-sequence.tar.gz
-	    ;;
-
-    rfc2388)
-	get_tarball rfc2388 \
-	    http://common-lisp.net/project/rfc2388/rfc2388_latest.tar.gz
+    cl-webdav|skippy|salza|trivial-sockets|split-sequence|rfc2388)
+	get_darcs $1 http://common-lisp.net/project/clbuild/mirror/$1
 	;;
 
     graphic-forms)
