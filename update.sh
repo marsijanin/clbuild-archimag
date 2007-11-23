@@ -81,7 +81,14 @@ get_darcs() {
     # don't use tail_last, since darcs already has this kind of progress bar
     if [ -d $name ]; then
 	dribble_get "darcs pull" $name
-	(cd $name; darcs pull --all)
+	(
+	    cd $name
+	    if ! test -d _darcs; then
+		echo ERROR: not a darcs repository
+		exit 1
+	    fi
+	    darcs pull --all
+	    )
     else
 	dribble_get "darcs get" $name
 	darcs get $url $name
@@ -108,7 +115,14 @@ get_git() {
 
     if [ -d $name ]; then
 	dribble_get "git pull" $name
-	(cd $name; git pull)
+	(
+	    cd $name
+	    if ! test -d .git; then
+		echo ERROR: not a darcs repository
+		exit 1
+	    fi
+	    git pull
+	    )
     else
 	dribble_get "git clone" $name
 	git clone $url $name
