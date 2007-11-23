@@ -259,6 +259,7 @@ Usage:
 
   diff          show local changes (for all version-controlled projects)
   check-urls    compared installed repository urls agains current locations
+  clean-links   remove broken symlinks in systems/
 
   buildsbcl [XC_HOST]  download/update and compile SBCL
   world         buildsbcl && build
@@ -627,6 +628,18 @@ case $1 in
 	chmod +x ../update.sh
 	for project in ${2:-$all_projects}; do
 	    ${UPDATE_SCRIPT} --dry-run $project
+	done
+	;;
+    clean-links)
+	cd "$system_dir"
+	for f in *; do
+	    if test -h "$f"; then
+		link_target=`readlink "$f"`
+		if ! test -e "$link_target"; then
+		    echo "removing broken link from $f to $link_target"
+		    rm "$f"
+		fi
+	    fi
 	done
 	;;
     diff)
