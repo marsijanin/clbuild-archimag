@@ -352,6 +352,20 @@ case $1 in
 	get_svn_clnet graphic-forms trunk
 	;;
 
+    psgraph)
+        get_tarball psgraph \
+        http://common-lisp.net/project/asdf-packaging/psgraph-latest.tar.gz
+        ;;
+
+    uffi|clsql|rt)
+	get_git $1 http://git.b9.com/$1.git
+	;;
+
+    cl-pdf)
+        get_svn cl-pdf \
+        http://www.fractalconcept.com:8000/public/open-source/cl-pdf/
+        ;;
+
     --help|help|-help)
 	echo usage: ./update.sh PROJECT_NAME
 	exit 0
