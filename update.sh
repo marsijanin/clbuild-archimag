@@ -48,21 +48,33 @@ dribble_get() {
     echo "$label $name"
 }
 
+dry_run_ok() {
+   if test -n "$dry_run"; then
+       echo "OK: $1"
+   fi
+}
+
+dry_run_missing() {
+   if test -n "$dry_run"; then
+       echo "MISSING: $1"
+   fi
+}
+
 get_darcs() {
     name="$1"
     url="$2"
 
-    if test -n "$dry_run"; then
-	if [ -d $name ]; then
-	    actual="`cat $name/_darcs/prefs/defaultrepo`"
-	    if test "x$actual" = "x$url"; then
-		echo "OK: $1"
-	    else
-		echo "MISMATCH: $1 was installed from $actual, current is $url"
-	    fi
+    if [ -d $name ]; then
+	actual="`cat $name/_darcs/prefs/defaultrepo`"
+	if test "x$actual" = "x$url"; then
+	    dry_run_ok $1
 	else
-	    echo "MISSING: $1"
+	    echo "MISMATCH: $1 was installed from $actual, current is $url"
 	fi
+    else
+	dry_run_missing $1
+    fi
+    if test -n "$dry_run"; then
 	exit 0
     fi
 
@@ -80,17 +92,17 @@ get_git() {
     name="$1"
     url="$2"
 
-    if test -n "$dry_run"; then
-	if [ -d $name ]; then
-	    actual="`cd $name && git config --get remote.origin.url`"
-	    if test "x$actual" = "x$url"; then
-		echo "OK: $1"
-	    else
-		echo "MISMATCH: $1 was installed from $actual, current is $url"
-	    fi
+    if [ -d $name ]; then
+	actual="`cd $name && git config --get remote.origin.url`"
+	if test "x$actual" = "x$url"; then
+	    dry_run_ok $1
 	else
-	    echo "MISSING: $1"
+	    echo "MISMATCH: $1 was installed from $actual, current is $url"
 	fi
+    else
+	dry_run_missing $1
+    fi
+    if test -n "$dry_run"; then
 	exit 0
     fi
 
@@ -107,17 +119,17 @@ get_svn() {
     name="$1"
     url="$2"
 
-    if test -n "$dry_run"; then
-	if [ -d $name ]; then
-	    actual="`cd $name && svn info | grep ^URL: | awk '{print $2;}'`"
-	    if test "x$actual" = "x$url"; then
-		echo "OK: $1"
-	    else
-		echo "MISMATCH: $1 was installed from $actual, current is $url"
-	    fi
+    if [ -d $name ]; then
+	actual="`cd $name && svn info | grep ^URL: | awk '{print $2;}'`"
+	if test "x$actual" = "x$url"; then
+	    dry_run_ok $1
 	else
-	    echo "MISSING: $1"
+	    echo "MISMATCH: $1 was installed from $actual, current is $url"
 	fi
+    else
+	dry_run_missing $1
+    fi
+    if test -n "$dry_run"; then
 	exit 0
     fi
 
@@ -130,17 +142,17 @@ get_cvs() {
     module="$1"
     repository="$2"
 
-    if test -n "$dry_run"; then
-	if [ -d $module ]; then
-	    actual="`cat $module/CVS/Root`"
-	    if test "x$actual" = "x$repository"; then
-		echo "OK: $1"
-	    else
-		echo "MISMATCH: $1 was installed from $actual, current is $repository"
-	    fi
+    if [ -d $module ]; then
+	actual="`cat $module/CVS/Root`"
+	if test "x$actual" = "x$repository"; then
+	    dry_run_ok $1
 	else
-	    echo "MISSING: $1"
+	    echo "MISMATCH: $1 was installed from $actual, current is $repository"
 	fi
+    else
+	dry_run_missing $1
+    fi
+    if test -n "$dry_run"; then
 	exit 0
     fi
 
@@ -159,7 +171,7 @@ get_tarball() {
 	    directories="`ls -d ${name}*`"
 	    echo "TARBALL: $directories installed from a tarball, cannot check"
 	else
-	    echo "MISSING: $1"
+	    dry_run_missing $1
 	fi
 	exit 0
     fi
