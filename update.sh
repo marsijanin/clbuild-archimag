@@ -335,7 +335,7 @@ case $1 in
 	get_darcs midi http://rvw.doc.gold.ac.uk/sullivan/darcs/midi
 	;;
 
-    puri|md5|cl-base64)
+    puri|md5|cl-base64|uffi|clsql|rt)
 	get_git $1 http://git.b9.com/$1.git
 	;;
 
@@ -350,10 +350,6 @@ case $1 in
 
     graphic-forms)
 	get_svn_clnet graphic-forms trunk
-	;;
-
-    uffi|clsql|rt)
-	get_git $1 http://git.b9.com/$1.git
 	;;
 
     cl-pdf)
