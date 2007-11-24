@@ -260,6 +260,7 @@ Usage:
   diff          show local changes (for all version-controlled projects)
   check-urls    compared installed repository urls agains current locations
   clean-links   remove broken symlinks in systems/
+  update-missing  download only projects not present yet
 
   buildsbcl [XC_HOST]  download/update and compile SBCL
   world         buildsbcl && build
@@ -476,6 +477,13 @@ case $1 in
 	;;
     update)
 	update $2
+	;;
+    update-missing)
+	for project in ${2:-$all_projects}; do
+	    if ! test -d "${source_dir}/$project"; then
+		update $project
+	    fi
+	done
 	;;
     recompile)
 	recompile
