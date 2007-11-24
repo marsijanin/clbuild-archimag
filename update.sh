@@ -358,7 +358,7 @@ case $1 in
 
     cl-pdf)
         get_svn cl-pdf \
-        http://www.fractalconcept.com:8000/public/open-source/cl-pdf/
+        http://www.fractalconcept.com:8000/public/open-source/cl-pdf
         ;;
 
     --help|help|-help)
