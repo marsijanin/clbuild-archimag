@@ -670,7 +670,7 @@ case $1 in
 		else
 		    echo -n " FAILED" 1>&2
 		fi
-		echo
+		echo 1>&2
 	    fi
 	done
 	less "$diff"
