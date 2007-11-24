@@ -46,7 +46,10 @@ else
 	windowsp=""
 fi
 
-source "$BASE/clbuild.conf"
+source "$BASE/clbuild.conf.default"
+if test -f "$BASE/clbuild.conf"; then
+    source "$BASE/clbuild.conf"
+fi
 # Fix up pathnames
 make_absolute_pn() {
 	if [ -n "$1" ] ; then
