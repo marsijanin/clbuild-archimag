@@ -275,7 +275,7 @@ Usage:
   listener      run the McCLIM listener
   gsharp        run the Gsharp score editor 
   climacs       run the Climacs text editor
-  closure       run the CLOSURE web browser
+  closure [HOME_PAGE_URL]   run the CLOSURE web browser
                 (required Debian packages: gif2png,libjpeg-progs)
   beirc         run the Beirc IRC client
   climplayer    run the CLIMPlayer music player
@@ -552,7 +552,12 @@ case $1 in
 	start_clim :climacs "(climacs:climacs)"
 	;;
     closure)
-	start_clim :closure "(clim-user::run-closure :new-process nil)"
+	if test -n "$2"; then
+	    set_url="(setf gui:*home-page* \"$2\")"
+	else
+	    set_url=""
+	fi
+	start_clim :closure "(progn $set_url (clim-user::run-closure :new-process nil))"
 	;;
     beirc)
 	start_clim :beirc "(beirc:beirc :new-process nil)"
