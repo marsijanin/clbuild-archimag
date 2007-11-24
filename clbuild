@@ -651,6 +651,7 @@ case $1 in
 	diff="${source_dir}/.diff"
 	cp /dev/null "$diff"
 	cd "${source_dir}"
+	darcs diff -u >>"$diff"
 	set +e
 	for f in *; do
 	    g="${source_dir}/$f"
