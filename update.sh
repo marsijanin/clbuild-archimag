@@ -344,18 +344,13 @@ case $1 in
 		http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees
 	;;
 
-    cl-webdav|skippy|salza|trivial-sockets|split-sequence|rfc2388)
+    cl-webdav|skippy|salza|trivial-sockets|split-sequence|rfc2388|psgraph)
 	get_darcs $1 http://common-lisp.net/project/clbuild/mirror/$1
 	;;
 
     graphic-forms)
 	get_svn_clnet graphic-forms trunk
 	;;
-
-    psgraph)
-        get_tarball psgraph \
-        http://common-lisp.net/project/asdf-packaging/psgraph-latest.tar.gz
-        ;;
 
     uffi|clsql|rt)
 	get_git $1 http://git.b9.com/$1.git
