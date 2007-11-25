@@ -344,7 +344,7 @@ case $1 in
 		http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees
 	;;
 
-    cl-webdav|skippy|salza|trivial-sockets|split-sequence|rfc2388|psgraph)
+    cl-webdav|skippy|salza|trivial-sockets|split-sequence|rfc2388|psgraph|parse-number)
 	get_darcs $1 http://common-lisp.net/project/clbuild/mirror/$1
 	;;
 
@@ -356,6 +356,16 @@ case $1 in
         get_svn cl-pdf \
         http://www.fractalconcept.com:8000/public/open-source/cl-pdf
         ;;
+
+    cl-yacc)
+	get_darcs cl-yacc \
+	    http://www.pps.jussieu.fr/~jch/software/repos/cl-yacc 
+	;;
+
+    plexippus-xpath)
+	get_darcs plexippus-xpath \
+	    http://common-lisp.net/~dlichteblau/plexippus-xpath
+	;;
 
     --help|help|-help)
 	echo usage: ./update.sh PROJECT_NAME
