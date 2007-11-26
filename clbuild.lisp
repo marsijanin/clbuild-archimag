@@ -82,6 +82,8 @@
   (make :mcclim)
   (make system))
 
+(declaim (optimize sb-ext:inhibit-warnings))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Hunchentoot
@@ -248,18 +250,16 @@
 #+clbuild::parse-xml
 #+clbuild::parse-xml
 
-(make-clim :cxml)
+(make :cxml)
 
 (with-application (filename)
-  ;; once for errors
   (handler-case
       (cxml:parse (pathname filename) nil)
     (error (c)
       (format t "~A~%" c)
       (quit 0)))
-  ;; once for output
   (cxml:parse (pathname filename)
-	      (cxml:make-character-stream-sink *standard-output*)))
+	      (cxml:make-octet-stream-sink *standard-output*)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -269,18 +269,14 @@
 #+clbuild::validate-xml
 #+clbuild::validate-xml
 
-(make-clim :cxml)
+(make :cxml)
 
 (with-application (filename)
-  ;; once for errors
   (handler-case
       (cxml:parse (pathname filename) nil :validate t)
     (error (c)
       (format t "~A~%" c)
-      (quit 0)))
-  ;; once for output
-  (cxml:parse (pathname filename)
-	      (cxml:make-character-stream-sink *standard-output*)))
+      (quit 0))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -289,14 +285,10 @@
 
 #+clbuild::validate-relax-ng
 #+clbuild::validate-relax-ng
-#+clbuild::validate-relax-ng
 
-(make-clim :cxml-rng)
-
-(declaim (optimize sb-ext:inhibit-warnings))
+(make :cxml-rng)
 
 (with-application (xml-filename rng-filename &key (compact "no"))
-  ;; once for errors
   (handler-case
       (cxml:parse (pathname xml-filename)
 		  (cxml-rng:make-validator
@@ -309,10 +301,47 @@
 		      (error "invalid compact value, must be yes or no")))))
     (error (c)
       (format t "~A~%" c)
-      (quit 0)))
-  ;; once for output
-  (cxml:parse (pathname xml-filename)
-	      (cxml:make-character-stream-sink *standard-output*)))
+      (quit 0))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; html-to-xhtml
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::html-to-xhtml
+#+clbuild::html-to-xhtml
+#+clbuild::html-to-xhtml
+
+(make :closure-html)
+(make :cxml)
+
+(with-application (html-filename output-filename)
+  (with-open-file (out output-filename
+		       :element-type '(unsigned-byte 8)
+		       :if-exists :error
+		       :direction :output)
+    (chtml:parse (pathname html-filename)
+		 (cxml:make-octet-stream-sink out))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; xhtml-to-html
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::xhtml-to-html
+#+clbuild::xhtml-to-html
+#+clbuild::xhtml-to-html
+
+(make :closure-html)
+(make :cxml)
+
+(with-application (xml-filename output-filename)
+  (with-open-file (out output-filename
+		       :element-type '(unsigned-byte 8)
+		       :if-exists :error
+		       :direction :output)
+    (cxml:parse (pathname xml-filename)
+		(chtml:make-octet-stream-sink out))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

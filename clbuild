@@ -556,7 +556,7 @@ case $1 in
 	    -eval '(slime)' \
 	    ${emacs_args}
 	;;
-    listener|gsharp|demodemo|climacs|closure|beirc|parse-xml|validate-xml|validate-relax-ng)
+    listener|gsharp|demodemo|climacs|closure|beirc|parse-xml|validate-xml|validate-relax-ng|html-to-xhtml|xhtml-to-html)
 	start_application "$@"
 	;; 
     climplayer)
