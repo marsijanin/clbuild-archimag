@@ -257,9 +257,7 @@
       (cxml:parse (pathname filename) nil)
     (error (c)
       (format t "~A~%" c)
-      (quit 0)))
-  (cxml:parse (pathname filename)
-	      (cxml:make-octet-stream-sink *standard-output*)))
+      (quit 0))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
