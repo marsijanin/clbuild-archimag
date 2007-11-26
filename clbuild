@@ -167,6 +167,18 @@ clbuild_lisp() {
 	"$@"
 }
 
+start_application() {
+    ${lisp} \
+	--noinform \
+	$run_options \
+	$eval "$require_asdf" \
+	$eval "$set_central_registry" \
+	$eval "$EXTRA_CLIM_FEATURES" \
+	$eval "(load \"$BASE/clbuild.lisp\")" \
+	--end-toplevel-options \
+	"$@"
+}
+
 recompile() {
 	rm -f monster.core
 	touch source/eclipse/config.lisp
@@ -326,21 +338,6 @@ check_misdesigned_program() {
 	exit 1
     fi
     echo "found `which $1`"
-}
-
-start_clim() {
-    system=$1
-    cmd="$2"
-
-    ${lisp} $run_options \
-	$eval "$require_asdf" \
-	$eval "$set_central_registry" \
-	$eval "$EXTRA_CLIM_FEATURES" \
-	$eval "$maybe_load_clx" \
-	$eval "(asdf:operate 'asdf:load-op :mcclim)" \
-	$eval "(asdf:operate 'asdf:load-op $system)" \
-	$eval "$cmd" \
-	$eval "$quit"
 }
 
 interactive_menu() {
@@ -551,33 +548,13 @@ case $1 in
 	    -eval '(slime)' \
 	    ${emacs_args}
 	;;
-    listener)
-	start_clim :clim-listener "(clim-listener:run-listener)"
+    listener|gsharp|demodemo|climacs|closure|beirc)
+	start_application "$@"
 	;; 
-    gsharp)
-	start_clim :gsharp "(gsharp::gsharp)"
-	;;
-    demodemo)
-	start_clim :clim-examples "(clim-demo::demodemo)"
-	;;
-    climacs)
-	start_clim :climacs "(climacs:climacs)"
-	;;
-    closure)
-	if test -n "$2"; then
-	    set_url="(setf gui:*home-page* \"$2\")"
-	else
-	    set_url=""
-	fi
-	start_clim :closure "(progn $set_url (clim-user::run-closure :new-process nil))"
-	;;
-    beirc)
-	start_clim :beirc "(beirc:beirc :new-process nil)"
-	;;
     climplayer)
 	check_program fileschanged
 	check_misdesigned_program mplayer
-	start_clim :climplayer "(climplayer:climplayer)"
+	start_application "$@"
 	;;
     hunchentoot)
 	if ! test -f /usr/lib/libssl.so; then
@@ -585,16 +562,7 @@ case $1 in
 	    echo "(type RET to continue anyway)"
 	    read
 	fi
-	${lisp} $run_options \
-	    $eval "$require_asdf" \
-	    $eval "$set_central_registry" \
-	    $eval "(asdf:operate 'asdf:load-op :hunchentoot-test)" \
-	    $eval "(setf tbnl:*catch-errors-p* nil)" \
-	    $eval "(hunchentoot:start-server :port 4242)" \
-	    $eval '(format t "~%Webserver is running at http://localhost:4242/hunchentoot/test~%")' \
-	    $eval '(format t "Type RET to quit~%")' \
-	    $eval '(read-line)' \
-	    $eval "$quit"
+	start_application "$@"
 	;;
     webdav)
 	if ! test -f /usr/lib/libssl.so; then
@@ -602,43 +570,13 @@ case $1 in
 	    echo "(type RET to continue anyway)"
 	    read
 	fi
-	directory="$2/"
-	if ! test -d "$directory"; then
-	    echo Error: Expected directory as an argument.
-	    echo usage: clbuild webdav DIRECTORY
-	    exit 1
-	fi
-	${lisp} $run_options \
-	    $eval "$require_asdf" \
-	    $eval "$set_central_registry" \
-	    $eval "(asdf:operate 'asdf:load-op :cl-webdav)" \
-	    $eval "(setf tbnl:*catch-errors-p* nil)" \
-	    $eval "(setf dav:*file-resource-base-path-namestring* \"$directory\")" \
-	    $eval "(push (dav:create-dav-dispatcher 'dav:file-resource) tbnl:*dispatch-table*)" \
-	    $eval "(hunchentoot:start-server :port 4242)" \
-	    $eval "(format t \"~%WebDAV server for $directory is running at http://localhost:4242/~%\")" \
-	    $eval '(format t "Type RET to quit~%")' \
-	    $eval '(read-line)' \
-	    $eval "$quit"
+	start_application "$@"
 	;;
     eclipse)
-	options=""
-	if test -n "$2"; then
-	    options=":display \"$2\""
-	fi
 	touch source/eclipse/config.lisp
 	# zzz cl-user::*eclipse-initfile*?!
 	# zzz cl-user::*eclipse-eclipsedir*?!
-	${lisp} $run_options \
-	    $eval "$require_asdf" \
-	    $eval "$set_central_registry" \
-	    $eval "(unless (find-package :eclipse) (asdf:operate 'asdf:load-op :eclipse))" \
-	    $eval "(defparameter cl-user::*eclipse-initfile* \".eclipse.lisp\")" \
-	    $eval "(defparameter cl-user::*eclipse-eclipsedir* nil)" \
-	    $eval "(unless (find-package :eclipse) (eclipse-system:compile-themes \"source/eclipse/themes/microGUI/\" \"source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\"))" \
-	    $eval "(load (compile-file \"source/eclipse/lib/clx-ext/event.lisp\"))" \
-	    $eval "(eclipse:eclipse $options)" \
-	    $eval "$quit"
+	start_application "$@"
 	;;
     check-urls)
 	cd "$source_dir"
