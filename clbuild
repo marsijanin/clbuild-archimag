@@ -311,6 +311,9 @@ Usage:
                 check XML for validity
   validate-relax-ng [--compact yes] XML-FILENAME SCHEMA-FILENAME
                 check XML for validity against a Relax NG Schema
+  html-to-xhtml HTML-FILENAME OUTPUT-FILENAME
+  xhtml-to-html XML-FILENAME OUTPUT-FILENAME
+                convert between HTML 4 and XHTMl
 
   dialog        show an interactive menu 
 
