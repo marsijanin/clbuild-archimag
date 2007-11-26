@@ -252,12 +252,8 @@ if test $# -ne 1; then
 fi
 
 case $1 in
-    flexichain|mcclim|zip|cxml|closure|gsharp|climacs|slime|beirc|eclipse|s-xml|s-xml-rpc)
+    flexichain|mcclim|zip|cxml|closure|gsharp|climacs|slime|beirc|eclipse)
 	get_cvs_clnet $1
-	;;
-
-    s-base64)
-	get_darcs $1 http://www.beta9.be/darcs/s-base64
 	;;
 
     alexandria)

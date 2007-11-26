@@ -25,7 +25,7 @@ bordeaux-threads climplayer closer-mop lw-compat skippy salza puri midi md5
 cl-base64 spatial-trees trivial-sockets split-sequence rfc2388
 graphic-forms closure-common closure-html cxml-rng cxml-stp drakma babel
 alexandria trivial-features uffi clsql rt psgraph cl-pdf plexippus-xpath
-cl-yacc parse-number s-xml s-xml-rpc s-base64"
+cl-yacc parse-number"
 
 
 if [ "$CLNET_USER" == "" ]; then
