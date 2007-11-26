@@ -242,6 +242,80 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; parse-xml
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::parse-xml
+#+clbuild::parse-xml
+
+(make-clim :cxml)
+
+(with-application (filename)
+  ;; once for errors
+  (handler-case
+      (cxml:parse (pathname filename) nil)
+    (error (c)
+      (format t "~A~%" c)
+      (quit 0)))
+  ;; once for output
+  (cxml:parse (pathname filename)
+	      (cxml:make-character-stream-sink *standard-output*)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; validate-xml
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::validate-xml
+#+clbuild::validate-xml
+
+(make-clim :cxml)
+
+(with-application (filename)
+  ;; once for errors
+  (handler-case
+      (cxml:parse (pathname filename) nil :validate t)
+    (error (c)
+      (format t "~A~%" c)
+      (quit 0)))
+  ;; once for output
+  (cxml:parse (pathname filename)
+	      (cxml:make-character-stream-sink *standard-output*)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; validate-relax-ng
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::validate-relax-ng
+#+clbuild::validate-relax-ng
+#+clbuild::validate-relax-ng
+
+(make-clim :cxml-rng)
+
+(declaim (optimize sb-ext:inhibit-warnings))
+
+(with-application (xml-filename rng-filename &key (compact "no"))
+  ;; once for errors
+  (handler-case
+      (cxml:parse (pathname xml-filename)
+		  (cxml-rng:make-validator
+		   (cond
+		     ((equal compact "yes")
+		       (cxml-rng:parse-compact (pathname rng-filename)))
+		     ((equal compact "no")
+		       (cxml-rng:parse-schema (pathname rng-filename)))
+		     (t
+		      (error "invalid compact value, must be yes or no")))))
+    (error (c)
+      (format t "~A~%" c)
+      (quit 0)))
+  ;; once for output
+  (cxml:parse (pathname xml-filename)
+	      (cxml:make-character-stream-sink *standard-output*)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Shouldn't get here
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (error "clbuild.lisp fell through")

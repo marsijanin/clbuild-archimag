@@ -201,6 +201,7 @@ recompile() {
 	    $eval "(asdf:oos 'asdf:load-op :climplayer)" \
 	    $eval "(asdf:oos 'asdf:load-op :hunchentoot-test)" \
 	    $eval "(asdf:oos 'asdf:load-op :cl-webdav)" \
+	    $eval "(asdf:oos 'asdf:load-op :cxml-rng)" \
 	    $eval "(asdf:oos 'asdf:load-op :eclipse)" \
 	    $eval "(eclipse-system:compile-themes \"$BASE/source/eclipse/themes/microGUI/\" \"$BASE/source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\")" \
 	    $eval "$cmd"
@@ -303,6 +304,13 @@ Usage:
   hunchentoot   run the Hunchentoot web server test
   webdav DIR    run the CL-WEBDAV server, serving directory DIR
                 (required Debian packages: libssl-dev)
+
+  parse-xml FILENAME
+                check XML for well-formedness
+  validate-xml FILENAME
+                check XML for validity
+  validate-relax-ng [--compact yes] XML-FILENAME SCHEMA-FILENAME
+                check XML for validity against a Relax NG Schema
 
   dialog        show an interactive menu 
 
@@ -548,7 +556,7 @@ case $1 in
 	    -eval '(slime)' \
 	    ${emacs_args}
 	;;
-    listener|gsharp|demodemo|climacs|closure|beirc)
+    listener|gsharp|demodemo|climacs|closure|beirc|parse-xml|validate-xml|validate-relax-ng)
 	start_application "$@"
 	;; 
     climplayer)
