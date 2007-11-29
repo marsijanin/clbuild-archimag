@@ -299,6 +299,10 @@ Short usage:
  
   dialog           show an interactive menu - requires dialog(1)
 
+See also:
+
+   help             show complete usage information
+
 EOF
 }
 
