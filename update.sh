@@ -352,9 +352,9 @@ case $1 in
 	get_svn_clnet graphic-forms trunk
 	;;
 
-    cl-pdf)
-        get_svn cl-pdf \
-        http://www.fractalconcept.com:8000/public/open-source/cl-pdf
+    cl-pdf|cl-typesetting)
+        get_svn $1 \
+        http://www.fractalconcept.com:8000/public/open-source/$1
         ;;
 
     cl-yacc)
