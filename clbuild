@@ -143,7 +143,7 @@ EOF
 	echo "NEW checking out asdf for use with clisp"
 	(cd "$BASE/source" && cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -d asdf-for-clisp sbcl/contrib/asdf)
     fi
-elif [ ! -z $SBCL ]; then
+elif [ ! -z "$SBCL" ]; then
     lisp=$SBCL
 elif [ -x ${target_dir}/bin/sbcl ]; then
     export SBCL_HOME=${target_namestring}lib/sbcl/
