@@ -226,7 +226,47 @@ update() {
 
 	cd "$source_dir"
 	chmod +x ../update.sh
-	for project in ${1:-$all_projects}; do
+
+	projects="$all_projects"
+	if test -n "$1"; then
+	    case "$CLBUILD_DEPENDENCIES" in
+		yes|ask)
+		    if grep "^$1 " ../dependencies >/dev/null; then
+			found=`grep "^$1 " ../dependencies`
+			if test $CLBUILD_DEPENDENCIES = ask; then
+			    echo "$1 depends on: $found"
+			    echo -n "include dependencies in update? (Y/n)"
+			    read reply
+			    case _"$reply" in
+				_Y|_y|_)
+				    projects="$found"
+				    ;;
+				_n)
+				    projects="$1"
+				    ;;
+				*)
+				    echo Invalid reply
+				    exit 1
+				    ;;
+			    esac
+			else
+			    projects="$found"
+			fi
+		    else
+			echo "error: dependencies for $1 not found" 1>&2
+			exit 1
+		    fi
+		    ;;
+		no)
+		    projects="$1"
+		    ;;
+		*)
+		    echo "error: invalid \$CLBUILD_DEPENDENCIES" 1>&2
+		    exit 1
+	    esac
+	fi
+
+	for project in $projects; do
 	    ${UPDATE_SCRIPT} ${UPDATE_ARGS} $project
 	    ln -f -s $(pwd)/${project}*/*.asd "${system_dir}"/
 	done
@@ -267,7 +307,8 @@ long_help() {
 Usage:
   check         check availability of all necessary helper applications
 
-  update PROJECT_NAME  download/update this project
+  update [--dependencies|--no-dependencies] PROJECT_NAME
+                download/update this project
 
   update        download/update all applications
   recompile     recompile all applications
@@ -318,6 +359,11 @@ Usage:
   dialog        show an interactive menu 
 
 Default when started without arguments is 'dialog'.
+
+Maintainance commands for developers:
+
+  record-dependencies
+                rebuild dependency information file
 
 If you do 'world' or 'buildsbcl' then SBCL will be installed in
 target/ and used for future commands. If you don't run these commands
@@ -488,6 +534,19 @@ case $1 in
 	rm -rf monster.core ${source_dir} ${target_dir}
 	;;
     update)
+	case "$2" in
+	    --no-dependencies)
+		CLBUILD_DEPENDENCIES="no"
+		shift
+		;;
+	    --dependencies)
+		CLBUILD_DEPENDENCIES="yes"
+		shift
+		;;
+	    *)
+		;;
+	esac
+	export CLBUILD_DEPENDENCIES
 	update $2
 	;;
     update-missing)
@@ -561,7 +620,11 @@ case $1 in
 	;;
     listener|gsharp|demodemo|climacs|closure|beirc|parse-xml|validate-xml|validate-relax-ng|html-to-xhtml|xhtml-to-html)
 	start_application "$@"
-	;; 
+	;;
+    record-dependencies)
+	cd "$BASE"
+	start_application record-dependencies "$all_projects"
+	;;
     climplayer)
 	check_program fileschanged
 	check_misdesigned_program mplayer

@@ -59,6 +59,15 @@ UPDATE_ARGS=""
 #UPDATE_ARGS=get
 
 
+### dependencies
+
+# fetch dependencies automatically?
+
+CLBUILD_DEPENDENCIES="ask"
+#CLBUILD_DEPENDENCIES="yes"
+#CLBUILD_DEPENDENCIES="no"
+
+
 #### CLIM configuration
 
 #CLIM_BACKEND=gtkairo

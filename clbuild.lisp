@@ -343,6 +343,87 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; record-dependencies (internal helper command)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::record-dependencies
+#+clbuild::record-dependencies
+
+(make :cl-ppcre)
+
+(progn
+  (defun project-to-systems (name)
+    (mapcar (lambda (x) (pathname-name x))
+	    (directory (format nil "source/~A/*.asd" name))))
+
+  (defun system-to-project (name)
+    (let* ((pathname (asdf:component-pathname (asdf:find-system name)))
+	   (relative (enough-namestring pathname)))
+      (when (eq :absolute (car (pathname-directory relative)))
+	(error "found ~A outside of clbuild, can't translate to project"
+	       name))
+      (third (pathname-directory relative))))
+
+  (defun system-dependencies (name)
+    (let ((dependencies '())
+	  (seen '()))
+      (labels ((walk-dependency (sym)
+		 (unless (find sym seen)
+		   (push sym seen)
+		   (let ((name (string-downcase sym)))
+		     (if (asdf::system-definition-pathname name)
+			 (pushnew sym dependencies)
+			 (register-dependencies name)))))
+	       (register-dependencies (name)
+		 (let* ((system (asdf:find-system name))
+			(in-order-to
+			 (slot-value system 'asdf::in-order-to)))
+		   (loop
+		      for (nil (nil . depends-on)) in in-order-to
+		      do (map nil #'walk-dependency depends-on)))))
+	(register-dependencies name))
+      dependencies))
+
+  (defmacro without-errors ((error-value description) &body body)
+    `(handler-case
+	 (progn ,@body)
+       (error (c)
+	 (format t "Ignoring error ~A: ~A~%~%" ',description c)
+	 ,error-value)))
+
+  (defun safe-project-dependencies (project)
+    (let ((projects
+	   (loop
+	      for system in (project-to-systems project)
+	      append (mapcar (lambda (system)
+			       (without-errors (nil "when looking for system")
+				 (system-to-project system)))
+			     (without-errors
+				 (nil "while scanning dependencies")
+			       (system-dependencies system))))))
+      (remove-duplicates (remove nil projects))))
+
+  (with-application (project-string)
+    (let ((projects (cl-ppcre:split "\\s+" project-string)))
+      #+nil
+      (setf projects
+	    ;; requires clx in FIND-SYSTEM:
+	    (remove "eclipse" projects :test 'equal))
+      (setf projects (sort projects #'string-lessp))
+      (dolist (project projects)
+	(dolist (system (project-to-systems project))
+	  (without-errors (nil "in find-system")
+	    (asdf:find-system system nil))))
+      (with-open-file (s "dependencies"
+			 :direction :output
+			 :if-exists :rename-and-delete)
+	(dolist (project projects)
+	  (format t "Looking for ~A's dependencies...~%" project)
+	  (format s "~A~{ ~A~}~%"
+		  project
+		  (safe-project-dependencies project)))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Shouldn't get here
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (error "clbuild.lisp fell through")
