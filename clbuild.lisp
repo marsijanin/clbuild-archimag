@@ -401,7 +401,9 @@
 			     (without-errors
 				 (nil "while scanning dependencies")
 			       (system-dependencies system))))))
-      (remove-duplicates (remove nil projects))))
+      (setf projects (remove nil projects))
+      (setf projects (remove project projects :test 'equal))
+      (remove-duplicates projects :test 'equal)))
 
   (with-application (project-string)
     (let ((projects (cl-ppcre:split "\\s+" project-string)))
