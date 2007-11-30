@@ -301,7 +301,7 @@ Short usage:
 
 See also:
 
-   help             show complete usage information
+  help             show complete usage information
 
 EOF
 }
@@ -361,8 +361,6 @@ Usage:
                 convert between HTML 4 and XHTMl
 
   dialog        show an interactive menu 
-
-Default when started without arguments is 'dialog'.
 
 Maintainance commands for developers:
 
@@ -707,17 +705,16 @@ case $1 in
     help|--long-help|-H)
         long_help
 	;;
-    --help|-h)
+    ""|--help|-h)
 	help
 	;;
-    ""|dialog)
+    dialog)
         if ! dialog --help >/dev/null; then
 	    cat <<EOF
 
 error: dialog(1) not found.  Cannot start interactive menu.
 Install dialog or try clbuild --help instead.
 EOF
-	    help
 	    exit 1
 	fi
 
