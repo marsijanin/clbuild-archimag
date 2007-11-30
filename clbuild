@@ -148,7 +148,7 @@ elif [ ! -z "$SBCL" ]; then
 elif [ -x ${target_dir}/bin/sbcl ]; then
     export SBCL_HOME=${target_namestring}lib/sbcl/
     lisp="${target_dir}/bin/sbcl"
-    if ! test -f monster.core; then
+    if ! test -f "$BASE"/monster.core; then
 	lisp="$lisp --core ${target_namestring}lib/sbcl/sbcl.core"
     fi
 else
@@ -180,7 +180,7 @@ start_application() {
 }
 
 recompile() {
-	rm -f monster.core
+	rm -f "$BASE"/monster.core
 	touch source/eclipse/config.lisp
 
         cmd="${1:-$quit}"
@@ -214,7 +214,7 @@ count_systems() {
 }
 
 update() {
-	rm -f monster.core
+	rm -f "$BASE"/monster.core
 
         TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
 	export TMPDIR
@@ -505,13 +505,13 @@ check() {
 }
 
 dumpcore() {
-    recompile '(sb-ext:save-lisp-and-die "monster.core")'
+    recompile '(sb-ext:save-lisp-and-die "'"$BASE"'/monster.core")'
     echo "monster.core dumped"
 }
 
-if test -f monster.core; then
+if test -f "$BASE"/monster.core; then
     # echo "using `pwd`/monster.core"
-    run_options="--core monster.core $run_options"
+    run_options="--core "$BASE"/monster.core $run_options"
 fi
 
 case $1 in
@@ -522,13 +522,13 @@ case $1 in
 	"$0" clean && "$0" buildsbcl && "$0" build
 	;;
     clean)
-	rm -f monster.core
+	rm -f "$BASE"/monster.core
 	cd $source_dir
 	find . -name "*.fasl" -exec rm {} \;
 	find . -name "*.lx64fsl" -exec rm {} \;
 	;;
     mrproper)
-	rm -rf monster.core ${source_dir} ${target_dir}
+	rm -rf "$BASE"/monster.core ${source_dir} ${target_dir}
 	;;
     update)
 	case "$2" in
