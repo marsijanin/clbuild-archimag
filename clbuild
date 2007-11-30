@@ -371,12 +371,7 @@ If you do 'world' or 'buildsbcl' then SBCL will be installed in
 target/ and used for future commands. If you don't run these commands
 (or you remove target/) then clbuild uses the 'sbcl' in your PATH.
 
-Set CCL to your OpenMCL binary to use OpenMCL instead of SBCL. 
-Example: CCL=~/ccl/lx86cl64 ./clbuild build
-(Not supported with targets 'buildsbcl' and 'sbcl'.)
-
-Set CLIM_BACKEND=gtkairo to enable clim-gtkairo instead of clim-clx.
-(Requires GTK+ >= 2.8.)
+For configuration options (including for non-SBCL lisps), see clbuild.conf.
 
 EOF
 }
