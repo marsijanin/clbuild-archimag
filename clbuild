@@ -32,14 +32,14 @@ if [ "$CLNET_USER" == "" ]; then
 fi
 export CLNET_USER
 
-BASE="$(cd "$(dirname $0)" && pwd)"
-system_dir="$BASE/systems"
-source_dir="$BASE/source"
-target_dir="$BASE/target"
 self="$0"
 while test -h "$self"; do
 	self=`readlink "$self"`
 done
+BASE="$(cd "$(dirname $self)" && pwd)"
+system_dir="$BASE/systems"
+source_dir="$BASE/source"
+target_dir="$BASE/target"
 
 if test x`uname -o 2>/dev/null` = xCygwin; then
 	windowsp=1
