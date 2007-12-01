@@ -304,8 +304,8 @@ update() {
 			    projects="$found"
 			fi
 		    else
-			echo "error: dependencies for $1 not found" 1>&2
-			exit 1
+			echo "warning: no dependencies for $1 found" 1>&2
+			projects="$1"
 		    fi
 		    ;;
 		no)

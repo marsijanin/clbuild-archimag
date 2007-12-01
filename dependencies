@@ -1,57 +1,57 @@
-alexandria
-babel rt trivial-features alexandria
-beirc mcclim cl-irc split-sequence cl-ppcre cl-fad
-bordeaux-threads
-cffi rt trivial-features babel
-chunga flexi-streams
-cl+ssl cffi trivial-gray-streams flexi-streams
-cl-base64
-cl-fad
-cl-irc split-sequence usocket flexi-streams
-cl-pdf
-cl-ppcre
-cl-typesetting cl-pdf
-cl-webdav hunchentoot cxml cl-fad
-cl-who
-cl-yacc
-climacs mcclim flexichain
-climplayer mcclim cl-ppcre split-sequence
-closer-mop lw-compat
-closure mcclim spatial-trees flexichain slime clx cxml closure-html bordeaux-threads trivial-sockets zip flexi-streams skippy
-closure-common trivial-gray-streams
-closure-html closure-common flexi-streams
-clsql md5 rt uffi
-clx
-cxml closure-common puri trivial-gray-streams
-cxml-rng cxml cl-ppcre cl-yacc parse-number cl-base64
-cxml-stp cxml alexandria plexippus-xpath
-drakma puri cl-base64 chunga usocket cl+ssl
-eclipse
-flexi-streams trivial-gray-streams
-flexichain
-graphic-forms cffi lw-compat closer-mop
-gsharp mcclim flexichain midi puri cxml
-hunchentoot cl-who chunga cl-base64 cl-ppcre cl+ssl md5 rfc2388 url-rewrite
-lw-compat
-mcclim clx spatial-trees flexichain slime
-md5
-midi
-parse-number
-plexippus-xpath cxml parse-number cl-ppcre cl-yacc
-psgraph
-puri
-rfc2388
-rt
-salza
-skippy
-slime
-spatial-trees
-split-sequence
-trivial-features rt cffi
-trivial-gray-streams
-trivial-sockets
-uffi
-url-rewrite
-usocket split-sequence
-zip cl-pdf trivial-gray-streams flexi-streams
-acl-compat 
+acl-compat puri cl-ppcre 
+alexandria 
+babel rt trivial-features alexandria 
+beirc mcclim cl-irc split-sequence cl-ppcre cl-fad 
+bordeaux-threads 
+cffi rt trivial-features babel 
+chunga flexi-streams 
+cl+ssl cffi trivial-gray-streams flexi-streams 
+cl-base64 
+cl-fad 
+cl-irc split-sequence usocket flexi-streams 
+cl-pdf 
+cl-ppcre 
+cl-typesetting cl-pdf 
+cl-webdav hunchentoot cxml cl-fad 
+cl-who 
+cl-yacc 
+climacs mcclim flexichain 
+climplayer mcclim cl-ppcre split-sequence 
+closer-mop lw-compat 
+closure mcclim spatial-trees flexichain slime clx cxml closure-html bordeaux-threads trivial-sockets zip flexi-streams skippy 
+closure-common trivial-gray-streams 
+closure-html closure-common flexi-streams 
+clsql md5 rt uffi 
+clx 
+cxml closure-common puri trivial-gray-streams 
+cxml-rng cxml cl-ppcre cl-yacc parse-number cl-base64 
+cxml-stp cxml alexandria plexippus-xpath 
+drakma puri cl-base64 chunga usocket cl+ssl 
+eclipse 
+flexi-streams trivial-gray-streams 
+flexichain 
+graphic-forms cffi lw-compat closer-mop 
+gsharp mcclim flexichain midi puri cxml 
+hunchentoot cl-who chunga cl-base64 cl-ppcre cl+ssl md5 rfc2388 url-rewrite 
+lw-compat 
+mcclim clx spatial-trees flexichain slime 
+md5 
+midi 
+parse-number 
+plexippus-xpath cxml parse-number cl-ppcre cl-yacc 
+psgraph 
+puri 
+rfc2388 
+rt 
+salza 
+skippy 
+slime 
+spatial-trees 
+split-sequence 
+trivial-features rt cffi 
+trivial-gray-streams 
+trivial-sockets 
+uffi 
+url-rewrite 
+usocket split-sequence 
+zip cl-pdf trivial-gray-streams flexi-streams 
