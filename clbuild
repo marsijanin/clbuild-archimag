@@ -25,7 +25,7 @@ bordeaux-threads climplayer closer-mop lw-compat skippy salza puri midi md5
 cl-base64 spatial-trees trivial-sockets split-sequence rfc2388
 graphic-forms closure-common closure-html cxml-rng cxml-stp drakma babel
 alexandria trivial-features uffi clsql rt psgraph cl-pdf plexippus-xpath
-cl-yacc parse-number cl-typesetting"
+cl-yacc parse-number cl-typesetting acl-compat"
 
 if [ "$CLNET_USER" == "" ]; then
     CLNET_USER=:pserver:anonymous:anonymous
@@ -65,19 +65,6 @@ if test -n "$windowsp" -a x$USER_INIT = x/dev/null; then
 	USER_INIT=NUL
 fi
 
-if test -n "$USER_INIT"; then
-    common_options="--userinit $USER_INIT"
-else
-    common_options=""
-fi
-
-# SBCL-specific options
-build_options="--noinform --noprint --disable-debugger $common_options"
-run_options="--disable-debugger $common_options"
-quit="(sb-ext:quit)"
-eval="--eval"
-require_asdf="(require :asdf)"
-
 # CLIM configuration
 case x$CLIM_BACKEND in
     xgraphic-forms)
@@ -111,30 +98,49 @@ fi
 set_central_registry="(setq asdf:*central-registry* '(#p\"${system_namestring}\"))"
 
 if [ ! -z $CCL ]; then
-    # user wants OpenMCL instead of SBCL.  Make it so.
+    #
+    # OpenMCL
+    #
     lisp=$CCL
-    build_options="--batch" # fixme, that's not good enough
+
+    noinform="-Q"
+    build_options="$noinform --batch" # fixme, that's not good enough
+    end_toplevel_options="" #fixme
     run_options="--batch"   # ditto
     quit="(ccl:quit)"
-elif [ ! -z $CLISP ]; then
-    # user wants CLISP instead of SBCL.  Make it so.
-    cat <<EOF
-*** clbuild starting up using CLISP
-*** Please note that CLISP support is experimental and not all applications
-*** are expected to compile properly yet.
+    eval="--eval"
+    require_asdf="(require :asdf)"
+    save_lisp_and_die="ccl:save-application"
 
-EOF
+    if test x"$USER_INIT" = x/dev/null; then
+	# -l /dev/null does not work
+	common_options="-n"
+    elif test -n "$USER_INIT"; then
+	common_options="-n -l $USER_INIT"
+    else
+	common_options=""
+    fi
+elif [ ! -z $CLISP ]; then
+    #
+    # CLISP
+    #
+    echo '*** Using CLISP.  Please note that CLISP support is not complete.'
     lisp="$CLISP -repl"
+
+    noinform="" #fixme
+    build_options="-on-error exit $common_options"
+    end_toplevel_options="" #fixme
+    run_options="-on-error exit $common_options"
+    quit="(ext:quit)"
     eval="-x"
+    require_asdf="(load \"$BASE/source/asdf-for-clisp/asdf.lisp\")"
+    save_lisp_and_die="error \"core files not supported for clisp\""
+
     if test -n "$USER_INIT"; then
 	common_options="-norc -i $USER_INIT"
     else
 	common_options=""
     fi
-    build_options="-on-error exit $common_options"
-    run_options="-on-error exit $common_options"
-    quit="(ext:quit)"
-    require_asdf="(load \"$BASE/source/asdf-for-clisp/asdf.lisp\")"
 
     if test -d "$BASE/source/asdf-for-clisp"; then
 	echo "*** asdf checkout found"
@@ -143,16 +149,36 @@ EOF
 	echo "NEW checking out asdf for use with clisp"
 	(cd "$BASE/source" && cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -d asdf-for-clisp sbcl/contrib/asdf)
     fi
-elif [ ! -z "$SBCL" ]; then
-    lisp=$SBCL
-elif [ -x ${target_dir}/bin/sbcl ]; then
-    export SBCL_HOME=${target_namestring}lib/sbcl/
-    lisp="${target_dir}/bin/sbcl"
-    if ! test -f "$BASE"/monster.core; then
-	lisp="$lisp --core ${target_namestring}lib/sbcl/sbcl.core"
-    fi
 else
-    lisp=sbcl
+    #
+    # SBCL
+    #
+    if [ ! -z "$SBCL" ]; then
+	lisp=$SBCL
+    elif [ -x ${target_dir}/bin/sbcl ]; then
+	export SBCL_HOME=${target_namestring}lib/sbcl/
+	lisp="${target_dir}/bin/sbcl"
+	if ! test -f "$BASE"/monster.core; then
+	    lisp="$lisp --core ${target_namestring}lib/sbcl/sbcl.core"
+	fi
+    else
+	lisp=sbcl
+    fi
+
+    noinform="--noinform"
+    end_toplevel_options="--end-toplevel-options"
+    build_options="$noinform --noprint --disable-debugger $common_options"
+    run_options="--disable-debugger $common_options"
+    quit="(sb-ext:quit)"
+    eval="--eval"
+    require_asdf="(require :asdf)"
+    save_lisp_and_die="sb-ext:save-lisp-and-die"
+
+    if test -n "$USER_INIT"; then
+	common_options="--userinit $USER_INIT"
+    else
+	common_options=""
+    fi
 fi
 
 [ -d "$system_dir" ] || mkdir "$system_dir"
@@ -168,15 +194,40 @@ clbuild_lisp() {
 }
 
 start_application() {
-    ${lisp} \
-	--noinform \
-	$run_options \
-	$eval "$require_asdf" \
-	$eval "$set_central_registry" \
-	$eval "$EXTRA_CLIM_FEATURES" \
-	$eval "(load \"$BASE/clbuild.lisp\")" \
-	--end-toplevel-options \
-	"$@"
+    if test -n "$end_toplevel_options"; then
+	${lisp} \
+	    $noinform \
+	    $run_options \
+	    $eval "$require_asdf" \
+	    $eval "$set_central_registry" \
+	    $eval "$EXTRA_CLIM_FEATURES" \
+	    $eval "(load \"$BASE/clbuild.lisp\")" \
+	    $end_toplevel_options \
+	    "$@"
+    else
+        TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
+	export TMPDIR
+
+        cleanup() {
+            rm -rf $TMPDIR
+        }
+        trap cleanup exit
+
+	while test -n "$1"; do
+	    # fixme: whitespacea
+	    echo $1 >>$TMPDIR/args
+	    shift
+	done
+
+	${lisp} \
+	    $noinform \
+	    $run_options \
+	    $eval "$require_asdf" \
+	    $eval "$set_central_registry" \
+	    $eval "$EXTRA_CLIM_FEATURES" \
+	    $eval "(defparameter cl-user::*clbuild-args* \"$TMPDIR/args\")" \
+	    $eval "(load \"$BASE/clbuild.lisp\")"
+    fi
 }
 
 recompile() {
@@ -505,8 +556,8 @@ check() {
 }
 
 dumpcore() {
-    recompile '(sb-ext:save-lisp-and-die "'"$BASE"'/monster.core")'
-    echo "monster.core dumped"
+    recompile "($save_lisp_and_die \"$BASE/monster.core\")" \
+	&& echo "monster.core dumped"
 }
 
 if test -f "$BASE"/monster.core; then
@@ -561,10 +612,6 @@ case $1 in
 	dumpcore
 	;;
     dumpcore)
-        if [ -n "$CCL" ]; then
-            echo "Sorry, dumpcore not implemented for OpenMCL yet." 1>&2
-            exit 1
-        fi
 	dumpcore
 	;;
     buildsbcl)

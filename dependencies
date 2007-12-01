@@ -54,3 +54,4 @@ uffi
 url-rewrite
 usocket split-sequence
 zip cl-pdf trivial-gray-streams flexi-streams
+acl-compat 

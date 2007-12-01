@@ -155,6 +155,7 @@ get_svn() {
 get_cvs() {
     module="$1"
     repository="$2"
+    target_directory="$3"
 
     if [ -d $module ]; then
 	actual="`cat $module/CVS/Root`"
@@ -172,7 +173,7 @@ get_cvs() {
 
     dribble_get "cvs co" $module
 
-    cvs -d $repository co $module | tail_last
+    cvs -d $repository co ${3+-d "$3"} $module | tail_last
 }
 
 get_tarball() {
@@ -370,6 +371,11 @@ case $1 in
     --help|help|-help)
 	echo usage: ./update.sh PROJECT_NAME
 	exit 0
+	;;
+
+    acl-compat)
+	# for hunchentoot on OpenMCL
+	get_cvs portableaserve/acl-compat :pserver:anonymous@portableaserve.cvs.sourceforge.net:/cvsroot/portableaserve/ acl-compat
 	;;
 
     *)

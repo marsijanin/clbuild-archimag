@@ -13,9 +13,17 @@
 
 (in-package :clbuild)
 
+#+openmcl
+(setf *default-pathname-defaults*
+      (pathname (concatenate 'string (ccl:getenv "PWD") "/")))
+
 (defparameter *raw-args*
   #+sbcl (cdr sb-ext:*posix-argv*)
-  #-sbcl (error "not implemented"))
+  #-sbcl (with-open-file (s cl-user::*clbuild-args*)
+	   (loop
+	      for line = (read-line s nil)
+	      while line
+	      collect line)))
 (defparameter *cmd* (car *raw-args*))
 (defparameter *args*
   (loop
@@ -31,8 +39,9 @@
 (push (intern (string-upcase *cmd*) :clbuild) *features*)
 
 (defun quit (rc)
-  #+sbcl (sb-ext:quit :unix-status rc)
-  #-sbcl (error "not implemented"))
+  (or #+sbcl (sb-ext:quit :unix-status rc)
+      #+openmcl (ccl:quit rc)
+      (error "not implemented")))
 
 (defun namify (arg)
   (if (listp arg)
@@ -82,6 +91,7 @@
   (make :mcclim)
   (make system))
 
+#+sbcl
 (declaim (optimize sb-ext:inhibit-warnings))
 
 
@@ -421,7 +431,7 @@
 			 :if-exists :rename-and-delete)
 	(dolist (project projects)
 	  (format t "Looking for ~A's dependencies...~%" project)
-	  (format s "~A~{ ~A~}~%"
+	  (format s "~A~{ ~A~} ~%"
 		  project
 		  (safe-project-dependencies project)))))))
 
