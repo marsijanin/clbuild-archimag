@@ -365,7 +365,7 @@ case $1 in
 
     plexippus-xpath)
 	get_darcs plexippus-xpath \
-	    http://common-lisp.net/~dlichteblau/plexippus-xpath
+	    http://common-lisp.net/project/plexippus-xpath/darcs/plexippus-xpath
 	;;
 
     --help|help|-help)
