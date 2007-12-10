@@ -315,11 +315,20 @@ update() {
 		    echo "error: invalid \$CLBUILD_DEPENDENCIES" 1>&2
 		    exit 1
 	    esac
+	    rm -f "$1"/.clbuild-skip-update
+	elif test -z "$clbuild_resume"; then
+	    rm -f */.clbuild-skip-update
 	fi
 
 	for project in $projects; do
-	    ${UPDATE_SCRIPT} ${UPDATE_ARGS} $project
-	    ln -f -s $(pwd)/${project}*/*.asd "${system_dir}"/
+	    skipfile="$project"/.clbuild-skip-update
+	    if test -f "$skipfile"; then
+		echo "resume: skipping update of $project"
+	    else
+		${UPDATE_SCRIPT} ${UPDATE_ARGS} $project
+		ln -f -s $(pwd)/${project}*/*.asd "${system_dir}"/
+		touch "$skipfile"
+	    fi
 	done
 
 	# some .asd files are hidden:
@@ -364,8 +373,12 @@ Usage:
 
   update [--dependencies|--no-dependencies] PROJECT_NAME
                 download/update this project
+  update [--resume]
+                download/update all projects.  With --resume, consider
+                only projects that a previous update run failed to fetch.
+  skip PROJECT_NAME
+                mark this project as done for the purposes of update --resume
 
-  update        download/update all applications
   recompile     recompile all applications
   dumpcore      recompile and dump a core file for faster startup
   build         update && dumpcore
@@ -581,19 +594,31 @@ case $1 in
     mrproper)
 	rm -rf "$BASE"/monster.core ${source_dir} ${target_dir}
 	;;
+    skip)
+	touch "$source_dir/$2/.clbuild-skip-update"
+	;;
     update)
-	case "$2" in
-	    --no-dependencies)
-		CLBUILD_DEPENDENCIES="no"
-		shift
-		;;
-	    --dependencies)
-		CLBUILD_DEPENDENCIES="yes"
-		shift
-		;;
-	    *)
-		;;
-	esac
+	unset clbuild_resume
+	while test -n "$2"; do
+	    case "$2" in
+		--no-dependencies)
+		    CLBUILD_DEPENDENCIES="no"
+		    shift
+		    ;;
+		--dependencies)
+		    CLBUILD_DEPENDENCIES="yes"
+		    shift
+		    ;;
+		--resume)
+		    clbuild_resume="yes"
+		    shift
+		    ;;
+		*)
+		    break
+		    ;;
+	    esac
+	done
+	export clbuild_resume
 	export CLBUILD_DEPENDENCIES
 	update $2
 	;;
