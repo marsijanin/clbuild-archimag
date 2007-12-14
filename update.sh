@@ -328,7 +328,7 @@ case $1 in
 	get_git closure-html git://repo.or.cz/closure-html.git
 	;;
 
-    cxml-rng|cxml-stp)
+    cxml-rng|cxml-stp|clim-alerts)
 	get_git $1 http://www.lichteblau.com/git/$1.git
 	;;
 

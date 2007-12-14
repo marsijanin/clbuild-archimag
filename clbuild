@@ -253,6 +253,7 @@ recompile() {
 	    $eval "(asdf:oos 'asdf:load-op :hunchentoot-test)" \
 	    $eval "(asdf:oos 'asdf:load-op :cl-webdav)" \
 	    $eval "(asdf:oos 'asdf:load-op :cxml-rng)" \
+	    $eval "(asdf:oos 'asdf:load-op :clim-alerts)" \
 	    $eval "(asdf:oos 'asdf:load-op :eclipse)" \
 	    $eval "(eclipse-system:compile-themes \"$BASE/source/eclipse/themes/microGUI/\" \"$BASE/source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\")" \
 	    $eval "$cmd"
@@ -408,6 +409,7 @@ Usage:
   climplayer    run the CLIMPlayer music player
                 (required Debian packages: mplayer, fileschanged, fam)
   demodemo      run some random CLIM examples
+  clim-alerts   run CLIM alerts
   eclipse [DPY] run the eclipse window manager
 
   hunchentoot   run the Hunchentoot web server test
@@ -687,7 +689,7 @@ case $1 in
 	    -eval '(slime)' \
 	    ${emacs_args}
 	;;
-    listener|gsharp|demodemo|climacs|closure|beirc|parse-xml|validate-xml|validate-relax-ng|html-to-xhtml|xhtml-to-html)
+    listener|gsharp|demodemo|climacs|closure|beirc|parse-xml|validate-xml|validate-relax-ng|html-to-xhtml|xhtml-to-html|clim-alerts)
 	start_application "$@"
 	;;
     record-dependencies)
