@@ -378,6 +378,13 @@ case $1 in
 	get_cvs portableaserve/acl-compat :pserver:anonymous@portableaserve.cvs.sourceforge.net:/cvsroot/portableaserve/ acl-compat
 	;;
 
+    mel-base)
+	# neonsquare's (currently unreachable) repository:
+	#   http://www.crispylogics.com/opensource/repos/mel-base
+	get_darcs mel-base \
+	    http://common-lisp.net/~dlichteblau/inofficial/mel-base
+	;;
+
     *)
 	echo Error: cannot download unknown project $1
 	exit 1
