@@ -15,6 +15,7 @@ cl-typesetting cl-pdf
 cl-webdav hunchentoot cxml cl-fad 
 cl-who 
 cl-yacc 
+clim-alerts mel-base mcclim bordeaux-threads cl-ppcre closure 
 climacs mcclim flexichain 
 climplayer mcclim cl-ppcre split-sequence 
 closer-mop lw-compat 
@@ -36,6 +37,7 @@ hunchentoot cl-who chunga cl-base64 cl-ppcre cl+ssl md5 rfc2388 url-rewrite
 lw-compat 
 mcclim clx spatial-trees flexichain slime 
 md5 
+mel-base cl+ssl 
 midi 
 parse-number 
 plexippus-xpath cxml parse-number cl-ppcre cl-yacc 
