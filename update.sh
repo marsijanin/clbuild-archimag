@@ -345,7 +345,7 @@ case $1 in
 		http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees
 	;;
 
-    cl-webdav|skippy|salza|trivial-sockets|split-sequence|rfc2388|psgraph|parse-number)
+    cl-webdav|skippy|salza|trivial-sockets|split-sequence|rfc2388|psgraph|parse-number|net-telent-date)
 	get_darcs $1 http://common-lisp.net/project/clbuild/mirror/$1
 	;;
 

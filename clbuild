@@ -25,7 +25,8 @@ bordeaux-threads climplayer closer-mop lw-compat skippy salza puri midi md5
 cl-base64 spatial-trees trivial-sockets split-sequence rfc2388
 graphic-forms closure-common closure-html cxml-rng cxml-stp drakma babel
 alexandria trivial-features uffi clsql rt psgraph cl-pdf plexippus-xpath
-cl-yacc parse-number cl-typesetting acl-compat mel-base clim-alerts"
+cl-yacc parse-number cl-typesetting acl-compat mel-base clim-alerts
+net-telent-date"
 
 if [ "$CLNET_USER" == "" ]; then
     CLNET_USER=:pserver:anonymous:anonymous

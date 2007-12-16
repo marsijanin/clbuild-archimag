@@ -39,6 +39,7 @@ mcclim clx spatial-trees flexichain slime
 md5 
 mel-base cl+ssl 
 midi 
+net-telent-date 
 parse-number 
 plexippus-xpath cxml parse-number cl-ppcre cl-yacc 
 psgraph 
