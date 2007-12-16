@@ -233,7 +233,7 @@ start_application() {
 
 recompile() {
 	rm -f "$BASE"/monster.core
-	touch source/eclipse/config.lisp
+	touch "$source_dir/eclipse/config.lisp"
 
         cmd="${1:-$quit}"
 	${lisp} $build_options \
@@ -255,10 +255,12 @@ recompile() {
 	    $eval "(asdf:oos 'asdf:load-op :cl-webdav)" \
 	    $eval "(asdf:oos 'asdf:load-op :cxml-rng)" \
 	    $eval "(asdf:oos 'asdf:load-op :clim-alerts)" \
-	    $eval "(asdf:oos 'asdf:load-op :eclipse)" \
-	    $eval "(eclipse-system:compile-themes \"$BASE/source/eclipse/themes/microGUI/\" \"$BASE/source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\")" \
 	    $eval "$cmd"
 	echo "$0 ok"
+
+	## disabled eclipse for now, because of theme compilation issues
+	# $eval "(asdf:oos 'asdf:load-op :eclipse)" \
+	# $eval "(eclipse-system:compile-themes \"$BASE/source/eclipse/themes/microGUI/\" \"$BASE/source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\")"
 }
 
 count_systems() {
