@@ -264,7 +264,7 @@ case $1 in
 
     trivial-features)
 	get_darcs trivial-features \
-	    http://common-lisp.net/~loliveira/soc07/trivial-features
+	    http://common-lisp.net/~loliveira/darcs/trivial-features
 	;;
 
     cl+ssl)
@@ -296,12 +296,12 @@ case $1 in
 	;;
 
     babel)
-	get_darcs babel http://common-lisp.net/~loliveira/soc07/babel
+	get_darcs babel http://common-lisp.net/~loliveira/darcs/babel
 	;;
 
     cffi)
 	#get_darcs cffi http://common-lisp.net/project/cffi/darcs/cffi/
-	get_darcs cffi http://common-lisp.net/~loliveira/soc07/cffi+grovel+babel+stuff
+	get_darcs cffi http://common-lisp.net/~loliveira/darcs/cffi+lotsastuff
 	;;
 	
     bordeaux-threads)
