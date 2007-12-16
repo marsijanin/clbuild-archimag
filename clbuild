@@ -336,6 +336,7 @@ update() {
 	done
 
 	# some .asd files are hidden:
+	ln -sf $(pwd)/mcclim/Experimental/freetype/*.asd ${system_dir}/
 	ln -sf $(pwd)/eclipse/system.lisp ${system_dir}/eclipse.asd
 	ln -f -s $(pwd)/graphic-forms/src/external-libraries/*/*/*.asd \
 	    ${system_dir}
