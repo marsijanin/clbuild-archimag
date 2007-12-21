@@ -537,6 +537,14 @@ update_project_2() {
 }
 
 update() {
+    # fixme: common dependencies will be processed several times here.
+    # This loop needs to be done in update_1 directly.
+    for project in $*; do
+	update_1 $project
+    done
+}
+
+update_1() {
 	rm -f "$BASE"/monster.core
 
         TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
@@ -898,7 +906,8 @@ case $1 in
 	done
 	export clbuild_resume
 	export CLBUILD_DEPENDENCIES
-	update $2
+	shift
+	update "$@"
 	;;
     update-missing)
 	for project in ${2:-$all_projects}; do
