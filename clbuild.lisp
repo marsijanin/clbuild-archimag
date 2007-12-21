@@ -81,12 +81,13 @@
 
 ;; helper function instead of REQUIRE, for the benefit of non-SBCL lisps
 (defun make (system)
-  (asdf:operate 'asdf:load-op system))
+  (let ((*package* (find-package :cl-user)))
+    (asdf:operate 'asdf:load-op system)))
 
 (defun make-clim (system)
   #-(or :clim-graphic-forms :gtkairo)
   (unless (find-package :xlib)
-    (asdf:operate 'asdf:load-op :clx))
+    (make :clx))
   (make :mcclim)
   (make system))
 
@@ -488,7 +489,8 @@
   (let ((projects (cl-ppcre:split "\\s+" projects-string))
 	;; the perpetual fixme list:
 	(blacklisted-systems (unless force *blacklisted-systems*))
-	(skipped-systems '()))
+	(skipped-systems '())
+	(*package* (find-package :cl-user)))
     ;; FIXME: it would be cooler to guess dependencies just like we do
     ;; above, and then process the projects in topological order, so
     ;; that, say, "Loading mcclim" is printed before "Loading beirc".
@@ -524,7 +526,7 @@
       #+sbcl (sb-ext:save-lisp-and-die "monster.core")
       #+clozure-common-lisp (ccl:save-application "monster.core")
       #-(or sbcl clozure-common-lisp)
-      (error "don't know how to save core on this lisp"))))
+      (error "don't know how to save this lisp"))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

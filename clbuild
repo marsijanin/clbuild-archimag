@@ -15,6 +15,7 @@
 #   Christophe Rhodes <csr21@cantab.net>
 #   David Lichteblau <david@lichteblau.com>
 #   Eric Marsden <eric.marsden@free.fr>
+#   Andreas Fuchs <asf@boinkor.net>
 
 set -e
 
