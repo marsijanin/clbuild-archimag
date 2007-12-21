@@ -80,7 +80,7 @@ case x$CLIM_BACKEND in
 	maybe_load_clx="(unless (find-package :xlib) (asdf:operate 'asdf:load-op :clx))"
         ;;
     *)
-        echo "invalid $CLIM_BACKEND, expected clx, gtkairo, or graphic-forms." 1>&2
+        echo "invalid $CLIM_BACKEND, see clbuild.conf.default for examples." 1>&2
         exit 1
         ;;
 esac

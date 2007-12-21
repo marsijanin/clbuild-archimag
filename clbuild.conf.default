@@ -73,3 +73,4 @@ CLBUILD_DEPENDENCIES="ask"
 #CLIM_BACKEND=gtkairo
 #CLIM_BACKEND=graphic-forms
 #CLIM_BACKEND=clx
+#CLIM_BACKEND=beagle
