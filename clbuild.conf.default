@@ -49,7 +49,7 @@ USER_INIT=/dev/null
 # source directory, but the script may be executed from another directory, so be
 # careful with relative pathnames.)
 
-UPDATE_SCRIPT="update.sh"
+UPDATE_SCRIPT="update_project"
 UPDATE_ARGS=""
 
 # alternatively, any downloading script can be used that knows about all
