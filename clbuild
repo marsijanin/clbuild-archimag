@@ -851,7 +851,7 @@ if test -f "$BASE"/monster.core; then
 fi
 
 all_projects=`cat "$BASE/projects" | awk '{print $1;}' | while read name; do
-	if test x"$name" != 'x#'; then
+	if test -n "$name" -a x"$name" != 'x#'; then
 	    echo -n "$name "
 	fi
     done`
