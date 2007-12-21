@@ -35,7 +35,6 @@
      and collect (pop args) into keys
      else collect arg into normals
      finally (return (append normals keys))))
-
 (push (intern (string-upcase *cmd*) :clbuild) *features*)
 
 (defun quit (rc)
@@ -369,16 +368,17 @@
 ;;; record-dependencies (internal helper command)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+#+(or clbuild::record-dependencies clbuild::recompile-systems)
+(defun project-to-systems (name)
+  (mapcar (lambda (x) (pathname-name x))
+	  (directory (format nil "source/~A/*.asd" name))))
+
 #+clbuild::record-dependencies
 #+clbuild::record-dependencies
 
 (make :cl-ppcre)
 
 (progn
-  (defun project-to-systems (name)
-    (mapcar (lambda (x) (pathname-name x))
-	    (directory (format nil "source/~A/*.asd" name))))
-
   (defun system-to-project (name)
     (let* ((pathname (asdf:component-pathname (asdf:find-system name)))
 	   (relative (enough-namestring pathname)))
@@ -447,6 +447,85 @@
 	  (format s "~A~{ ~A~} ~%"
 		  project
 		  (safe-project-dependencies project)))))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; recompile-systems (internal helper command)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::recompile-systems
+#+clbuild::recompile-systems
+#+clbuild::recompile-systems
+
+(make :cl-ppcre)
+
+(defparameter *blacklisted-systems*
+    '(
+      ;; need to rip out the theming fasls and configuration file stuff
+      ;; to make it build reliably:
+      "eclipse"
+
+      ;; bogus #+sbcl reader conditional:
+      #+sbcl "cl-typegraph"
+      #+sbcl "cl-typesetting-test"
+
+      ;; error due to constant folded reference to function object
+      "cl-webdav"
+
+      ;; don't want to depend on foreign libraries unnecessarily:
+      ;; ... yes, this loads only clsql-postgresql-socket!
+      ;; Good enough, I hope.
+      "clsql-db2" "clsql-mysql" "clsql-aodbc" "clsql-oracle"
+      "clsql-postgresql" "clsql-sqlite" "clsql-sqlite3" "clsql-odbc"
+
+      ;; windows only:
+      #-(or windows mswindows win32) "graphic-forms"
+      #-(or windows mswindows win32) "graphic-forms-tests"
+      #-(or windows mswindows win32) "graphic-forms-uitoolkit"
+      ))
+
+(with-application (projects-string &key dump verbose force)
+  (let ((projects (cl-ppcre:split "\\s+" projects-string))
+	;; the perpetual fixme list:
+	(blacklisted-systems (unless force *blacklisted-systems*))
+	(skipped-systems '()))
+    ;; FIXME: it would be cooler to guess dependencies just like we do
+    ;; above, and then process the projects in topological order, so
+    ;; that, say, "Loading mcclim" is printed before "Loading beirc".
+    (setf projects (sort projects #'string-lessp))
+    (flet ((build ()
+	     (dolist (project projects)
+	       (dolist (system (project-to-systems project))
+		 (cond
+		   ((find system blacklisted-systems :test #'equal)
+		    (push system skipped-systems))
+		   (t
+		    (format t "Loading ~A...~%" system)
+		    (asdf:operate 'asdf:load-op system :verbose verbose)))))))
+      (if verbose
+	  (build)
+	  (handler-bind
+	      ;; make SBCL STFU
+	      ((style-warning #'muffle-warning)
+	       #+sbcl (sb-ext:compiler-note #'muffle-warning))
+	    (let ((*compile-verbose* nil)
+		  (*compile-print* nil)
+		  (*load-verbose* nil)
+		  (*load-print* nil))
+	      (build)))))
+    (when skipped-systems
+      (format t "WARNING: The following black-listed systems were skipped: ~
+                 ~{~A~^, ~}~%~
+                Try --force t to include them.~%"
+	      skipped-systems))
+    (when dump
+      (format t "Dumping monster.core...~%")
+      (force-output)
+      #+sbcl (sb-ext:save-lisp-and-die "monster.core")
+      #+clozure-common-lisp (ccl:save-application "monster.core")
+      #-(or sbcl clozure-common-lisp)
+      (error "don't know how to save core on this lisp"))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Shouldn't get here

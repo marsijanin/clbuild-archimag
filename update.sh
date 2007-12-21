@@ -336,7 +336,7 @@ case $1 in
 	get_darcs midi http://rvw.doc.gold.ac.uk/sullivan/darcs/midi
 	;;
 
-    puri|md5|cl-base64|uffi|clsql|rt)
+    puri|md5|cl-base64|clsql|rt)
 	get_git $1 http://git.b9.com/$1.git
 	;;
 
@@ -383,6 +383,10 @@ case $1 in
 	#   http://www.crispylogics.com/opensource/repos/mel-base
 	get_darcs mel-base \
 	    http://common-lisp.net/~dlichteblau/inofficial/mel-base
+	;;
+
+    iterate)
+	get_darcs iterate http://common-lisp.net/project/iterate/darcs/iterate
 	;;
 
     *)

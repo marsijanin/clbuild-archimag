@@ -24,7 +24,7 @@ cl-fad hunchentoot chunga url-rewrite cl-who cl-webdav clx cffi
 bordeaux-threads climplayer closer-mop lw-compat skippy salza puri midi md5
 cl-base64 spatial-trees trivial-sockets split-sequence rfc2388
 graphic-forms closure-common closure-html cxml-rng cxml-stp drakma babel
-alexandria trivial-features uffi clsql rt psgraph cl-pdf plexippus-xpath
+alexandria trivial-features clsql rt psgraph cl-pdf plexippus-xpath
 cl-yacc parse-number cl-typesetting acl-compat mel-base clim-alerts
 net-telent-date"
 
@@ -68,12 +68,8 @@ fi
 
 # CLIM configuration
 case x$CLIM_BACKEND in
-    xgraphic-forms)
-        EXTRA_CLIM_FEATURES="(pushnew :clim-graphic-forms *features*)"
-	maybe_load_clx="nil"
-        ;;
-    xgtkairo)
-        EXTRA_CLIM_FEATURES="(pushnew :gtkairo *features*)"
+    xgraphic-forms|xgtkairo|xbeagle)
+        EXTRA_CLIM_FEATURES="(pushnew :clim-$CLIM_BACKEND *features*)"
 	maybe_load_clx="nil"
         ;;
     x|xclx)
@@ -111,7 +107,7 @@ if [ ! -z $CCL ]; then
     quit="(ccl:quit)"
     eval="--eval"
     require_asdf="(require :asdf)"
-    save_lisp_and_die="ccl:save-application"
+    core_option="-I"
 
     if test x"$USER_INIT" = x/dev/null; then
 	# -l /dev/null does not work
@@ -135,7 +131,7 @@ elif [ ! -z $CLISP ]; then
     quit="(ext:quit)"
     eval="-x"
     require_asdf="(load \"$BASE/source/asdf-for-clisp/asdf.lisp\")"
-    save_lisp_and_die="error \"core files not supported for clisp\""
+    core_option="-M"
 
     if test -n "$USER_INIT"; then
 	common_options="-norc -i $USER_INIT"
@@ -173,7 +169,7 @@ else
     quit="(sb-ext:quit)"
     eval="--eval"
     require_asdf="(require :asdf)"
-    save_lisp_and_die="sb-ext:save-lisp-and-die"
+    core_option="--core"
 
     if test -n "$USER_INIT"; then
 	common_options="--userinit $USER_INIT"
@@ -194,11 +190,17 @@ clbuild_lisp() {
 	"$@"
 }
 
-start_application() {
+lisp_trampoline() {
+    # Start the Lisp with user arguments.  For SBCL, we can do that using
+    # --end-toplevel-options.  For other Lisps, go through a temporary
+    # file.
+
+    options="$1"
+    shift
+
     if test -n "$end_toplevel_options"; then
 	${lisp} \
-	    $noinform \
-	    $run_options \
+	    $options \
 	    $eval "$require_asdf" \
 	    $eval "$set_central_registry" \
 	    $eval "$EXTRA_CLIM_FEATURES" \
@@ -221,8 +223,7 @@ start_application() {
 	done
 
 	${lisp} \
-	    $noinform \
-	    $run_options \
+	    $options \
 	    $eval "$require_asdf" \
 	    $eval "$set_central_registry" \
 	    $eval "$EXTRA_CLIM_FEATURES" \
@@ -231,36 +232,31 @@ start_application() {
     fi
 }
 
+start_application() {
+    lisp_trampoline "$noinform $run_options" "$@"
+}
+
 recompile() {
 	rm -f "$BASE"/monster.core
 	touch "$source_dir/eclipse/config.lisp"
 
-        cmd="${1:-$quit}"
-	${lisp} $build_options \
-	    $eval "$require_asdf" \
-	    $eval "$set_central_registry" \
-            $eval "$EXTRA_CLIM_FEATURES" \
-	    $eval "$maybe_load_clx" \
-	    $eval "(asdf:oos 'asdf:load-op :mcclim)" \
-	    $eval "(asdf:oos 'asdf:load-op :cl-ppcre)" \
-	    $eval "(asdf:oos 'asdf:load-op :clim-listener)" \
-	    $eval "(asdf:oos 'asdf:load-op :skippy)" \
-	    $eval "(asdf:oos 'asdf:load-op :gsharp)" \
-	    $eval "(asdf:oos 'asdf:load-op :clim-examples)" \
-	    $eval "(asdf:oos 'asdf:load-op :closure)" \
-	    $eval "(asdf:oos 'asdf:load-op :beirc)" \
-	    $eval "(asdf:oos 'asdf:load-op :climacs)" \
-	    $eval "(asdf:oos 'asdf:load-op :climplayer)" \
-	    $eval "(asdf:oos 'asdf:load-op :hunchentoot-test)" \
-	    $eval "(asdf:oos 'asdf:load-op :cl-webdav)" \
-	    $eval "(asdf:oos 'asdf:load-op :cxml-rng)" \
-	    $eval "(asdf:oos 'asdf:load-op :clim-alerts)" \
-	    $eval "$cmd"
-	echo "$0 ok"
+	if test x"$1" = x--dump; then
+	    dump="--dump t"
+	    shift
+	else
+	    dump=""
+	fi
 
-	## disabled eclipse for now, because of theme compilation issues
-	# $eval "(asdf:oos 'asdf:load-op :eclipse)" \
-	# $eval "(eclipse-system:compile-themes \"$BASE/source/eclipse/themes/microGUI/\" \"$BASE/source/eclipse/themes/Step/\" \"source/eclipse/themes/brushed-metal/\" \"source/eclipse/themes/CoolClean/\")"
+	concatenated_args="$@"
+	if test -z "$concatenated_args"; then
+	    concatenated_args="$all_projects"
+	fi
+
+	cd "$BASE"
+	lisp_trampoline "$build_options" \
+	    recompile-systems \
+	    $dump \
+	    "$concatenated_args"
 }
 
 count_systems() {
@@ -337,6 +333,7 @@ update() {
 	# some .asd files are hidden:
 	ln -sf $(pwd)/mcclim/Experimental/freetype/*.asd ${system_dir}/
 	ln -sf $(pwd)/eclipse/system.lisp ${system_dir}/eclipse.asd
+	ln -sf $(pwd)/cffi/uffi-compat/uffi.asd ${system_dir}/
 	ln -f -s $(pwd)/graphic-forms/src/external-libraries/*/*/*.asd \
 	    ${system_dir}
 
@@ -574,13 +571,12 @@ check() {
 }
 
 dumpcore() {
-    recompile "($save_lisp_and_die \"$BASE/monster.core\")" \
-	&& echo "monster.core dumped"
+    recompile --dump "$@"
 }
 
 if test -f "$BASE"/monster.core; then
     # echo "using `pwd`/monster.core"
-    run_options="--core "$BASE"/monster.core $run_options"
+    run_options="$core_option "$BASE"/monster.core $run_options"
 fi
 
 case $1 in
@@ -635,14 +631,17 @@ case $1 in
 	done
 	;;
     recompile)
-	recompile
+	shift
+	recompile "$@"
 	;;
     build)
+	shift
 	update
-	dumpcore
+	dumpcore "$@"
 	;;
     dumpcore)
-	dumpcore
+	shift
+	dumpcore "$@"
 	;;
     buildsbcl)
         if [ -n "$CCL" ]; then
