@@ -319,14 +319,13 @@ update() {
 		    echo "error: invalid \$CLBUILD_DEPENDENCIES" 1>&2
 		    exit 1
 	    esac
-	    rm -f "$1"/.clbuild-skip-update
 	elif test -z "$clbuild_resume"; then
 	    rm -f */.clbuild-skip-update
 	fi
 
 	for project in $projects; do
 	    skipfile="$project"/.clbuild-skip-update
-	    if test -f "$skipfile"; then
+	    if test -f "$skipfile" -a -n "$clbuild_resume"; then
 		echo "resume: skipping update of $project"
 	    else
 		${UPDATE_SCRIPT} ${UPDATE_ARGS} $project
