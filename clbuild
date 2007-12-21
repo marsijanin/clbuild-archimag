@@ -380,9 +380,9 @@ Usage:
   skip PROJECT_NAME
                 mark this project as done for the purposes of update --resume
 
-  recompile     recompile all applications
-  dumpcore      recompile and dump a core file for faster startup
-  build         update && dumpcore
+  recompile [PROJECT_NAME] recompile all applications (or just PROJECT_NAME)
+  dumpcore [PROJECT_NAME]  recompile and dump a core file for faster startup
+  build [PROJECT_NAME]     update && dumpcore
 
   diff          show local changes (for all version-controlled projects)
   check-urls    compared installed repository urls agains current locations
@@ -636,7 +636,7 @@ case $1 in
 	;;
     build)
 	shift
-	update
+	update "$@"
 	dumpcore "$@"
 	;;
     dumpcore)
