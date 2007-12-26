@@ -539,9 +539,13 @@ update_project_2() {
 update() {
     # fixme: common dependencies will be processed several times here.
     # This loop needs to be done in update_1 directly.
-    for project in $*; do
-	update_1 $project
-    done
+    if test $# -gt 0; then
+	for project in $*; do
+	    update_1 $project
+	done
+    else
+	update_1
+    fi
 }
 
 update_1() {
