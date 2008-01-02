@@ -985,7 +985,7 @@ case $1 in
 	    -eval '(slime)' \
 	    ${emacs_args}
 	;;
-    listener|gsharp|demodemo|climacs|closure|beirc|parse-xml|validate-xml|validate-relax-ng|html-to-xhtml|xhtml-to-html|clim-alerts)
+    listener|gsharp|demodemo|climacs|closure|beirc|parse-xml|validate-xml|validate-relax-ng|html-to-xhtml|xhtml-to-html|clim-alerts|vecto-demo)
 	start_application "$@"
 	;;
     record-dependencies)

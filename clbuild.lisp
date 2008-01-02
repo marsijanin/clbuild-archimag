@@ -366,6 +366,38 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; vecto-demo
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::vecto-demo
+#+clbuild::vecto-demo
+
+(make :vecto)
+
+(with-application
+    (filename &key (text "Lisp")
+	      (font "/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf"))
+  (vecto:with-canvas (:width 90 :height 90)
+    (let ((font (vecto:get-font font))
+          (step (/ pi 7)))
+      (vecto:set-font font 40)
+      (vecto:translate 45 45)
+      (vecto:draw-centered-string 0 -10 text)
+      (vecto:set-rgb-stroke 1 0 0)
+      (vecto:centered-circle-path 0 0 35)
+      (vecto:stroke)
+      (vecto:set-rgba-stroke 0 0 1.0 0.5)
+      (vecto:set-line-width 4)
+      (dotimes (i 14)
+        (vecto:with-graphics-state
+          (vecto:rotate (* i step))
+          (vecto:move-to 30 0)
+          (vecto:line-to 40 0)
+          (vecto:stroke)))
+      (format t "Writing ~A~%" filename)
+      (vecto:save-png filename))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; record-dependencies (internal helper command)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
