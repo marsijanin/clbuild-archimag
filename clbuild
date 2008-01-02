@@ -500,6 +500,10 @@ get_b9_com() {
     get_git $1 http://git.b9.com/$1.git
 }
 
+get_xach_com() {
+    get_git $1 http://git.xach.com/$1.git
+}
+
 get_tarball_bz2() {
     get_tarball "$1" "$2" j
 }

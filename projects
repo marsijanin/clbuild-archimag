@@ -87,3 +87,9 @@ acl-compat get_cvs_full :pserver:anonymous@portableaserve.cvs.sourceforge.net:/c
 mel-base get_darcs http://common-lisp.net/~dlichteblau/inofficial/mel-base
 
 iterate get_darcs http://common-lisp.net/project/iterate/darcs/iterate
+
+cl-vectors       get_git git://git.tuxee.net/cl-vectors
+salza2           get_xach_com
+zpng             get_xach_com
+vecto            get_xach_com
+zpb-ttf          get_xach_com
