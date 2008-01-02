@@ -395,9 +395,9 @@
 		 (unless (find sym seen)
 		   (push sym seen)
 		   (let ((name (string-downcase sym)))
-		     (if (asdf::system-definition-pathname name)
-			 (pushnew sym dependencies)
-			 (register-dependencies name)))))
+		     (when (asdf::system-definition-pathname name)
+		       (pushnew sym dependencies))
+		     (register-dependencies name))))
 	       (register-dependencies (name)
 		 (let* ((system (asdf:find-system name))
 			(in-order-to
