@@ -60,6 +60,6 @@ trivial-sockets
 url-rewrite 
 usocket split-sequence 
 vecto cl-vectors salza2 zpng zpb-ttf 
-zip cl-pdf trivial-gray-streams flexi-streams 
+zip salza2 trivial-gray-streams flexi-streams 
 zpb-ttf 
 zpng salza2 
