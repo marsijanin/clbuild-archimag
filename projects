@@ -10,6 +10,7 @@ climacs    get_cvs_clnet
 slime      get_cvs_clnet
 beirc      get_cvs_clnet
 eclipse    get_cvs_clnet
+cljl       get_cvs_clnet cl-jpeg
 
 alexandria get_darcs http://common-lisp.net/project/alexandria/darcs/alexandria
 
