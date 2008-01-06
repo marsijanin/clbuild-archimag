@@ -16,11 +16,12 @@ cl-vectors zpb-ttf
 cl-webdav chunga cl-base64 cl-ppcre trivial-features alexandria babel cffi flexi-streams cl+ssl md5 rfc2388 url-rewrite hunchentoot closure-common puri trivial-gray-streams cxml cl-fad 
 cl-who 
 cl-yacc 
-clim-alerts 
+clim-alerts mel-base closure-html bordeaux-threads trivial-sockets salza2 zip skippy closure closure-common cxml parse-number cl-ppcre cl-yacc plexippus-xpath cxml-stp puri cl-base64 chunga split-sequence usocket trivial-gray-streams flexi-streams cl+ssl drakma net-telent-date clx trivial-features alexandria babel cffi spatial-trees flexichain slime mcclim 
 climacs trivial-features alexandria babel cffi spatial-trees slime mcclim flexichain 
 climplayer trivial-features alexandria babel cffi spatial-trees flexichain slime mcclim cl-ppcre split-sequence 
+cljl 
 closer-mop lw-compat 
-closure 
+closure trivial-features alexandria babel cffi mcclim spatial-trees flexichain slime clx puri cxml closure-common closure-html bordeaux-threads trivial-sockets salza2 zip trivial-gray-streams flexi-streams skippy 
 closure-common trivial-gray-streams 
 closure-html closure-common trivial-gray-streams flexi-streams 
 clsql md5 rt trivial-features alexandria babel cffi 

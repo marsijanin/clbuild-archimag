@@ -420,6 +420,13 @@
 	       name))
       (third (pathname-directory relative))))
 
+  (defmacro without-errors ((error-value description) &body body)
+    `(handler-case
+	 (progn ,@body)
+       (error (c)
+	 (format t "Ignoring error ~A: ~A~%~%" ',description c)
+	 ,error-value)))
+
   (defun system-dependencies (name)
     (let ((dependencies '())
 	  (seen '()))
@@ -436,16 +443,11 @@
 			 (slot-value system 'asdf::in-order-to)))
 		   (loop
 		      for (nil (nil . depends-on)) in in-order-to
-		      do (map nil #'walk-dependency depends-on)))))
+		      do (dolist (next depends-on) 
+			   (without-errors (nil "while walking dependencies")
+			     (walk-dependency next)))))))
 	(register-dependencies name))
       dependencies))
-
-  (defmacro without-errors ((error-value description) &body body)
-    `(handler-case
-	 (progn ,@body)
-       (error (c)
-	 (format t "Ignoring error ~A: ~A~%~%" ',description c)
-	 ,error-value)))
 
   (defun safe-project-dependencies (project)
     (let ((projects
