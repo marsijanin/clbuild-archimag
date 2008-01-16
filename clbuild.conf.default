@@ -40,7 +40,7 @@ USER_INIT=/dev/null
 #### CVS configuration
 
 #CLNET_USER=:pserver:anonymous:anonymous
-
+#SF_USER=:pserver:anonymous:
 
 #### download utility selection
 

@@ -24,6 +24,11 @@ if [ "$CLNET_USER" == "" ]; then
 fi
 export CLNET_USER
 
+if [ "SF_USER" == "" ]; then
+    SF_USER=:pserver:anonymous:
+fi
+export SF_USER
+
 self="$0"
 while test -h "$self"; do
 	self=`readlink "$self"`
@@ -147,7 +152,7 @@ elif [ ! -z $CLISP ]; then
 	echo
     else
 	echo "NEW checking out asdf for use with clisp"
-	(cd "$BASE/source" && cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -d asdf-for-clisp sbcl/contrib/asdf)
+	(cd "$BASE/source" && cvs -d ${SF_USER}@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -d asdf-for-clisp sbcl/contrib/asdf)
     fi
 else
     #
@@ -943,7 +948,7 @@ case $1 in
             exit 1
         fi
 	cd ${source_dir}
-	cvs -d :pserver:anonymous:@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co sbcl
+	cvs -d ${SF_USER}@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co sbcl
 	# Enable threads
 	if test -z "$windowsp"; then
 	    echo '(lambda (list) (pushnew :sb-thread list) list)' > sbcl/customize-target-features.lisp
