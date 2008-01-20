@@ -24,11 +24,6 @@ if [ "$CLNET_USER" == "" ]; then
 fi
 export CLNET_USER
 
-if [ "SF_USER" == "" ]; then
-    SF_USER=:pserver:anonymous:
-fi
-export SF_USER
-
 self="$0"
 while test -h "$self"; do
 	self=`readlink "$self"`
@@ -895,7 +890,7 @@ case $1 in
             exit 1
         fi
 	cd ${source_dir}
-	cvs -d ${SF_USER}@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co sbcl
+	$SBCL_DOWNLOAD_COMMAND
 	# Enable threads
 	if test -z "$windowsp"; then
 	    echo '(lambda (list) (pushnew :sb-thread list) list)' > sbcl/customize-target-features.lisp

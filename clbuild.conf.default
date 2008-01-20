@@ -40,7 +40,16 @@ USER_INIT=/dev/null
 #### CVS configuration
 
 #CLNET_USER=:pserver:anonymous:anonymous
-#SF_USER=:pserver:anonymous:
+
+# must set a default right here, because it is being used below:
+SF_USER=:pserver:anonymous:
+
+
+#### SBCL repository location
+
+#SBCL_DOWNLOAD_COMMAND="cvs -d ${SF_USER}@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co sbcl"
+SBCL_DOWNLOAD_COMMAND="git clone git://repo.or.cz/sbcl.git"
+
 
 #### download utility selection
 
