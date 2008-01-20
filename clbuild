@@ -663,8 +663,6 @@ Usage:
 
   slime         run the Superior Lisp Interaction Mode in a fresh Emacs
   lisp          run Lisp in the terminal
-  sbcl          alias for "lisp" (with all systems available to REQUIRE)
-  openmcl       alias for "lisp"
 
   record-dependencies   rebuild dependency information file
 
@@ -901,22 +899,6 @@ case $1 in
 	shift;
         clbuild_lisp "$@"
         ;;
-    sbcl)
-        if [ -n "$CCL" ]; then
-            echo "Cowardly refusing to run SBCL when \$CCL is set." 1>&2
-            exit 1
-        fi
-	shift;
-        clbuild_lisp "$@"
-	;;
-    openmcl)
-        if [ -z "$CCL" ]; then
-            echo "Cannot run OpenMCL because \$CCL is not set." 1>&2
-            exit 1
-        fi
-	shift;
-        clbuild_lisp "$@"
-	;;
     slime)
 	shift
 	emacs_args="$@"
