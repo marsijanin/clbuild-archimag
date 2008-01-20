@@ -1,4 +1,4 @@
-# -*- fill-column: nil, indent-tabs: nil -*-
+# -*- fill-column: nil; indent-tabs: nil -*-
 #
 # Main list of projects, including software that is tested regularly
 # by clbuild committers and that (usually) compiles without problems
@@ -102,3 +102,8 @@ salza2           get_xach_com  #ZLIB and DEFLATE compressor
 zpng             get_xach_com  #PNG creator
 vecto            get_xach_com  #cl-pdf-like API for cl-vectors
 zpb-ttf          get_xach_com  #TrueType font parser
+
+postmodern get_darcs http://common-lisp.net/project/postmodern/darcs/postmodern #CLSQL-replacement for PostgreSQL databases
+fiveam get_darcs http://common-lisp.net/project/bese/repos/fiveam #regression testing framework
+ieee-floats get_darcs http://common-lisp.net/project/ieee-floats/darcs/ieee-floats #IEEE 754 encoder/decoder
+trivial-utf-8 get_darcs http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8/ #UTF-8 encoder/decoder
