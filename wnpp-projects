@@ -11,7 +11,7 @@
 eclipse    get_cvs_clnet  #window manager
 
 # defines a package called GL, which conflicts with CLX
-cl-opengl        get_darcs http://common-lisp.net/~loliveira/darcs/cl-opengl-thomas
+cl-opengl        get_darcs http://common-lisp.net/~loliveira/darcs/cl-opengl-thomas # FFI bindings for OpenGL (thomas fork) 
 
 # random projects suggested by users:
 zebu             get_svn https://cl-net-snmp.svn.sourceforge.net/svnroot/cl-net-snmp/zebu/trunk
