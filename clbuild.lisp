@@ -85,7 +85,7 @@
     (asdf:operate 'asdf:load-op system)))
 
 (defun make-clim (system)
-  #-(or :clim-graphic-forms :gtkairo)
+  #-(or :clim-graphic-forms :clim-gtkairo)
   (unless (find-package :xlib)
     (make :clx))
   (make :mcclim)
