@@ -412,6 +412,20 @@
 (make :cl-ppcre)
 
 (progn
+  (defun extra-dependencies (system)
+    ;; add magic dependencies to ensure that clbuild configuration doesn't
+    ;; leak into the dependency file too easily.  In this case, we don't
+    ;; clim-gtkairo's dependency on cffi to appear or disappear every time
+    ;; some rebuilds dependencies with a different backend.
+    ;;
+    ;; (Better include spurious dependencies than too few.)
+    ;;
+    ;; OpenMCL-specific stuff like acl-compat for hunchentoot might also have
+    ;; to be added here.
+    (cdr (assoc system
+		'(("mcclim" "cffi"))
+		:test #'equal)))
+
   (defun system-to-project (name)
     (let* ((pathname (asdf:component-pathname (asdf:find-system name)))
 	   (relative (enough-namestring pathname)))
@@ -458,10 +472,12 @@
 				 (system-to-project system)))
 			     (without-errors
 				 (nil "while scanning dependencies")
-			       (system-dependencies system))))))
+			       (append (extra-dependencies system)
+				       (system-dependencies system)))))))
       (setf projects (remove nil projects))
       (setf projects (remove project projects :test 'equal))
-      (remove-duplicates projects :test 'equal)))
+      (setf projects (remove-duplicates projects :test 'equal))
+      (sort projects #'string-lessp)))
 
   (with-application (project-string)
     (let ((projects (cl-ppcre:split "\\s+" project-string)))
