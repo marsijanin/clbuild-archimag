@@ -18,7 +18,6 @@ gsharp     get_cvs_clnet  #interactive, extensible editor for musical scores
 climacs    get_cvs_clnet  #CLIM-based text editor
 slime      get_cvs_clnet  #Emacs mode for Common Lisp development
 beirc      get_cvs_clnet  #CLIM-based Internet Relay Chat client
-cljl       get_cvs_clnet cl-jpeg  #baseline JPEG encoder/decoder
 
 alexandria get_darcs http://common-lisp.net/project/alexandria/darcs/alexandria #utility function library
 
