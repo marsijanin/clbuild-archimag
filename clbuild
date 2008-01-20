@@ -658,6 +658,7 @@ Usage:
   check-urls    compared installed repository urls agains current locations
   clean-links   remove broken symlinks in systems/
   update-missing  download only projects not present yet
+  register-asd PROJECT  add .asd file symlinks for PROJECT
 
   buildsbcl [XC_HOST]  download/update and compile SBCL
   world         buildsbcl && build
@@ -981,6 +982,25 @@ case $1 in
 		    echo "removing broken link from $f to $link_target"
 		    rm "$f"
 		fi
+	    fi
+	done
+	;;
+    register-asd)
+	project="$2"
+	dir="$source_dir/$project"
+
+	if test -z "$project"; then
+	    echo "usage: clbuild register-asd PROJECT" 1>&2
+	    exit 1
+	fi
+	if ! test -d "$dir"; then
+	    echo "cannot find $dir" 1>&2
+	    exit 1
+	fi
+	for f in $dir/*.asd; do
+	    if test -f "$f"; then
+		echo "$f"
+		ln -f -s $f "${system_dir}"/
 	    fi
 	done
 	;;
