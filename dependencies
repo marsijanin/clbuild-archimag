@@ -3,7 +3,10 @@ alexandria
 babel alexandria rt trivial-features 
 beirc cl-fad cl-irc cl-ppcre clx flexi-streams flexichain mcclim slime spatial-trees split-sequence trivial-gray-streams usocket 
 bordeaux-threads 
+cells 
+cells-gtk cells 
 cffi alexandria babel rt trivial-features 
+cffi-net alexandria babel cffi trivial-features 
 chunga flexi-streams trivial-gray-streams 
 cl+ssl alexandria babel cffi flexi-streams trivial-features trivial-gray-streams 
 cl-base64 
@@ -35,6 +38,7 @@ eclipse
 fiveam 
 flexi-streams trivial-gray-streams 
 flexichain 
+ftd alexandria babel cffi cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees trivial-features 
 graphic-forms alexandria babel cffi closer-mop lw-compat trivial-features 
 gsharp closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-gray-streams 
 hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-ppcre cl-who flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
@@ -66,7 +70,7 @@ skippy
 slime 
 spatial-trees 
 split-sequence 
-trivial-features alexandria babel cffi rt 
+trivial-features 
 trivial-gray-streams 
 trivial-sockets 
 trivial-utf-8 

@@ -7,6 +7,11 @@
 #
 # Part of clbuild by Luke Gorrie and contributors.
 
+
+#
+# (mostly) functional projects:
+#
+
 # eclipse used to be a main project, but theming system often causes trouble
 eclipse    get_cvs_clnet  #window manager
 
@@ -24,3 +29,19 @@ s-sysdeps        get_darcs http://www.beta9.be/darcs/s-sysdeps
 s-base64         get_darcs http://www.beta9.be/darcs/s-base64
 s-xml            get_cvs_clnet
 s-xml-rpc        get_cvs_clnet
+
+
+#
+# broken stuff -- where projects go to die:
+#
+
+# cells doesn't even load: "The variable UTILS-KT::CLOCK is unbound"
+cells get_cvs_clnet      #turns CLOS into an imaginary spreadsheet
+cells-gtk get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/cells-gtk/cvsroot/ root/cells-gtk #GUI framework using Cells and GTK+
+
+# cffi-net doesn't load either, presumably due to a cffi compatibility issue
+cffi-net get_darcs http://cffi-net.accela.net/darcs/cffi-net/
+
+# the ~dlichteblau fork of FTD would work, but needs cffi-net 
+# ftd get_darcs http://common-lisp.net/project/ftd/darcs/ftd/ #The Flexi-Trivial Dired-style file manager using CLIM
+ftd get_darcs http://common-lisp.net/~dlichteblau/inofficial/ftd/ #The Flexi-Trivial Dired-style file manager using CLIM (~dlichteblau fork)
