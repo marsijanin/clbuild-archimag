@@ -959,6 +959,11 @@ case $1 in
 	;;
     record-dependencies)
 	cd "$BASE"
+	for project in $all_projects; do
+	    if ! test -d "${source_dir}/$project"; then
+		update $project
+	    fi
+	done
 	start_application record-dependencies "$all_projects"
 	;;
     check-urls)

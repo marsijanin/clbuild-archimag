@@ -9,6 +9,7 @@ cl+ssl alexandria babel cffi flexi-streams trivial-features trivial-gray-streams
 cl-base64 
 cl-fad 
 cl-irc flexi-streams split-sequence trivial-gray-streams usocket 
+cl-opengl alexandria babel cffi trivial-features 
 cl-pdf iterate 
 cl-ppcre 
 cl-typesetting cl-pdf iterate 
@@ -39,12 +40,14 @@ gsharp closure-common clx cxml flexichain mcclim midi puri slime spatial-trees t
 hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-ppcre cl-who flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 ieee-floats 
 iterate 
+lisa 
 lw-compat 
 mcclim cffi clx flexichain slime spatial-trees 
 md5 
 mel-base alexandria babel cffi cl+ssl flexi-streams trivial-features trivial-gray-streams 
 midi 
 net-telent-date 
+parse-html 
 parse-number 
 plexippus-xpath cl-ppcre cl-yacc closure-common cxml parse-number puri trivial-gray-streams 
 postmodern bordeaux-threads ieee-floats md5 split-sequence trivial-utf-8 usocket 
@@ -52,6 +55,10 @@ psgraph
 puri 
 rfc2388 
 rt 
+s-base64 
+s-sysdeps 
+s-xml 
+s-xml-rpc s-base64 s-sysdeps s-xml 
 salza 
 salza2 
 series 
@@ -66,6 +73,7 @@ trivial-utf-8
 url-rewrite 
 usocket split-sequence 
 vecto cl-vectors salza2 zpb-ttf zpng 
+zebu 
 zip flexi-streams salza2 trivial-gray-streams 
 zpb-ttf 
 zpng salza2 
