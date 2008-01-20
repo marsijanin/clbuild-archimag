@@ -618,16 +618,22 @@ update_1() {
 	    fi
 	done
 
-	# some .asd files are hidden:
-	ln -sf $(pwd)/mcclim/Experimental/freetype/*.asd ${system_dir}/
-	ln -sf $(pwd)/eclipse/system.lisp ${system_dir}/eclipse.asd
-	ln -sf $(pwd)/cffi/uffi-compat/uffi.asd ${system_dir}/
-	ln -f -s $(pwd)/graphic-forms/src/external-libraries/*/*/*.asd \
-	    ${system_dir}
+	link_extra_asds
 
 	echo "update complete"
 	count_systems
         cd ..
+}
+
+link_extra_asds() {
+    # some (buggy) projects try to hide their .asd files from us:
+    ln -sf $source_dir/mcclim/Experimental/freetype/*.asd ${system_dir}/
+    ln -sf $source_dir/eclipse/system.lisp ${system_dir}/eclipse.asd
+    ln -f -s $source_dir/graphic-forms/src/external-libraries/*/*/*.asd \
+	${system_dir}
+
+    # also, override uffi:
+    ln -sf $source_dir/cffi/uffi-compat/uffi.asd ${system_dir}/
 }
 
 help() {
@@ -980,6 +986,7 @@ case $1 in
 		ln -f -s $f "${system_dir}"/
 	    fi
 	done
+	link_extra_asds
 	;;
     diff)
 	diff="${source_dir}/.diff"
@@ -1020,6 +1027,6 @@ case $1 in
 	esac
 	;;
     *)
-	echo "invalid command $2, try --help for help"
+	echo "invalid command $1, try --help for help"
 	exit 1
 esac
