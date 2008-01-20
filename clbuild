@@ -715,6 +715,8 @@ clbuild run APPLICATION [ARGS...]
   run html-to-xhtml HTML-FILENAME OUTPUT-FILENAME
   run xhtml-to-html XML-FILENAME OUTPUT-FILENAME
                 convert between HTML 4 and XHTMl
+
+  run vecto-demo    generate a test image using vecto
 EOF
 }
 
