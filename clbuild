@@ -654,8 +654,6 @@ Short usage:
   listener         run the McCLIM listener
   hunchentoot      run the Hunchentoot web server test
  
-  dialog           show an interactive menu - requires dialog(1)
-
 See also:
 
   help             show complete usage information
@@ -724,8 +722,6 @@ Usage:
   xhtml-to-html XML-FILENAME OUTPUT-FILENAME
                 convert between HTML 4 and XHTMl
 
-  dialog        show an interactive menu 
-
 Maintainance commands for developers:
 
   record-dependencies
@@ -756,91 +752,6 @@ check_misdesigned_program() {
 	exit 1
     fi
     echo "found `which $1`"
-}
-
-interactive_menu() {
-    if ! dialog --clear --title "clbuild" \
-	--menu "Welcome to clbuild's interactive menu.\n\n\
-If unsure, choose 'update' to download the userland, then try\n\
-running one of applications." \
-	0 0 0 \
-	"update" "download/update all applications" \
-	"recompile" "recompile all applications" \
-	"dumpcore" "recompile and dump a core file for faster startup" \
-	"" "" \
-	"buildsbcl" "download/update and compile SBCL" \
-	"world" "buildsbcl && update && dumpcore" \
-	"" "" \
-	"slime" "run the Superior Lisp Interaction Mode in a fresh Emacs" \
-	"slime -nw" "run the Superior Lisp Interaction Mode (in this TTY)" \
-	"lisp" "run Lisp in the terminal" \
-	"" "" \
-	"gsharp" "run the Gsharp score editor" \
-	"climacs" "run the Climacs text editor" \
-	"closure" "run the CLOSURE web browser" \
-	"beirc" "run the Beirc IRC client" \
-	"climplayer" "run the CLIMPlayer music player" \
-	"demodemo" "run some random CLIM examples" \
-	"hunchentoot" "run the Hunchentoot web server test" \
-	"webdav" "run the CL-WEBDAV server" \
-	"eclipse" "run the eclipse window manager" \
-	"" "" \
-	"clear" "Delete all fasls" \
-	"mrproper" "Delete all downloaded source and fasls" \
-	"" "" \
-	"quit" "Exit clbuild" \
-	2>$TMPDIR/choice
-    then
-	echo menu aborted
-	exit 0
-    fi
-    choice="`cat $TMPDIR/choice`"
-    case $choice in
-	webdav)
-	    if dialog --title "clbuild webdav" --clear --inputbox \
-		"A WebDAV server will be started on http://localhost:4242.\n\n\
-Files will be served for read and write operations without authentication.\n\n\
-Please choose a directory to be exported." \
-		16 72 /tmp 2>$TMPDIR/choice
-	    then
-		directory=`cat $TMPDIR/choice`
-		if test -d $directory; then
-		    choice="webdav $directory"
-		else
-		    $DIALOG --title "clbuild webdav" --clear \
-			--msgbox "Error: Directory not found: $directory" \
-			10 41
-		    choice=""
-		fi
-	    else
-		choice=""
-	    fi
-	    ;;
-	eclipse)
-	    if dialog --title "clbuild webdav" --clear --inputbox \
-		"Please enter the X11 display to run eclipse on." \
-		16 72 ${DISPLAY:-:0} 2>$TMPDIR/choice
-	    then
-		choice="eclipse `cat $TMPDIR/choice`"
-	    else
-		choice=""
-	    fi
-	    ;;
-    esac
-    case $choice in
-	"")
-	    ;;
-	quit)
-	    exit 0
-	    ;;
-	*)
-	    echo
-	    "$0" $choice || echo clbuild: $choice failed
-	    echo
-	    echo Type RET to continue
-	    read
-	    ;;
-    esac
 }
 
 check() {
@@ -1127,31 +1038,6 @@ case $1 in
 	;;
     ""|--help|-h)
 	help
-	;;
-    dialog)
-        if ! dialog --help >/dev/null; then
-	    cat <<EOF
-
-error: dialog(1) not found.  Cannot start interactive menu.
-Install dialog or try clbuild --help instead.
-EOF
-	    exit 1
-	fi
-
-	# always run check first to avoid unpleasant surprises
-	check
-
-
-        TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
-
-        cleanup() {
-            rm -rf $TMPDIR
-        }
-        trap cleanup exit
-
-	while :; do
-	    interactive_menu
-	done
 	;;
     *)
         help
