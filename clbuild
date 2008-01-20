@@ -109,9 +109,7 @@ if [ ! -z $CCL ]; then
     lisp=$CCL
 
     noinform="-Q"
-    build_options="$noinform --batch" # fixme, that's not good enough
     end_toplevel_options="" #fixme
-    run_options="--batch"   # ditto
     quit="(ccl:quit)"
     eval="--eval"
     require_asdf="(require :asdf)"
@@ -125,6 +123,10 @@ if [ ! -z $CCL ]; then
     else
 	common_options=""
     fi
+
+    # fixme: this doesn't quite match the SBCL version yet:
+    build_options="$noinform --batch $common_options"
+    run_options="--batch $common_options"
 elif [ ! -z $CLISP ]; then
     #
     # CLISP
@@ -133,9 +135,7 @@ elif [ ! -z $CLISP ]; then
     lisp="$CLISP -repl"
 
     noinform="" #fixme
-    build_options="-on-error exit $common_options"
     end_toplevel_options="" #fixme
-    run_options="-on-error exit $common_options"
     quit="(ext:quit)"
     eval="-x"
     require_asdf="(load \"$BASE/source/asdf-for-clisp/asdf.lisp\")"
@@ -146,6 +146,9 @@ elif [ ! -z $CLISP ]; then
     else
 	common_options=""
     fi
+
+    build_options="-on-error exit $common_options"
+    run_options="-on-error exit $common_options"
 
     if test -d "$BASE/source/asdf-for-clisp"; then
 	echo "*** asdf checkout found"
@@ -172,8 +175,6 @@ else
 
     noinform="--noinform"
     end_toplevel_options="--end-toplevel-options"
-    build_options="$noinform --noprint --disable-debugger $common_options"
-    run_options="--disable-debugger $common_options"
     quit="(sb-ext:quit)"
     eval="--eval"
     require_asdf="(require :asdf)"
@@ -184,6 +185,9 @@ else
     else
 	common_options=""
     fi
+
+    build_options="$noinform --noprint --disable-debugger $common_options"
+    run_options="--disable-debugger $common_options"
 fi
 
 [ -d "$system_dir" ] || mkdir "$system_dir"
