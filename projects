@@ -107,3 +107,5 @@ postmodern get_darcs http://common-lisp.net/project/postmodern/darcs/postmodern 
 fiveam get_darcs http://common-lisp.net/project/bese/repos/fiveam #regression testing framework
 ieee-floats get_darcs http://common-lisp.net/project/ieee-floats/darcs/ieee-floats #IEEE 754 encoder/decoder
 trivial-utf-8 get_darcs http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8/ #UTF-8 encoder/decoder
+
+series           get_cvs_full :pserver:anonymous@series.cvs.sourceforge.net:/cvsroot/series series

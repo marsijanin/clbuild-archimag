@@ -47,13 +47,14 @@ midi
 net-telent-date 
 parse-number 
 plexippus-xpath cl-ppcre cl-yacc closure-common cxml parse-number puri trivial-gray-streams 
-postmodern bordeaux-threads md5 split-sequence trivial-utf-8 usocket 
+postmodern bordeaux-threads ieee-floats md5 split-sequence trivial-utf-8 usocket 
 psgraph 
 puri 
 rfc2388 
 rt 
 salza 
 salza2 
+series 
 skippy 
 slime 
 spatial-trees 
