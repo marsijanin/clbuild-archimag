@@ -249,9 +249,6 @@ start_application() {
 }
 
 recompile() {
-	rm -f "$BASE"/monster.core
-	touch "$source_dir/eclipse/config.lisp"
-
 	if test x"$1" = x--dump; then
 	    dump="--dump t"
 	    shift
@@ -562,7 +559,7 @@ update() {
 }
 
 update_1() {
-	rm -f "$BASE"/monster.core
+        touch "$BASE"/.core-is-stale
 
         TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
 	export TMPDIR
@@ -640,29 +637,6 @@ update_1() {
 
 help() {
 	cat <<EOF
-Short usage:
-
-  update [PROJECT] download/update project or all projects
-  buildsbcl        download/update and compile SBCL
-  build            update, rebuild all applications, and dump a core file
-  diff             show local changes (for all version-controlled projects)
-  clean            delete all compiled object files
- 
-  slime            run the Superior Lisp Interaction Mode in a fresh Emacs
-  lisp             run Lisp in the terminal
- 
-  listener         run the McCLIM listener
-  hunchentoot      run the Hunchentoot web server test
- 
-See also:
-
-  help             show complete usage information
-
-EOF
-}
-
-long_help() {
-	cat <<EOF
 Usage:
   check         check availability of all necessary helper applications
 
@@ -696,36 +670,12 @@ Usage:
   sbcl          alias for "lisp" (with all systems available to REQUIRE)
   openmcl       alias for "lisp"
 
-  listener      run the McCLIM listener
-  gsharp        run the Gsharp score editor 
-  climacs       run the Climacs text editor
-  closure [HOME_PAGE_URL]   run the CLOSURE web browser
-                (required Debian packages: gif2png,libjpeg-progs)
-  beirc         run the Beirc IRC client
-  climplayer    run the CLIMPlayer music player
-                (required Debian packages: mplayer, fileschanged, fam)
-  demodemo      run some random CLIM examples
-  clim-alerts   run CLIM alerts
-  eclipse [DPY] run the eclipse window manager
+  record-dependencies   rebuild dependency information file
 
-  hunchentoot   run the Hunchentoot web server test
-  webdav DIR    run the CL-WEBDAV server, serving directory DIR
-                (required Debian packages: libssl-dev)
+Starting applications:
 
-  parse-xml FILENAME
-                check XML for well-formedness
-  validate-xml FILENAME
-                check XML for validity
-  validate-relax-ng [--compact yes] XML-FILENAME SCHEMA-FILENAME
-                check XML for validity against a Relax NG Schema
-  html-to-xhtml HTML-FILENAME OUTPUT-FILENAME
-  xhtml-to-html XML-FILENAME OUTPUT-FILENAME
-                convert between HTML 4 and XHTMl
-
-Maintainance commands for developers:
-
-  record-dependencies
-                rebuild dependency information file
+  run APPLICATION   run this application
+  run --help        show help for applications
 
 If you do 'world' or 'buildsbcl' then SBCL will be installed in
 target/ and used for future commands. If you don't run these commands
@@ -733,6 +683,38 @@ target/ and used for future commands. If you don't run these commands
 
 For configuration options (including for non-SBCL lisps), see clbuild.conf.
 
+EOF
+}
+
+help_run() {
+	cat <<EOF
+clbuild run APPLICATION [ARGS...]
+
+  run listener      run the McCLIM listener
+  run gsharp        run the Gsharp score editor 
+  run climacs       run the Climacs text editor
+  run closure [HOME_PAGE_URL]   run the CLOSURE web browser
+                    (required Debian packages: gif2png,libjpeg-progs)
+  run beirc         run the Beirc IRC client
+  run climplayer    run the CLIMPlayer music player
+                    (required Debian packages: mplayer, fileschanged, fam)
+  run demodemo      run some random CLIM examples
+  run clim-alerts   run CLIM alerts
+  run eclipse [DPY] run the eclipse window manager
+
+  run hunchentoot   run the Hunchentoot web server test
+  run webdav DIR    run the CL-WEBDAV server, serving directory DIR
+                    (required Debian packages: libssl-dev)
+
+  run parse-xml FILENAME
+                    check XML for well-formedness
+  run validate-xml FILENAME
+                    check XML for validity
+  run validate-relax-ng [--compact yes] XML-FILENAME SCHEMA-FILENAME
+                    check XML for validity against a Relax NG Schema
+  run html-to-xhtml HTML-FILENAME OUTPUT-FILENAME
+  run xhtml-to-html XML-FILENAME OUTPUT-FILENAME
+                convert between HTML 4 and XHTMl
 EOF
 }
 
@@ -780,11 +762,17 @@ check() {
 }
 
 dumpcore() {
+    rm -f "$BASE"/.core-is-stale
+    rm -f "$BASE"/monster.core
     recompile --dump "$@"
 }
 
 if test -f "$BASE"/monster.core; then
-    # echo "using `pwd`/monster.core"
+    if test -f "$BASE/.core-is-stale"; then
+	echo "using $BASE/monster.core"
+	echo 'WARNING: "clbuild update" was used since core file creation'
+	echo 'WARNING: consider re-running dumpcore'
+    fi
     run_options="$core_option "$BASE"/monster.core $run_options"
 fi
 
@@ -798,13 +786,6 @@ scan_projects() {
 
 main_projects=`scan_projects "$BASE/projects"`
 all_projects=$main_projects\ `scan_projects "$BASE/wnpp-projects"`
-
-list_file() {
-    file="$1"
-    pattern="$2"
-    category="$3"
-
-}
 
 list() {
     pattern="$1"
@@ -826,6 +807,7 @@ list() {
 		    ;;
 	    esac
 
+	    # fixme: do this using "paste a b | expand -t 25" instead
 	    left="$status $project"
 	    count=`echo -n "$left" | wc -c`
 	    count=`expr 25 - $count`
@@ -952,39 +934,30 @@ case $1 in
 	    -eval '(slime)' \
 	    ${emacs_args}
 	;;
-    listener|gsharp|demodemo|climacs|closure|beirc|parse-xml|validate-xml|validate-relax-ng|html-to-xhtml|xhtml-to-html|clim-alerts|vecto-demo)
+    run)
+	shift
+	case $1 in
+	    --help)
+		help_run
+		exit 0
+		;;
+	    climplayer)
+		check_program fileschanged
+		check_misdesigned_program mplayer
+		;;
+	    hunchentoot|webdav)
+		if ! test -f /usr/lib/libssl.so; then
+		    echo "WARNING: /usr/lib/libssl.so not found, did you install OpenSSL?"
+		    echo "(type RET to continue anyway)"
+		    read
+		fi
+		;;
+	esac
 	start_application "$@"
 	;;
     record-dependencies)
 	cd "$BASE"
 	start_application record-dependencies "$all_projects"
-	;;
-    climplayer)
-	check_program fileschanged
-	check_misdesigned_program mplayer
-	start_application "$@"
-	;;
-    hunchentoot)
-	if ! test -f /usr/lib/libssl.so; then
-	    echo "WARNING: /usr/lib/libssl.so not found, did you install OpenSSL?"
-	    echo "(type RET to continue anyway)"
-	    read
-	fi
-	start_application "$@"
-	;;
-    webdav)
-	if ! test -f /usr/lib/libssl.so; then
-	    echo "WARNING: /usr/lib/libssl.so not found, did you install OpenSSL?"
-	    echo "(type RET to continue anyway)"
-	    read
-	fi
-	start_application "$@"
-	;;
-    eclipse)
-	touch source/eclipse/config.lisp
-	# zzz cl-user::*eclipse-initfile*?!
-	# zzz cl-user::*eclipse-eclipsedir*?!
-	start_application "$@"
 	;;
     check-urls)
 	cd "$source_dir"
@@ -1033,13 +1006,16 @@ case $1 in
 	done
 	less "$diff"
 	;;
-    help|--long-help|-H)
-        long_help
-	;;
-    ""|--help|-h)
-	help
+    help|--long-help|-H|""|--help|-h)
+	case $2 in
+	    run)
+		help_run
+		;;
+	    *)
+		help
+	esac
 	;;
     *)
-        help
+	echo "invalid command $2, try --help for help"
 	exit 1
 esac
