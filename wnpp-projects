@@ -1,0 +1,11 @@
+# -*- fill-column: nil, indent-tabs: nil -*-
+#
+# Auxiliary list of "work-needing and prospective projects" for clbuild.
+#
+# Packages in this list are not installed by default.
+# See file `projects' for the main list.
+#
+# Part of clbuild by Luke Gorrie and contributors.
+
+# eclipse used to be a main project, but theming system often causes trouble
+eclipse    get_cvs_clnet  #window manager

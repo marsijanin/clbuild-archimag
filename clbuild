@@ -261,7 +261,7 @@ recompile() {
 
 	concatenated_args="$@"
 	if test -z "$concatenated_args"; then
-	    concatenated_args="$all_projects"
+	    concatenated_args="$main_projects"
 	fi
 
 	cd "$BASE"
@@ -533,11 +533,11 @@ update_project() {
 	exit 1
     fi
 
-    if ! grep "^$1 " "$BASE/projects" >/dev/null; then
+    if ! grep -h "^$1 " "$BASE/projects" "$BASE/wnpp-projects" >/dev/null; then
        echo Error: cannot download unknown project $1
        exit 1
     fi
-    found=`grep "^$1 " "$BASE/projects"`
+    found=`grep -h "^$1 " "$BASE/projects" "$BASE/wnpp-projects" | cut -d\# -f1`
     update_project_2 $found
 }
 
@@ -574,7 +574,7 @@ update_1() {
 
 	cd "$source_dir"
 
-	projects="$all_projects"
+	projects="$main_projects"
 	if test -n "$1"; then
 	    case "$CLBUILD_DEPENDENCIES" in
 		yes|ask)
@@ -668,15 +668,17 @@ long_help() {
 Usage:
   check         check availability of all necessary helper applications
 
+  list [PATTERN]  list all projects, or projects matching PATTERN
+
   update [--dependencies|--no-dependencies] PROJECT_NAME
                 download/update this project
   update [--resume]
-                download/update all projects.  With --resume, consider
+                download/update main projects.  With --resume, consider
                 only projects that a previous update run failed to fetch.
   skip PROJECT_NAME
                 mark this project as done for the purposes of update --resume
 
-  recompile [PROJECT_NAME] recompile all applications (or just PROJECT_NAME)
+  recompile [PROJECT_NAME] recompile main applications (or just PROJECT_NAME)
   dumpcore [PROJECT_NAME]  recompile and dump a core file for faster startup
   build [PROJECT_NAME]     update && dumpcore
 
@@ -875,15 +877,60 @@ if test -f "$BASE"/monster.core; then
     run_options="$core_option "$BASE"/monster.core $run_options"
 fi
 
-all_projects=`cat "$BASE/projects" | awk '{print $1;}' | while read name; do
+scan_projects() {
+    cat $1 | awk '{print $1;}' | while read name; do
 	if test -n "$name" -a x"$name" != 'x#'; then
 	    echo -n "$name "
 	fi
-    done`
+    done
+}
+
+main_projects=`scan_projects "$BASE/projects"`
+all_projects=$main_projects\ `scan_projects "$BASE/wnpp-projects"`
+
+list_file() {
+    file="$1"
+    pattern="$2"
+    category="$3"
+
+}
+
+list() {
+    pattern="$1"
+    cat "$BASE/projects" "$BASE/wnpp-projects" | sort | grep -i -E "$pattern" | while read project rest; do
+	if test -n "$project" -a x"$project" != 'x#'; then
+	    description=`echo $rest | cut -d\# -f2`
+	    case `cd $source_dir && ${UPDATE_SCRIPT} --dry-run $project | cut -d: -f1` in
+		MISSING)
+		    status=u
+		    ;;
+		MISMATCH)
+		    status="!"
+		    ;;
+		OK)
+		    status="i"
+		    ;;
+		*)
+		    echo "failed to check URL" 1>&2
+		    ;;
+	    esac
+
+	    left="$status $project"
+	    count=`echo -n "$left" | wc -c`
+	    count=`expr 25 - $count`
+	    space=`for x in $(seq 1 $count); do echo -n " "; done`
+	    echo "$left$space$description"
+	fi
+    done
+    exit 0
+}
 
 case $1 in
     check)
 	check
+	;;
+    list)
+	list "${2:-.*}"
 	;;
     world)
 	"$0" clean && "$0" buildsbcl && "$0" build
@@ -927,7 +974,7 @@ case $1 in
 	update "$@"
 	;;
     update-missing)
-	for project in ${2:-$all_projects}; do
+	for project in ${2:-$main_projects}; do
 	    if ! test -d "${source_dir}/$project"; then
 		update $project
 	    fi

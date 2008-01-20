@@ -1,96 +1,104 @@
+# -*- fill-column: nil, indent-tabs: nil -*-
+#
+# Main list of projects, including software that is tested regularly
+# by clbuild committers and that (usually) compiles without problems
+# on at least SBCL.
+#
+# Projects that have not received adequate testing of this kind should
+# be added to `wnpp-projects' instead.
+#
 # Part of clbuild by Luke Gorrie and contributors.
 
-flexichain get_cvs_clnet
-mcclim     get_cvs_clnet
-zip        get_cvs_clnet
-cxml       get_cvs_clnet
-closure    get_cvs_clnet
-gsharp     get_cvs_clnet
-climacs    get_cvs_clnet
-slime      get_cvs_clnet
-beirc      get_cvs_clnet
-eclipse    get_cvs_clnet
-cljl       get_cvs_clnet cl-jpeg
+flexichain get_cvs_clnet  #editable sequences
+mcclim     get_cvs_clnet  #implementation of the Common Lisp Interface Manager
+zip        get_cvs_clnet  #ZIP-file reader and creator
+cxml       get_cvs_clnet  #XML parser and DOM implementation
+closure    get_cvs_clnet  #CLIM-based web browser
+gsharp     get_cvs_clnet  #interactive, extensible editor for musical scores
+climacs    get_cvs_clnet  #CLIM-based text editor
+slime      get_cvs_clnet  #Emacs mode for Common Lisp development
+beirc      get_cvs_clnet  #CLIM-based Internet Relay Chat client
+cljl       get_cvs_clnet cl-jpeg  #baseline JPEG encoder/decoder
 
-alexandria get_darcs http://common-lisp.net/project/alexandria/darcs/alexandria
+alexandria get_darcs http://common-lisp.net/project/alexandria/darcs/alexandria #utility function library
 
-trivial-features get_darcs http://common-lisp.net/~loliveira/darcs/trivial-features
+trivial-features get_darcs http://common-lisp.net/~loliveira/darcs/trivial-features #ensures consistent *FEATURES* across implementations
 
-cl+ssl               get_cvs_clnet cl-plus-ssl
-trivial-gray-streams get_cvs_clnet cl-plus-ssl
-closure-common       get_cvs_clnet cxml
-usocket              get_svn_clnet usocket/trunk
-cl-irc               get_svn_clnet trunk
+cl+ssl               get_cvs_clnet cl-plus-ssl #FFI bindings for OpenSSL
+trivial-gray-streams get_cvs_clnet cl-plus-ssl #gray stream portability layer
+closure-common       get_cvs_clnet cxml #portable unicode for closure
+usocket              get_svn_clnet usocket/trunk #socket portability library
+cl-irc               get_svn_clnet trunk #IRC client library
 
-cl-ppcre         get_ediware
-flexi-streams    get_ediware
-cl-fad           get_ediware
-hunchentoot      get_ediware
-chunga           get_ediware
-url-rewrite      get_ediware
-cl-who           get_ediware
-drakma           get_ediware
+cl-ppcre         get_ediware #Portable Perl-compatible regular expressions
+flexi-streams    get_ediware #Flexible bivalent streams
+cl-fad           get_ediware #Portable pathname library
+hunchentoot      get_ediware #web server formerly known as TBNL
+chunga           get_ediware #portable chunked streams
+url-rewrite      get_ediware #(X)HTML attribute rewriting library
+cl-who           get_ediware #yet another Lisp markup language
+drakma           get_ediware #HTTP client
 
-clx   get_darcs http://common-lisp.net/~crhodes/clx
+clx   get_darcs http://common-lisp.net/~crhodes/clx #X11 client library
 
-babel get_darcs http://common-lisp.net/~loliveira/darcs/babel
+babel get_darcs http://common-lisp.net/~loliveira/darcs/babel #charset encoder/decoder
 
-# get_darcs cffi http://common-lisp.net/project/cffi/darcs/cffi/
-cffi get_darcs http://common-lisp.net/~loliveira/darcs/cffi+lotsastuff
+# get_darcs cffi http://common-lisp.net/project/cffi/darcs/cffi/ #Common Foreign Function Interface
+cffi get_darcs http://common-lisp.net/~loliveira/darcs/cffi+lotsastuff #Common Foreign Function Interface (lotsastuff fork)
 
-bordeaux-threads get_darcs http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads
+bordeaux-threads get_darcs http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads #threading portability layer
 
-climplayer get_darcs http://common-lisp.net/project/climplayer/darcs/climplayer
+climplayer get_darcs http://common-lisp.net/project/climplayer/darcs/climplayer #CLIM-based graphical frontend for mplayer
 
-closer-mop get_darcs http://common-lisp.net/project/closer/repos/closer-mop
-lw-compat  get_darcs http://common-lisp.net/project/closer/repos/lw-compat
+closer-mop get_darcs http://common-lisp.net/project/closer/repos/closer-mop #MOP compatibility layer
+lw-compat  get_darcs http://common-lisp.net/project/closer/repos/lw-compat #LispWorks compatibility layer
 
-closure-html   get_git git://repo.or.cz/closure-html.git
+closure-html   get_git git://repo.or.cz/closure-html.git #Closure's HTML parser
 
-cxml-rng       get_lichteblau_com
-cxml-stp       get_lichteblau_com
-clim-alerts    get_lichteblau_com
+cxml-rng       get_lichteblau_com #Relax NG for cxml
+cxml-stp       get_lichteblau_com #STP, a DOM alternative
+clim-alerts    get_lichteblau_com #CLIM-based mail and blog notifications
 
-midi           get_darcs http://rvw.doc.gold.ac.uk/sullivan/darcs/midi
+midi           get_darcs http://rvw.doc.gold.ac.uk/sullivan/darcs/midi #MIDI parser
 
-puri      get_b9_com
-md5       get_b9_com
-cl-base64 get_b9_com
-clsql     get_b9_com
-rt        get_b9_com
+puri      get_b9_com #URI library
+md5       get_b9_com #MD5 digest implementation
+cl-base64 get_b9_com #Base64 encoder/decoder
+clsql     get_b9_com #database interface Library
+rt        get_b9_com #regression test driver
 
-spatial-trees get_darcs http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees
+spatial-trees get_darcs http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees #dynamic index structures for spatially-extended data
 
-cl-webdav        get_clbuild_mirror
-skippy           get_clbuild_mirror
-salza            get_clbuild_mirror
-trivial-sockets  get_clbuild_mirror
-split-sequence   get_clbuild_mirror
-rfc2388          get_clbuild_mirror
-psgraph          get_clbuild_mirror
-parse-number     get_clbuild_mirror
-net-telent-date  get_clbuild_mirror
+cl-webdav        get_clbuild_mirror #WebDAV server
+skippy           get_clbuild_mirror #GIF file reader/writer
+salza            get_clbuild_mirror #ZLIB and DEFLATE compressor (old API)
+trivial-sockets  get_clbuild_mirror #socket portability library
+split-sequence   get_clbuild_mirror #sequence splitting function
+rfc2388          get_clbuild_mirror #multipart/form-data processor
+psgraph          get_clbuild_mirror #DAG drawing library
+parse-number     get_clbuild_mirror #parser for Common Lisp number syntax
+net-telent-date  get_clbuild_mirror #time parsing routines from CMUCL
 
-graphic-forms    get_svn_clnet trunk
+graphic-forms    get_svn_clnet trunk #MS Windows GUI library
 
-cl-pdf get_svn http://www.fractalconcept.com:8000/public/open-source/cl-pdf
-cl-typesetting get_svn http://www.fractalconcept.com:8000/public/open-source/cl-typesetting
+cl-pdf get_svn http://www.fractalconcept.com:8000/public/open-source/cl-pdf #PDF generation library
+cl-typesetting get_svn http://www.fractalconcept.com:8000/public/open-source/cl-typesetting #PDF typesetting library
 
-cl-yacc get_darcs http://www.pps.jussieu.fr/~jch/software/repos/cl-yacc 
+cl-yacc get_darcs http://www.pps.jussieu.fr/~jch/software/repos/cl-yacc #parser generator
 
-plexippus-xpath get_darcs http://common-lisp.net/project/plexippus-xpath/darcs/plexippus-xpath
+plexippus-xpath get_darcs http://common-lisp.net/project/plexippus-xpath/darcs/plexippus-xpath #XPath 1.0 implementation
 
 # for hunchentoot on OpenMCL
-acl-compat get_cvs_full :pserver:anonymous@portableaserve.cvs.sourceforge.net:/cvsroot/portableaserve/ portableaserve/acl-compat
+acl-compat get_cvs_full :pserver:anonymous@portableaserve.cvs.sourceforge.net:/cvsroot/portableaserve/ portableaserve/acl-compat #ACL compatibility library
 
 # neonsquare's (currently unreachable) repository:
 #   http://www.crispylogics.com/opensource/repos/mel-base
-mel-base get_darcs http://common-lisp.net/~dlichteblau/inofficial/mel-base
+mel-base get_darcs http://common-lisp.net/~dlichteblau/inofficial/mel-base #E-Mail handling library
 
-iterate get_darcs http://common-lisp.net/project/iterate/darcs/iterate
+iterate get_darcs http://common-lisp.net/project/iterate/darcs/iterate #extensible iteration macro
 
-cl-vectors       get_git git://git.tuxee.net/cl-vectors
-salza2           get_xach_com
-zpng             get_xach_com
-vecto            get_xach_com
-zpb-ttf          get_xach_com
+cl-vectors       get_git git://git.tuxee.net/cl-vectors #vector rasterization and manipulation system
+salza2           get_xach_com  #ZLIB and DEFLATE compressor
+zpng             get_xach_com  #PNG creator
+vecto            get_xach_com  #cl-pdf-like API for cl-vectors
+zpb-ttf          get_xach_com  #TrueType font parser
