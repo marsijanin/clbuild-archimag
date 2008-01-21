@@ -48,7 +48,7 @@ SF_USER=:pserver:anonymous:
 #### SBCL repository location
 
 #SBCL_DOWNLOAD_COMMAND="cvs -d ${SF_USER}@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co sbcl"
-SBCL_DOWNLOAD_COMMAND="git clone git://repo.or.cz/sbcl.git"
+SBCL_DOWNLOAD_COMMAND="get_git sbcl git://repo.or.cz/sbcl.git"
 
 
 #### download utility selection
