@@ -529,6 +529,9 @@
       "clsql-db2" "clsql-mysql" "clsql-aodbc" "clsql-oracle"
       "clsql-postgresql" "clsql-sqlite" "clsql-sqlite3" "clsql-odbc"
 
+      ;; CFFI-GROVEL incompatibility?
+      "trivial-features-tests"
+
       ;; windows only:
       #-(or windows mswindows win32) "graphic-forms"
       #-(or windows mswindows win32) "graphic-forms-tests"
