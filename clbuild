@@ -661,6 +661,7 @@ Usage:
   update-missing  download only projects not present yet
   register-asd PROJECT  add .asd file symlinks for PROJECT
 
+  updatesbcl    download/update SBCL
   buildsbcl [XC_HOST]  download/update and compile SBCL
   world         buildsbcl && build
 
@@ -768,6 +769,21 @@ dumpcore() {
     rm -f "$BASE"/.core-is-stale
     rm -f "$BASE"/monster.core
     recompile --dump "$@"
+}
+
+updatesbcl() {
+    cd ${source_dir}
+    $SBCL_DOWNLOAD_COMMAND
+    # Enable threads
+    if test -z "$windowsp"; then
+	ctf=sbcl/customize-target-features.lisp
+	if test -f $ctf; then
+	    echo $ctf already exists
+	else
+	    echo creating $ctf
+	    echo '(lambda (list) (pushnew :sb-thread list) list)' >$ctf
+	fi
+    fi
 }
 
 if test -f "$BASE"/monster.core; then
@@ -889,17 +905,15 @@ case $1 in
 	shift
 	dumpcore "$@"
 	;;
+    updatesbcl)
+	updatesbcl
+	;;
     buildsbcl)
         if [ -n "$CCL" ]; then
             echo "Cowardly refusing to build SBCL when \$CCL is set." 1>&2
             exit 1
         fi
-	cd ${source_dir}
-	$SBCL_DOWNLOAD_COMMAND
-	# Enable threads
-	if test -z "$windowsp"; then
-	    echo '(lambda (list) (pushnew :sb-thread list) list)' > sbcl/customize-target-features.lisp
-	fi
+	updatesbcl
 	(cd sbcl; sh make.sh "$2"; SBCL_HOME= INSTALL_ROOT=${target_dir} sh install.sh)
 	;;
     lisp)
