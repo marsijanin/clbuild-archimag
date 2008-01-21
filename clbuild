@@ -745,6 +745,7 @@ check() {
     check_program darcs
     check_program wget
     check_program tar
+    check_misdesigned_program curl
     check_misdesigned_program git
     check_misdesigned_program mktemp
     echo "Success: All helper applications found."
