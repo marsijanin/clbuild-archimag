@@ -369,7 +369,7 @@ get_git() {
 	(
 	    cd $name
 	    if ! test -d .git; then
-		echo ERROR: not a darcs repository
+		echo ERROR: not a git repository
 		exit 1
 	    fi
 	    git pull
