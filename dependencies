@@ -1,5 +1,6 @@
 acl-compat cl-ppcre puri 
 alexandria 
+arnesi slime 
 babel alexandria rt trivial-features 
 beirc cl-fad cl-irc cl-ppcre clx flexi-streams flexichain mcclim slime spatial-trees split-sequence trivial-gray-streams usocket 
 bordeaux-threads 
@@ -35,7 +36,7 @@ cxml-rng cl-base64 cl-ppcre cl-yacc closure-common cxml parse-number puri trivia
 cxml-stp alexandria cl-ppcre cl-yacc closure-common cxml parse-number plexippus-xpath puri trivial-gray-streams 
 drakma alexandria babel cffi chunga cl+ssl cl-base64 flexi-streams puri split-sequence trivial-features trivial-gray-streams usocket 
 eclipse 
-fiveam 
+fiveam arnesi slime 
 flexi-streams trivial-gray-streams 
 flexichain 
 ftd alexandria babel cffi cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees trivial-features 
