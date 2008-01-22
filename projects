@@ -77,6 +77,7 @@ rfc2388          get_clbuild_mirror #multipart/form-data processor
 psgraph          get_clbuild_mirror #DAG drawing library
 parse-number     get_clbuild_mirror #parser for Common Lisp number syntax
 net-telent-date  get_clbuild_mirror #time parsing routines from CMUCL
+ltk              get_clbuild_mirror #binding for the Tk graphics toolkit
 
 graphic-forms    get_svn_clnet trunk #MS Windows GUI library
 

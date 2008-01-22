@@ -718,6 +718,8 @@ clbuild run APPLICATION [ARGS...]
                 convert between HTML 4 and XHTMl
 
   run vecto-demo    generate a test image using vecto
+
+  run ltk-demo      show a dialog using ltk
 EOF
 }
 

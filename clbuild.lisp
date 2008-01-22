@@ -397,6 +397,28 @@
       (format t "Writing ~A~%" filename)
       (vecto:save-png filename))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; ltk-demo
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::ltk-demo
+#+clbuild::ltk-demo
+
+(make :ltk)
+
+(with-application ()
+  (setf ltk:*debug-tk* nil)
+  (ltk:with-ltk ()
+    (let ((b (make-instance
+	      'ltk:button
+	      :text "Hello World!"
+	      :command (lambda ()
+			 (ltk:do-msg "Bye!" "Hello World!")
+			 (setf ltk:*exit-mainloop* t)))))
+      (ltk:pack b))))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; record-dependencies (internal helper command)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -531,6 +553,9 @@
 
       ;; CFFI-GROVEL incompatibility?
       "trivial-features-tests"
+
+      ;; assumes sb-bsd-sockets is already loaded instead of depending on it
+      "ltk-remote"
 
       ;; windows only:
       #-(or windows mswindows win32) "graphic-forms"
