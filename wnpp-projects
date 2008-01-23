@@ -12,6 +12,9 @@
 # (mostly) functional projects:
 #
 
+# SBCL/CMUCL-only, and has trouble with current SBCL
+clg        get_cvs_sfnet  #GTK+ bindings
+
 # eclipse used to be a main project, but theming system often causes trouble
 eclipse    get_cvs_clnet  #window manager
 

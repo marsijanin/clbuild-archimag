@@ -485,6 +485,13 @@ get_cvs_clnet() {
     get_cvs_aux $module ${CLNET_USER}@common-lisp.net:/project/$project/cvsroot
 }
 
+get_cvs_sfnet() {
+    module="$1"
+    project="${2:-$1}"
+
+    get_cvs_aux $module ${SF_USER}@$project.cvs.sourceforge.net:/cvsroot/$project
+}
+
 get_ediware() {
     get_darcs $1 http://common-lisp.net/~loliveira/ediware/$1
 }
@@ -631,6 +638,7 @@ link_extra_asds() {
     ln -sf $source_dir/eclipse/system.lisp ${system_dir}/eclipse.asd
     ln -f -s $source_dir/graphic-forms/src/external-libraries/*/*/*.asd \
 	${system_dir}
+    ln -s $source_dir/clg/*/*.asd ${system_dir}
 
     # also, override uffi:
     ln -sf $source_dir/cffi/uffi-compat/uffi.asd ${system_dir}/
@@ -1004,6 +1012,7 @@ case $1 in
 	    fi
 	done
 	link_extra_asds
+	count_systems
 	;;
     diff)
 	diff="${source_dir}/.diff"

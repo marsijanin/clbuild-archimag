@@ -437,9 +437,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 #+(or clbuild::record-dependencies clbuild::recompile-systems)
-(defun project-to-systems (name)
-  (mapcar (lambda (x) (pathname-name x))
-	  (directory (format nil "source/~A/*.asd" name))))
+(progn
+  ;; list of projects that hide their .asd files from us.
+  ;; (We don't search recursively for .asd files unless it's really
+  ;; necessary.)
+  (defvar *hidden-projects* '("clg" "mcclim" "graphic-forms" "eclipse"))
+
+  (defun project-to-systems (name)
+    (mapcar (lambda (x) (pathname-name x))
+	    (directory (if (find name *hidden-projects* :test #'equal)
+			   (format nil "source/~A/**/*.asd" name)
+			   (format nil "source/~A/*.asd" name))))))
 
 #+clbuild::record-dependencies
 #+clbuild::record-dependencies
