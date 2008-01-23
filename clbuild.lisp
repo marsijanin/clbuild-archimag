@@ -397,28 +397,6 @@
       (format t "Writing ~A~%" filename)
       (vecto:save-png filename))))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; ltk-demo
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#+clbuild::ltk-demo
-#+clbuild::ltk-demo
-
-(make :ltk)
-
-(with-application ()
-  (setf ltk:*debug-tk* nil)
-  (ltk:with-ltk ()
-    (let ((b (make-instance
-	      'ltk:button
-	      :text "Hello World!"
-	      :command (lambda ()
-			 (ltk:do-msg "Bye!" "Hello World!")
-			 (setf ltk:*exit-mainloop* t)))))
-      (ltk:pack b))))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; record-dependencies (internal helper command)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
