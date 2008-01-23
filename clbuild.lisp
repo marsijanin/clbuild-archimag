@@ -398,6 +398,41 @@
       (vecto:save-png filename))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; ltk-demo
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::ltk-demo
+#+clbuild::ltk-demo
+
+(make :ltk)
+
+(with-application ()
+  (setf ltk:*debug-tk* nil)
+  (ltk:with-ltk ()
+    (let ((b (make-instance
+	      'ltk:button
+	      :text "Hello World!"
+	      :command (lambda ()
+			 (ltk:do-msg "Bye!" "Hello World!")
+			 (setf ltk:*exit-mainloop* t)))))
+      (ltk:pack b))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; SWANK (server part only)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::swank
+#+clbuild::swank
+
+(make :swank)
+
+(with-application (&key (port "4005") (address "127.0.0.1"))
+  (let ((swank::*loopback-interface* address))
+    (swank:create-server :port (parse-integer port) :dont-close t))
+  (format t "Swank is running on port ~A. Press RET to exit.~%" port)
+  (read-line))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; record-dependencies (internal helper command)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
