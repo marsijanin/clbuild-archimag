@@ -638,7 +638,7 @@ link_extra_asds() {
     ln -sf $source_dir/eclipse/system.lisp ${system_dir}/eclipse.asd
     ln -f -s $source_dir/graphic-forms/src/external-libraries/*/*/*.asd \
 	${system_dir}
-    ln -s $source_dir/clg/*/*.asd ${system_dir}
+    ln -sf $source_dir/clg/*/*.asd ${system_dir}
 
     # also, override uffi:
     ln -sf $source_dir/cffi/uffi-compat/uffi.asd ${system_dir}/

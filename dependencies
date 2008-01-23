@@ -1,4 +1,5 @@
 acl-compat cl-ppcre puri 
+adw-charting cl-vectors salza2 vecto zpb-ttf zpng 
 alexandria 
 arnesi slime 
 babel alexandria rt trivial-features 

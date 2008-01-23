@@ -110,3 +110,5 @@ ieee-floats get_darcs http://common-lisp.net/project/ieee-floats/darcs/ieee-floa
 trivial-utf-8 get_darcs http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8/ #UTF-8 encoder/decoder
 
 series           get_cvs_full :pserver:anonymous@series.cvs.sourceforge.net:/cvsroot/series series
+
+adw-charting get_darcs http://www.common-lisp.net/project/adw-charting/darcs #pie and line chart drawing library

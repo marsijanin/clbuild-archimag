@@ -417,6 +417,24 @@
 			 (setf ltk:*exit-mainloop* t)))))
       (ltk:pack b))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; adw-charting-demo
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::adw-charting-demo
+#+clbuild::adw-charting-demo
+
+(make :adw-charting)
+
+(with-application (filename)
+  (adw-charting:with-pie-chart (400 200)
+    (let ((now (get-decoded-time)))
+      (adw-charting:add-slice "seconds past" now)
+      (adw-charting:add-slice "seconds left" (- 60 now))
+      (adw-charting:save-file filename))))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; SWANK (server part only)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
