@@ -818,6 +818,15 @@ all_projects=$main_projects\ `scan_projects "$BASE/wnpp-projects"`
 
 list() {
     pattern="$1"
+
+    TMPDIR=`mktemp -d /tmp/clbuild.XXXXXXXXXX`
+    export TMPDIR
+    
+    cleanup() {
+        rm -rf $TMPDIR
+    }
+    trap cleanup exit
+
     cat "$BASE/projects" "$BASE/wnpp-projects" | sort | grep -i -E "$pattern" | while read project rest; do
 	if test -n "$project" -a x"$project" != 'x#'; then
 	    description=`echo $rest | cut -d\# -f2`
@@ -836,14 +845,11 @@ list() {
 		    ;;
 	    esac
 
-	    # fixme: do this using "paste a b | expand -t 25" instead
-	    left="$status $project"
-	    count=`echo -n "$left" | wc -c`
-	    count=`expr 25 - $count`
-	    space=`for x in $(seq 1 $count); do echo -n " "; done`
-	    echo "$left$space$description"
+	    echo "$status $project" >>$TMPDIR/left
+	    echo $description >>$TMPDIR/right
 	fi
     done
+    paste $TMPDIR/left $TMPDIR/right | expand -t 25
     exit 0
 }
 
