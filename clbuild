@@ -725,7 +725,8 @@ clbuild run APPLICATION [ARGS...]
   run xhtml-to-html XML-FILENAME OUTPUT-FILENAME
                 convert between HTML 4 and XHTMl
 
-  run vecto-demo    generate a test image using vecto
+  run vecto-demo         generate a test image using vecto
+  run adw-charting-demo  generate a test image using adw-charting
 
   run ltk-demo      show a dialog using ltk
 EOF
