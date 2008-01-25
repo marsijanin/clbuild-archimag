@@ -459,7 +459,7 @@
   ;; list of projects that hide their .asd files from us.
   ;; (We don't search recursively for .asd files unless it's really
   ;; necessary.)
-  (defvar *hidden-projects* '("clg" "mcclim" "graphic-forms" "eclipse"))
+  (defvar *hidden-projects* '("clg" "graphic-forms" "eclipse"))
 
   (defun project-to-systems (name)
     (mapcar (lambda (x) (pathname-name x))
