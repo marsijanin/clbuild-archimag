@@ -881,7 +881,7 @@ case $1 in
 	find . -name "*.lx64fsl" -exec rm {} \;
 	;;
     mrproper)
-	rm -rf "$BASE"/monster.core ${source_dir} ${target_dir}
+	rm -rf "$BASE"/monster.core ${source_dir} ${target_dir} ${system_dir}/*
 	;;
     skip)
 	touch "$source_dir/$2/.clbuild-skip-update"
