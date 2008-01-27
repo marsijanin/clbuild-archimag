@@ -35,7 +35,7 @@ Emacs, not cygwin's Emacs.
 
 Q  Is the `dependencies' file auto-generated?
 
-Yes, use "clbuild record-dependencies" to rebuild-it.
+Yes, use "clbuild record-dependencies" to rebuild it.
 
 
 ------------------------------------------------------------------------
@@ -92,6 +92,11 @@ system BABEL-TEST depends on the system RT.
 
 But the system HUNCHENTOOT depends only on BABEL, not BABEL-TEST, so the
 project `hunchentoot' does not depend on the project `rt'.
+
+Think about "clbuild update hunchentoot" as "install everything I need
+to use/hack all parts of hunchentoot", which doesn't include BABEL-TEST
+or RT.  "clbuild update babel" means "install everything I need to
+use/hack babel", which includes BABEL-TEST and hence RT.
 
 
 ------------------------------------------------------------------------
