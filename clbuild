@@ -557,13 +557,19 @@ update() {
 	fi
 	previous=`cat "$BASE/.clbuild-resume"`
 	CLBUILD_DEPENDENCIES=no update_1 $previous
-    else
+    elif test $# -gt 0; then
 	rm -f $source_dir/*/.clbuild-skip-update
-	if test $# -gt 0; then
-	    update_1 $*
-	else
-	    update_1 $main_projects
-	fi
+	update_1 $*
+    else
+	exec 1>&2
+	echo "Error: arguments expected"
+	echo "Usage:"
+	echo "  clbuild update PROJECT1 PROJECT2 PROJECT3...  # only these"
+	echo "  clbuild update --resume            # resume interrupted update"
+	echo "  clbuild update --main-projects     # all in projects file"
+	echo "  clbuild update --wnpp-projects     # all in wnpp-projects file"
+	echo "  clbuild update --all-projects      # both files"
+	exit 1
     fi
 }
 
@@ -674,7 +680,7 @@ Usage:
 
   list [PATTERN]  list all projects, or projects matching PATTERN
 
-  update [--dependencies|--no-dependencies] PROJECT_NAME
+  update [--dependencies|--no-dependencies] PROJECT_SPEC
                 download/update this project
   update [--resume]
                 download/update main projects.  With --resume, consider
@@ -682,9 +688,9 @@ Usage:
   skip PROJECT_NAME
                 mark this project as done for the purposes of update --resume
 
-  recompile [PROJECT_NAME] recompile main applications (or just PROJECT_NAME)
-  dumpcore [PROJECT_NAME]  recompile and dump a core file for faster startup
-  build [PROJECT_NAME]     update && dumpcore
+  recompile PROJECT_SPEC compile fasls
+  dumpcore PROJECT_SPEC  recompile and dump a core file for faster startup
+  build PROJECT_SPEC     update && dumpcore
 
   diff          show local changes (for all version-controlled projects)
   check-urls    compared installed repository urls agains current locations
@@ -703,6 +709,12 @@ Usage:
   lisp          run Lisp in the terminal
 
   record-dependencies   rebuild dependency information file
+
+For update/recompile/build/dumpcore a PROJECT_SPEC can be used:
+  PROJECT1 PROJECT2 PROJECT3...  # only these
+  --main-projects                # all in projects file
+  --wnpp-projects                # all in wnpp-projects file
+  --all-projects                 # both files
 
 Starting applications:
 
@@ -911,6 +923,7 @@ case $1 in
 	;;
     update)
 	unset clbuild_resume
+	unset extra
 	while test -n "$2"; do
 	    case "$2" in
 		--no-dependencies)
@@ -925,6 +938,18 @@ case $1 in
 		    clbuild_resume="yes"
 		    shift
 		    ;;
+		--main-projects)
+		    extra="$extra $main_projects"
+		    shift
+		    ;;
+		--wnpp-projects)
+		    extra="$extra $wnpp_projects"
+		    shift
+		    ;;
+		--all-projects)
+		    extra="$extra $all_projects"
+		    shift
+		    ;;
 		*)
 		    break
 		    ;;
@@ -933,7 +958,7 @@ case $1 in
 	export clbuild_resume
 	export CLBUILD_DEPENDENCIES
 	shift
-	update "$@"
+	update "$@" $extra
 	;;
     update-missing)
 	for project in ${2:-$main_projects}; do
@@ -942,21 +967,52 @@ case $1 in
 	    fi
 	done
 	;;
-    recompile)
+    recompile|build|dumpcore)
+	operation="$1"
 	shift
+	unset projects
+	while test -n "$1"; do
+	    case "$1" in
+		--main-projects)
+		    projects="$projects $main_projects"
+		    shift
+		    ;;
+		--wnpp-projects)
+		    projects="$projects $wnpp_projects"
+		    shift
+		    ;;
+		--all-projects)
+		    projects="$projects $all_projects"
+		    shift
+		    ;;
+		*)
+		    break
+		    ;;
+	    esac
+	done
+	if test -z "$projects" -a $# -eq 0; then
+	    exec 1>&2
+	    echo "Error: arguments expected"
+	    echo "Usage:"
+	    echo "  clbuild $operation PROJECT1 PROJECT2 PROJECT3...  # only these"
+	    echo "  clbuild $operation --main-projects     # all in projects file"
+	    echo "  clbuild $operation --wnpp-projects     # all in wnpp-projects file"
+	    echo "  clbuild $operation --all-projects      # both files"
+	    exit 1
+	fi
 	ensure_clppcre
-	recompile "$@"
-	;;
-    build)
-	shift
-	ensure_clppcre
-	update "$@"
-	dumpcore "$@"
-	;;
-    dumpcore)
-	shift
-	ensure_clppcre
-	dumpcore "$@"
+	case $operation in
+	    recompile)
+		recompile "$@" $projects
+		;;
+	    build)
+		update "$@" $projects
+		dumpcore "$@" $projects
+		;;
+	    dumpcore)
+		dumpcore "$@" $projects
+		;;
+	esac
 	;;
     updatesbcl)
 	updatesbcl
