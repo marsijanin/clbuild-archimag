@@ -111,7 +111,7 @@ There are many answers to this question.  Here are just a few of them:
     having built a clean SBCL, and without having to worry whether the
     Lisp in $PATH is good enough.
 
-  - Building SBCL from a shell scripts seems like a natural thing to do.
+  - Building SBCL from a shell script seems like a natural thing to do.
 
   - Other projects have tried to explore different parts of the design
     space for lisp software installers.  There is cl-librarian written

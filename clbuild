@@ -534,6 +534,7 @@ update_project() {
 
     if ! grep -h "^$1 " "$BASE/projects" "$BASE/wnpp-projects" >/dev/null; then
        echo Error: cannot download unknown project $1
+       rm "$BASE/.clbuild-resume"
        exit 1
     fi
     found=`grep -h "^$1 " "$BASE/projects" "$BASE/wnpp-projects" | cut -d\# -f1`
@@ -549,14 +550,20 @@ update_project_2() {
 }
 
 update() {
-    # fixme: common dependencies will be processed several times here.
-    # This loop needs to be done in update_1 directly.
-    if test $# -gt 0; then
-	for project in $*; do
-	    update_1 $project
-	done
+    if test -n "$clbuild_resume"; then
+	if test $# -gt 0; then
+	    echo "error: --resume conflicts with arguments" 1>&2
+	    exit 1
+	fi
+	previous=`cat "$BASE/.clbuild-resume"`
+	CLBUILD_DEPENDENCIES=no update_1 $previous
     else
-	update_1
+	rm -f $source_dir/*/.clbuild-skip-update
+	if test $# -gt 0; then
+	    update_1 $*
+	else
+	    update_1 $main_projects
+	fi
     fi
 }
 
@@ -567,54 +574,68 @@ update_1() {
 	export TMPDIR
 
         cleanup() {
+	    if test -f "$BASE/.clbuild-resume"; then
+		exec 1>&2
+		echo
+		echo error: update was interrupted.
+		echo 'Use "clbuild update --resume" to retry.  (See also "clbuild skip PROJECT").'
+	    fi
             rm -rf $TMPDIR
         }
         trap cleanup exit
 
 	cd "$source_dir"
 
-	projects="$main_projects"
-	if test -n "$1"; then
+	touch $TMPDIR/dependencies0
+	while test $# -ge 1; do
+	    echo $1 >>$TMPDIR/arguments0
+	    if grep "^$1 " ../dependencies >/dev/null; then
+		found=`grep "^$1 " ../dependencies`
+		for x in $found; do
+		    echo $x >>$TMPDIR/dependencies0
+		done
+	    else
+		echo $1 >>$TMPDIR/dependencies0
+		echo "warning: no dependencies for $1 found" 1>&2
+	    fi
+	    shift
+	done
+	sort <$TMPDIR/arguments0 | uniq >$TMPDIR/arguments
+	sort <$TMPDIR/dependencies0 | uniq >$TMPDIR/dependencies
+
+	if ! cmp $TMPDIR/arguments $TMPDIR/dependencies >/dev/null; then
 	    case "$CLBUILD_DEPENDENCIES" in
-		yes|ask)
-		    if grep "^$1 " ../dependencies >/dev/null; then
-			found=`grep "^$1 " ../dependencies`
-			if test $CLBUILD_DEPENDENCIES = ask; then
-			    echo "$1 depends on: $found"
-			    echo -n "include dependencies in update? (Y/n)"
-			    read reply
-			    case _"$reply" in
-				_Y|_y|_)
-				    projects="$found"
-				    ;;
-				_n)
-				    projects="$1"
-				    ;;
-				*)
-				    echo Invalid reply
-				    exit 1
-				    ;;
-			    esac
-			else
-			    projects="$found"
-			fi
-		    else
-			echo "warning: no dependencies for $1 found" 1>&2
-			projects="$1"
-		    fi
+		ask)
+		    extra=`diff $TMPDIR/arguments $TMPDIR/dependencies | grep '^>' | cut -d' ' -f2 | xargs echo`
+		    echo "The following extra dependencies were found: $extra"
+		    echo -n "include dependencies in update? (Y/n)"
+		    read reply
+		    case _"$reply" in
+			_Y|_y|_)
+			    ;;
+			_n)
+			    mv $TMPDIR/arguments $TMPDIR/dependencies
+			    ;;
+			*)
+			    echo Invalid reply
+			    exit 1
+			    ;;
+		    esac
+		    ;;
+		yes)
 		    ;;
 		no)
-		    projects="$1"
+		    mv $TMPDIR/arguments $TMPDIR/dependencies
 		    ;;
 		*)
 		    echo "error: invalid \$CLBUILD_DEPENDENCIES" 1>&2
 		    exit 1
 	    esac
-	elif test -z "$clbuild_resume"; then
-	    rm -f */.clbuild-skip-update
 	fi
 
-	for project in $projects; do
+	cp $TMPDIR/dependencies "$BASE/.clbuild-resume"
+
+	for project in $(cat $TMPDIR/dependencies); do
 	    skipfile="$project"/.clbuild-skip-update
 	    if test -f "$skipfile" -a -n "$clbuild_resume"; then
 		echo "resume: skipping update of $project"
@@ -626,6 +647,8 @@ update_1() {
 	done
 
 	link_extra_asds
+
+	rm "$BASE/.clbuild-resume"
 
 	echo "update complete"
 	count_systems
