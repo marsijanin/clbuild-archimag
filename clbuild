@@ -485,6 +485,14 @@ get_cvs_clnet() {
     get_cvs_aux $module ${CLNET_USER}@common-lisp.net:/project/$project/cvsroot
 }
 
+get_cvs_clnet_full() {
+    clbuildproject="$1"
+    clnetproject="${2:-$1}"
+    path="$3"
+
+    get_cvs_aux $path ${CLNET_USER}@common-lisp.net:/project/$clnetproject/cvsroot $clbuildproject
+}
+
 get_cvs_sfnet() {
     module="$1"
     project="${2:-$1}"

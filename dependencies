@@ -34,7 +34,7 @@ babel alexandria rt trivial-features
 beirc cl-fad cl-irc cl-ppcre clx flexi-streams flexichain mcclim slime spatial-trees split-sequence trivial-gray-streams usocket 
 bordeaux-threads 
 cells 
-cells-gtk alexandria babel cells cffi gtk-ffi pod-utils trivial-features 
+cells-gtk alexandria babel cells cffi gtk-ffi ph-maths pod-utils trivial-features 
 cffi alexandria babel rt trivial-features 
 cffi-net alexandria babel cffi trivial-features 
 chunga flexi-streams trivial-gray-streams 
@@ -86,6 +86,7 @@ midi
 net-telent-date 
 parse-html 
 parse-number 
+ph-maths 
 plexippus-xpath cl-ppcre cl-yacc closure-common cxml parse-number puri trivial-gray-streams 
 pod-utils 
 postmodern bordeaux-threads ieee-floats md5 split-sequence trivial-utf-8 usocket 
