@@ -850,7 +850,8 @@ scan_projects() {
 }
 
 main_projects=`scan_projects "$BASE/projects"`
-all_projects=$main_projects\ `scan_projects "$BASE/wnpp-projects"`
+wnpp_projects=`scan_projects "$BASE/wnpp-projects"`
+all_projects="$main_projects $wnpp_projects"
 
 list() {
     pattern="$1"
