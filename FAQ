@@ -1,0 +1,118 @@
+------------------------------------------------------------------------
+
+Q  How does clbuild differ from asdf-install?
+
+A  clbuild includes a list of selected libraries and applications and
+their well-known locations, and downloads the newest version or
+CVS/SVN/darcs repositories if possible. It can also build SBCL for you
+and includes convenient commands to start various applications.
+
+In contrast, asdf-install can install any software listed on Cliki. It
+always downloads release tarballs. (It is up to the user to hunt down
+the trustworthy PGP keys as a protection agains malicous wiki entries.)
+
+
+------------------------------------------------------------------------
+
+Q  My favourite application is not supported. How can I add it?
+
+A  Just add it to clbuild/wnpp-projects. Please send a note to the
+mailing list so that we can include it, too.
+
+
+------------------------------------------------------------------------
+
+Q  Does it work on cygwin?
+
+A  It used to work on cygwin. You need to recompile SBCL with an
+ASDF patch for shortcut support first. Beware that cygwin support is
+tested only occasionally and might not be complete anymore.
+
+To starts clbuild's slime, make sure to use the Windows version of
+Emacs, not cygwin's Emacs.
+
+------------------------------------------------------------------------
+
+Q  Is the `dependencies' file auto-generated?
+
+Yes, use "clbuild record-dependencies" to rebuild-it.
+
+
+------------------------------------------------------------------------
+
+Q  The `dependencies' file is broken!
+
+This file is an educated guess and sometimes not perfect.  We prefer to
+err on the side of too many dependencies rather than too few.
+
+However, the following situations are NOT necessarily bugs:
+
+  - circular dependencies
+    (cffi depends on trivial-features, which depends on cffi itself.
+    That is NOT a problem.
+
+  - non-transitive dependencies
+    (if A depends on B, which depends on C, it does NOT follow that A
+    depends on C.)
+
+
+Make sure to distinguish between project dependencies and system
+dependencies.
+
+The following process computes the "project dependencies" of a project
+FOO:
+
+  - look for all files named clbuild/source/FOO/*.asd and load them
+
+    (Except for some special projects that force us to scan recursively
+    for asd files.)
+
+  - for each system BAR that we found a file FOO/bar.asd for, compute
+    the systems that BAR depends on.
+
+    ASDF provides no function that I am aware of to find those
+    dependencies, so we scan the in-order-to slot to make an educated
+    guess what those dependencies are.
+
+    (As an extra exception, we sometimes add dependencies at this point,
+    for example to force mcclim to always depend on cffi, no matter
+    whether the caller currently has gtkairo enabled or not.)
+
+  - for each such system that is a dependency, map the system back to
+    its asd file, and if that asd file is found somewhere in
+    clbuild/source/BAZ/, consider it to be part of project BAZ
+
+  - The projects found in the last step are the dependencies of FOO.
+
+This process implies that dependencies between projects are not
+transitive.
+
+For example, the project `babel' depends on the project `rt' because the
+system BABEL-TEST depends on the system RT.
+
+But the system HUNCHENTOOT depends only on BABEL, not BABEL-TEST, so the
+project `hunchentoot' does not depend on the project `rt'.
+
+
+------------------------------------------------------------------------
+
+Q  Why is clbuild written in shell?  Lisp is so much better.
+
+There are many answers to this question.  Here are just a few of them:
+
+  - Luke originally wrote clbuild as a shell script.
+
+  - clbuild is not a mere shell script.  At least `recompile' and
+    `record-dependencies' are now written in Lisp.
+
+  - We basically just call out to darcs, git, cvs, and svn anyway.
+
+  - Thanks to the shell script, we can install lisp projects before
+    having built a clean SBCL, and without having to worry whether the
+    Lisp in $PATH is good enough.
+
+  - Building SBCL from a shell scripts seems like a natural thing to do.
+
+  - Other projects have tried to explore different parts of the design
+    space for lisp software installers.  There is cl-librarian written
+    in Lisp, clget written in Perl, and so on.
