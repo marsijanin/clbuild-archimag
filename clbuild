@@ -800,8 +800,8 @@ updatesbcl() {
 if test -f "$BASE"/monster.core; then
     if test -f "$BASE/.core-is-stale"; then
 	echo "using $BASE/monster.core"
-	echo 'WARNING: "clbuild update" was used since core file creation'
-	echo 'WARNING: consider re-running dumpcore'
+	echo 'note: "clbuild update" was used since core file creation'
+	echo 'note: consider re-running dumpcore'
     fi
     run_options="$core_option "$BASE"/monster.core $run_options"
 fi
@@ -852,6 +852,16 @@ list() {
     done
     paste $TMPDIR/left $TMPDIR/right | expand -t 25
     exit 0
+}
+
+ensure_clppcre() {
+    if ! test -d "$source_dir/cl-ppcre"; then
+	(
+	    cd "$source_dir"
+	    update_project cl-ppcre
+	    ln -f -s $source_dir/cl-ppcre/*.asd "${system_dir}"/
+	)
+    fi
 }
 
 case $1 in
@@ -911,15 +921,18 @@ case $1 in
 	;;
     recompile)
 	shift
+	ensure_clppcre
 	recompile "$@"
 	;;
     build)
 	shift
+	ensure_clppcre
 	update "$@"
 	dumpcore "$@"
 	;;
     dumpcore)
 	shift
+	ensure_clppcre
 	dumpcore "$@"
 	;;
     updatesbcl)
