@@ -625,6 +625,9 @@
       ;; assumes sb-bsd-sockets is already loaded instead of depending on it
       "ltk-remote"
 
+      ;; .asd file assumes cells is already loaded
+      "cells-test"
+      
       ;; windows only:
       #-(or windows mswindows win32) "graphic-forms"
       #-(or windows mswindows win32) "graphic-forms-tests"

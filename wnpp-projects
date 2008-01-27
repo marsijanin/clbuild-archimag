@@ -38,9 +38,10 @@ s-xml-rpc        get_cvs_clnet
 # broken stuff -- where projects go to die:
 #
 
-# cells doesn't even load: "The variable UTILS-KT::CLOCK is unbound"
-cells get_cvs_clnet      #turns CLOS into an imaginary spreadsheet
+cells get_cvs_clnet cells-gtk #turns CLOS into an imaginary spreadsheet (version for cells-gtk)
 cells-gtk get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/cells-gtk/cvsroot/ root/cells-gtk #GUI framework using Cells and GTK+
+pod-utils get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/cells-gtk/cvsroot/ root/pod-utils #(part of cells-gtk)
+gtk-ffi get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/cells-gtk/cvsroot/ root/gtk-ffi #(part of cells-gtk)
 
 # cffi-net doesn't load either, presumably due to a cffi compatibility issue
 cffi-net get_darcs http://cffi-net.accela.net/darcs/cffi-net/
