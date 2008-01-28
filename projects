@@ -112,3 +112,7 @@ trivial-utf-8 get_darcs http://common-lisp.net/project/trivial-utf-8/darcs/trivi
 series           get_cvs_full :pserver:anonymous@series.cvs.sourceforge.net:/cvsroot/series series
 
 adw-charting get_darcs http://www.common-lisp.net/project/adw-charting/darcs #pie and line chart drawing library
+
+cl-dot           get_svn http://svn.foldr.org/~michaelw/cl-dot/trunk #Dot output from arbitrary Lisp data
+mw-equiv         get_svn http://svn.foldr.org/~michaelw/mw-equiv/trunk #extensible object equivalence
+redshank         get_darcs http://www.foldr.org/~michaelw/projects/redshank #Common Lisp editing extensions (for Emacs)

@@ -40,6 +40,7 @@ cffi-net alexandria babel cffi trivial-features
 chunga flexi-streams trivial-gray-streams 
 cl+ssl alexandria babel cffi flexi-streams trivial-features trivial-gray-streams 
 cl-base64 
+cl-dot 
 cl-fad 
 cl-irc flexi-streams split-sequence trivial-gray-streams usocket 
 cl-opengl alexandria babel cffi trivial-features 
@@ -83,6 +84,7 @@ mcclim cffi clx flexichain slime spatial-trees
 md5 
 mel-base alexandria babel cffi cl+ssl flexi-streams trivial-features trivial-gray-streams 
 midi 
+mw-equiv 
 net-telent-date 
 parse-html 
 parse-number 
@@ -92,6 +94,7 @@ pod-utils
 postmodern bordeaux-threads ieee-floats md5 split-sequence trivial-utf-8 usocket 
 psgraph 
 puri 
+redshank slime
 rfc2388 
 rt 
 s-base64 
