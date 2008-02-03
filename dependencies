@@ -94,7 +94,7 @@ pod-utils
 postmodern bordeaux-threads ieee-floats md5 split-sequence trivial-utf-8 usocket 
 psgraph 
 puri 
-redshank slime
+redshank slime 
 rfc2388 
 rt 
 s-base64 

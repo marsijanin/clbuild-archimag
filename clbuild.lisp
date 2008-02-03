@@ -473,10 +473,10 @@
 (make :cl-ppcre)
 
 (progn
-  (defun extra-dependencies (system)
+  (defun extra-system-dependencies (system)
     ;; add magic dependencies to ensure that clbuild configuration doesn't
     ;; leak into the dependency file too easily.  In this case, we don't
-    ;; clim-gtkairo's dependency on cffi to appear or disappear every time
+    ;; want clim-gtkairo's dependency on cffi to appear or disappear every time
     ;; some rebuilds dependencies with a different backend.
     ;;
     ;; (Better include spurious dependencies than too few.)
@@ -485,6 +485,11 @@
     ;; to be added here.
     (cdr (assoc system
 		'(("mcclim" "cffi"))
+		:test #'equal)))
+
+  (defun extra-project-dependencies (project)
+    (cdr (assoc project
+		'(("redshank" "slime"))
 		:test #'equal)))
 
   (defun system-to-project (name)
@@ -533,8 +538,9 @@
 				 (system-to-project system)))
 			     (without-errors
 				 (nil "while scanning dependencies")
-			       (append (extra-dependencies system)
+			       (append (extra-system-dependencies system)
 				       (system-dependencies system)))))))
+      (setf projects (append projects (extra-project-dependencies project)))
       (setf projects (remove nil projects))
       (setf projects (remove project projects :test 'equal))
       (setf projects (remove-duplicates projects :test 'equal))
