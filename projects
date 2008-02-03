@@ -78,6 +78,8 @@ psgraph          get_clbuild_mirror #DAG drawing library
 parse-number     get_clbuild_mirror #parser for Common Lisp number syntax
 net-telent-date  get_clbuild_mirror #time parsing routines from CMUCL
 ltk              get_clbuild_mirror #binding for the Tk graphics toolkit
+ironclad         get_clbuild_mirror #cryptography library
+chipz            get_clbuild_mirror #DEFLATE decompression
 
 graphic-forms    get_svn_clnet trunk #MS Windows GUI library
 
