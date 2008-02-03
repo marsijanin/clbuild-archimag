@@ -20,6 +20,8 @@ eclipse    get_cvs_clnet  #window manager
 
 # has trouble with SBCL's relentless DEFCONSTANT implementation
 cljl       get_cvs_clnet cl-jpeg  #baseline JPEG encoder/decoder
+regex      get_darcs http://www.foldr.org/~michaelw/projects/regex  #Another Regex package
+clawk      get_darcs http://www.foldr.org/~michaelw/projects/clawk  #AWK embedded in CL
 
 # defines a package called GL, which conflicts with CLX
 cl-opengl        get_darcs http://common-lisp.net/~loliveira/darcs/cl-opengl-thomas # FFI bindings for OpenGL (thomas fork) 
