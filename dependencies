@@ -37,6 +37,7 @@ cells
 cells-gtk alexandria babel cells cffi gtk-ffi ph-maths pod-utils trivial-features 
 cffi alexandria babel rt trivial-features 
 cffi-net alexandria babel cffi trivial-features 
+chipz 
 chunga flexi-streams trivial-gray-streams 
 cl+ssl alexandria babel cffi flexi-streams trivial-features trivial-gray-streams 
 cl-base64 
@@ -76,6 +77,7 @@ gsharp closure-common clx cxml flexichain mcclim midi puri slime spatial-trees t
 gtk-ffi alexandria babel cells cffi pod-utils trivial-features 
 hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-ppcre cl-who flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 ieee-floats 
+ironclad 
 iterate 
 lisa 
 ltk 
@@ -98,7 +100,9 @@ redshank slime
 rfc2388 
 rt 
 s-base64 
+s-http-client puri s-base64 s-sysdeps s-utils 
 s-sysdeps 
+s-utils 
 s-xml 
 s-xml-rpc s-base64 s-sysdeps s-xml 
 salza 

@@ -32,6 +32,8 @@ s-sysdeps        get_darcs http://www.beta9.be/darcs/s-sysdeps
 s-base64         get_darcs http://www.beta9.be/darcs/s-base64
 s-xml            get_cvs_clnet
 s-xml-rpc        get_cvs_clnet
+s-http-client    get_darcs http://www.beta9.be/darcs/s-http-client
+s-utils          get_darcs http://www.beta9.be/darcs/s-utils
 
 
 #
