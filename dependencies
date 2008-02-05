@@ -40,7 +40,6 @@ cffi-net alexandria babel cffi trivial-features
 chipz 
 chunga flexi-streams trivial-gray-streams 
 cl+ssl alexandria babel cffi flexi-streams trivial-features trivial-gray-streams 
-clawk regex 
 cl-base64 
 cl-dot 
 cl-fad 
@@ -53,6 +52,7 @@ cl-vectors zpb-ttf
 cl-webdav alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre closure-common cxml flexi-streams hunchentoot md5 puri rfc2388 trivial-features trivial-gray-streams url-rewrite 
 cl-who 
 cl-yacc 
+clawk regex 
 clg parse-number s-xml 
 clim-alerts alexandria babel bordeaux-threads cffi chunga cl+ssl cl-base64 cl-ppcre cl-yacc closure closure-common closure-html clx cxml cxml-stp drakma flexi-streams flexichain mcclim mel-base net-telent-date parse-number plexippus-xpath puri salza2 skippy slime spatial-trees split-sequence trivial-features trivial-gray-streams trivial-sockets usocket zip 
 climacs clx flexichain mcclim slime spatial-trees 
@@ -98,6 +98,7 @@ postmodern bordeaux-threads ieee-floats md5 split-sequence trivial-utf-8 usocket
 psgraph 
 puri 
 redshank slime 
+regex 
 rfc2388 
 rt 
 s-base64 
