@@ -716,6 +716,7 @@ Usage:
 
   slime         run the Superior Lisp Interaction Mode in a fresh Emacs
   lisp          run Lisp in the terminal
+  slime-configuration  print .emacs excerpt for slime
 
   record-dependencies   rebuild dependency information file
 
@@ -909,6 +910,19 @@ ensure_clppcre() {
     fi
 }
 
+write_start_slime_el() {
+	cat <<EOF
+(setq load-path (cons "${source_namestring}slime" load-path))
+(setq load-path (cons "${source_namestring}slime/contrib" load-path))
+(setq inhibit-splash-screen t)
+(load "${source_namestring}slime/slime")
+(setq inferior-lisp-program "$self lisp")
+(setq slime-use-autodoc-mode nil)
+(slime-setup '(slime-fancy slime-tramp slime-asdf))
+(slime)
+EOF
+}
+
 case $1 in
     check)
 	check
@@ -1043,16 +1057,14 @@ case $1 in
 	shift
 	emacs_args="$@"
 	emacs=${EMACS-emacs}
-	$emacs \
-	    -eval "(setq load-path (cons \"${source_namestring}slime\" load-path))" \
-	    -eval "(setq load-path (cons \"${source_namestring}slime/contrib\" load-path))" \
-	    -eval "(setq inhibit-splash-screen t)" \
-	    -eval "(load \"${source_namestring}slime/slime\")" \
-	    -eval "(setq inferior-lisp-program \"$self lisp\")" \
-	    -eval "(setq slime-use-autodoc-mode nil)" \
-            -eval "(slime-setup '(slime-fancy slime-tramp slime-asdf))" \
-	    -eval '(slime)' \
-	    ${emacs_args}
+	write_start_slime_el >"$BASE/.start-slime.el"
+	$emacs -l "$BASE/.start-slime.el" ${emacs_args}
+	;;
+    slime-configuration)
+	shift
+	echo ';; add this to your ~/.emacs to use clbuild and its slime:'
+	echo ';;'
+	write_start_slime_el
 	;;
     run)
 	shift
