@@ -37,6 +37,17 @@ USER_INIT=/dev/null
 #CLISP=clisp
 
 
+#### slime configuration
+
+# if enabled,  slime calls "clbuild preloaded"
+# if disabled, slime calls "clbuild lisp"
+#
+# default is disabled
+
+unset START_SLIME_USING_CORE
+#START_SLIME_USING_CORE=y
+
+
 #### CVS configuration
 
 #CLNET_USER=:pserver:anonymous:anonymous

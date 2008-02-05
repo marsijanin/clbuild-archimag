@@ -715,7 +715,8 @@ Usage:
   mrproper      delete all downloaded source and fasl files
 
   slime         run the Superior Lisp Interaction Mode in a fresh Emacs
-  lisp          run Lisp in the terminal
+  lisp          run Lisp in the terminal (using sbcl.core)
+  preloaded     run Lisp in the terminal (using monster.core)
   slime-configuration  print .emacs excerpt for slime
 
   record-dependencies   rebuild dependency information file
@@ -843,11 +844,13 @@ updatesbcl() {
 }
 
 if test -f "$BASE"/monster.core; then
-    if test -f "$BASE/.core-is-stale"; then
-	echo "using $BASE/monster.core"
-	echo 'note: "clbuild update" was used since core file creation'
-	echo 'note: consider re-running dumpcore'
-    fi
+    # Initially I thought this warning might be helpful, but it's usually
+    # false alarm:
+#     if test -f "$BASE/.core-is-stale"; then
+# 	echo "using $BASE/monster.core"
+# 	echo 'note: "clbuild update" was used since core file creation'
+# 	echo 'note: consider re-running dumpcore'
+#     fi
     run_options="$core_option "$BASE"/monster.core $run_options"
 fi
 
@@ -910,16 +913,27 @@ ensure_clppcre() {
     fi
 }
 
-write_start_slime_el() {
-	cat <<EOF
+write_slime_configuration() {
+    if test -n "$START_SLIME_USING_CORE"; then
+	cmd=preloaded
+    else
+	cmd=lisp
+    fi
+    cat <<EOF
 (setq load-path (cons "${source_namestring}slime" load-path))
 (setq load-path (cons "${source_namestring}slime/contrib" load-path))
+(setq slime-backend "$BASE/.swank-loader.lisp")
 (setq inhibit-splash-screen t)
 (load "${source_namestring}slime/slime")
-(setq inferior-lisp-program "$self lisp")
+(setq inferior-lisp-program "$self $cmd")
 (setq slime-use-autodoc-mode nil)
 (slime-setup '(slime-fancy slime-tramp slime-asdf))
 (slime)
+EOF
+    # while we're at it, also write the swank loader
+    cat >>$BASE/.swank-loader.lisp <<EOF
+(unless (find-package 'swank-loader)
+  (load "$source_dir/slime/swank-loader.lisp"))
 EOF
 }
 
@@ -1053,18 +1067,25 @@ case $1 in
 	shift;
         clbuild_lisp "$@"
         ;;
+    preloaded)
+	shift;
+	if test -f "$BASE"/monster.core; then
+	    common_options="$core_option "$BASE"/monster.core $common_options"
+	fi
+        clbuild_lisp "$@"
+        ;;
     slime)
 	shift
 	emacs_args="$@"
 	emacs=${EMACS-emacs}
-	write_start_slime_el >"$BASE/.start-slime.el"
+	write_slime_configuration >"$BASE/.start-slime.el"
 	$emacs -l "$BASE/.start-slime.el" ${emacs_args}
 	;;
     slime-configuration)
 	shift
 	echo ';; add this to your ~/.emacs to use clbuild and its slime:'
 	echo ';;'
-	write_start_slime_el
+	write_slime_configuration
 	;;
     run)
 	shift
