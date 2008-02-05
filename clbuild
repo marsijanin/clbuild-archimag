@@ -1115,6 +1115,8 @@ case $1 in
 		update $project
 	    fi
 	done
+	# hack: don't want the core here
+	run_options="$build_options"
 	start_application record-dependencies "$all_projects"
 	;;
     check-urls)
