@@ -121,6 +121,7 @@ trivial-utf-8
 url-rewrite 
 usocket split-sequence 
 vecto cl-vectors salza2 zpb-ttf zpng 
+xuriella alexandria cl-ppcre cl-yacc closure-common closure-html cxml cxml-stp flexi-streams parse-number plexippus-xpath puri split-sequence trivial-gray-streams 
 zebu 
 zip flexi-streams salza2 trivial-gray-streams 
 zpb-ttf 
