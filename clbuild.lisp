@@ -587,7 +587,8 @@
                  #     (if A depends on B, which depends on C, it does NOT~@
                  #     follow that A depends on C.)~@
                  # ~@
-                 # For details, please refer to the FAQ in this directory.~@
+                 # For details, please refer to~@
+                 # http://common-lisp.net/project/clbuild/#faq_dependency_details~@
                  # ~%")
 	(dolist (project projects)
 	  (format t "Looking for ~A's dependencies...~%" project)
