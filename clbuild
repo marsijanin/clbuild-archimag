@@ -944,9 +944,6 @@ case $1 in
     list)
 	list "${2:-.*}"
 	;;
-    world)
-	"$0" clean && "$0" buildsbcl && "$0" build
-	;;
     clean)
 	rm -f "$BASE"/monster.core
 	cd $source_dir
@@ -1005,7 +1002,7 @@ case $1 in
 	    fi
 	done
 	;;
-    recompile|build|dumpcore)
+    recompile|build|dumpcore|world)
 	operation="$1"
 	shift
 	unset projects
@@ -1049,6 +1046,9 @@ case $1 in
 		;;
 	    dumpcore)
 		dumpcore "$@" $projects
+		;;
+	    world)
+		"$0" clean && "$0" buildsbcl && "$0" build "$@" $projects
 		;;
 	esac
 	;;
