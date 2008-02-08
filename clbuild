@@ -925,7 +925,7 @@ write_slime_configuration() {
 (setq slime-backend "$BASE/.swank-loader.lisp")
 (setq inhibit-splash-screen t)
 (load "${source_namestring}slime/slime")
-(setq inferior-lisp-program "$self $cmd")
+(setq inferior-lisp-program "$BASE/clbuild $cmd")
 (setq slime-use-autodoc-mode nil)
 (slime-setup '(slime-fancy slime-tramp slime-asdf))
 (slime)
