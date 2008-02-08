@@ -58,7 +58,7 @@ cxml-rng       get_lichteblau_com #Relax NG for cxml
 cxml-stp       get_lichteblau_com #STP, a DOM alternative
 clim-alerts    get_lichteblau_com #CLIM-based mail and blog notifications
 
-midi           get_darcs http://rvw.doc.gold.ac.uk/sullivan/darcs/midi #MIDI parser
+midi           get_darcs http://rvw.doc.gold.ac.uk/gibbons/darcs/midi #MIDI parser
 
 puri      get_b9_com #URI library
 md5       get_b9_com #MD5 digest implementation
@@ -66,7 +66,7 @@ cl-base64 get_b9_com #Base64 encoder/decoder
 clsql     get_b9_com #database interface Library
 rt        get_b9_com #regression test driver
 
-spatial-trees get_darcs http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees #dynamic index structures for spatially-extended data
+spatial-trees get_darcs http://rvw.doc.gold.ac.uk/gibbons/darcs/spatial-trees #dynamic index structures for spatially-extended data
 
 cl-webdav        get_clbuild_mirror #WebDAV server
 skippy           get_clbuild_mirror #GIF file reader/writer
