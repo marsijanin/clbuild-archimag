@@ -31,6 +31,7 @@ acl-compat cl-ppcre puri
 adw-charting cl-vectors salza2 vecto zpb-ttf zpng 
 alexandria 
 arnesi slime 
+atdoc closure-common cxml puri slime split-sequence trivial-gray-streams 
 babel alexandria rt trivial-features 
 beirc cl-fad cl-irc cl-ppcre clx flexi-streams flexichain mcclim slime spatial-trees split-sequence trivial-gray-streams usocket 
 bordeaux-threads 
@@ -73,7 +74,7 @@ eclipse
 fiveam arnesi slime 
 flexi-streams trivial-gray-streams 
 flexichain 
-ftd alexandria babel cffi cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees trivial-features 
+ftd cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees 
 graphic-forms alexandria babel cffi closer-mop lw-compat trivial-features 
 gsharp closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-gray-streams 
 gtk-ffi alexandria babel cells cffi pod-utils trivial-features 
@@ -115,7 +116,7 @@ skippy
 slime 
 spatial-trees 
 split-sequence 
-trivial-features 
+trivial-features alexandria babel cffi rt 
 trivial-gray-streams 
 trivial-sockets 
 trivial-utf-8 
