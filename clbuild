@@ -920,6 +920,13 @@ write_slime_configuration() {
 	cmd=lisp
     fi
     cat <<EOF
+
+;; possibly controversial as a global default, but shipping a lisp
+;; that dies trying to talk to slime is stupid, so:
+(set-language-environment "UTF-8")
+(setq slime-net-coding-system 'utf-8-unix)
+
+;; load slime:
 (setq load-path (cons "${source_namestring}slime" load-path))
 (setq load-path (cons "${source_namestring}slime/contrib" load-path))
 (setq slime-backend "$BASE/.swank-loader.lisp")
