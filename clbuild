@@ -24,11 +24,18 @@ if [ "$CLNET_USER" == "" ]; then
 fi
 export CLNET_USER
 
-self="$0"
-while test -h "$self"; do
+# MacOS doesn't have "readlink -e", needed to follow symlinks.
+# We hack it using readlink, dirname, and cd.
+readlink_e() {
+    self="$0"
+    while test -h "$self"; do
+	cd "$(dirname $self)"
 	self=`readlink "$self"`
-done
-BASE="$(cd "$(dirname $self)" && pwd)"
+    done
+    cd "$(dirname $self)"
+    pwd
+}
+BASE=$(readlink_e)
 system_dir="$BASE/systems"
 source_dir="$BASE/source"
 target_dir="$BASE/target"
