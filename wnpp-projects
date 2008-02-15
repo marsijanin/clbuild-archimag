@@ -46,6 +46,15 @@ s-utils          get_darcs http://www.beta9.be/darcs/s-utils
 # projects that are currently broken
 #
 
+# endless problems:
+#  - doesn't build at all without a user-written my-config.sexp
+#  - needs sb-posix, but doesn't declare that dependency, meaning that
+#    it doesn't build even with a config file
+#  - ele-clsql loads clsql from the .asd file, not using :depends-on,
+#    which is completely unacceptable
+#    (we blacklist ele-clsql in clbuild.lisp because of that)
+elephant         get_darcs http://www.common-lisp.net/project/elephant/darcs/elephant
+
 # doesn't work with cffi+lotsastuff
 cells get_cvs_clnet cells-gtk #turns CLOS into an imaginary spreadsheet (version for cells-gtk)
 cells-gtk get_cvs_clnet_full cells-gtk root/cells-gtk #GUI framework using Cells and GTK+

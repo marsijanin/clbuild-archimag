@@ -634,7 +634,10 @@
 
       ;; .asd file assumes cells is already loaded
       "cells-test"
-      
+
+      ;; loads clsql from the asd file (argh!)
+      "ele-clsql"
+
       ;; windows only:
       #-(or windows mswindows win32) "graphic-forms"
       #-(or windows mswindows win32) "graphic-forms-tests"

@@ -71,6 +71,7 @@ cxml-rng cl-base64 cl-ppcre cl-yacc closure-common cxml parse-number puri trivia
 cxml-stp alexandria cl-ppcre cl-yacc closure-common cxml parse-number plexippus-xpath puri trivial-gray-streams 
 drakma alexandria babel cffi chunga cl+ssl cl-base64 flexi-streams puri split-sequence trivial-features trivial-gray-streams usocket 
 eclipse 
+elephant alexandria arnesi babel bordeaux-threads cffi cl-base64 clsql fiveam ieee-floats md5 postmodern slime split-sequence trivial-features trivial-utf-8 usocket 
 fiveam arnesi slime 
 flexi-streams trivial-gray-streams 
 flexichain 
