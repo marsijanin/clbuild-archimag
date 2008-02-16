@@ -55,13 +55,6 @@ s-utils          get_darcs http://www.beta9.be/darcs/s-utils
 #    (we blacklist ele-clsql in clbuild.lisp because of that)
 elephant         get_darcs http://www.common-lisp.net/project/elephant/darcs/elephant
 
-# doesn't work with cffi+lotsastuff
-cells get_cvs_clnet cells-gtk #turns CLOS into an imaginary spreadsheet (version for cells-gtk)
-cells-gtk get_cvs_clnet_full cells-gtk root/cells-gtk #GUI framework using Cells and GTK+
-pod-utils get_cvs_clnet_full cells-gtk root/pod-utils #(part of cells-gtk)
-gtk-ffi get_cvs_clnet_full cells-gtk root/gtk-ffi #(part of cells-gtk)
-ph-maths get_cvs_clnet_full cells-gtk root/ph-maths #(part of cells-gtk)
-
 # cffi-net doesn't load either, presumably due to a cffi compatibility issue
 cffi-net get_darcs http://cffi-net.accela.net/darcs/cffi-net/
 
