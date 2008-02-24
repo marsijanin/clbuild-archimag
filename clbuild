@@ -718,8 +718,8 @@ Usage:
   buildsbcl [XC_HOST]  download/update and compile SBCL
   world         buildsbcl && build
 
-  clean         delete all compiled object files
-  mrproper      delete all downloaded source and fasl files
+  clean [PROJECT]  delete all compiled object files [in source/PROJECT]
+  mrproper         delete all downloaded source and fasl files
 
   slime         run the Superior Lisp Interaction Mode in a fresh Emacs
   lisp          run Lisp in the terminal (using sbcl.core)
@@ -960,10 +960,25 @@ case $1 in
 	list "${2:-.*}"
 	;;
     clean)
-	rm -f "$BASE"/monster.core
-	cd $source_dir
-	find . -name "*.fasl" -exec rm {} \;
-	find . -name "*.lx64fsl" -exec rm {} \;
+	clean_fasls() {
+	    echo cleaning fasls in `pwd`
+	    find . -name "*.fasl" -exec rm {} \;
+	    find . -name "*.lx64fsl" -exec rm {} \;
+	}
+	if test $# -gt 1; then
+	    while test $# -gt 1; do
+		( cd "$source_dir/$2" && clean_fasls )
+		shift
+	    done
+	else
+	    core="$BASE"/monster.core
+	    if test -f "$core"; then
+		echo removing $core
+		rm -f "$core"
+	    fi
+	    cd $source_dir
+	    clean_fasls
+	fi
 	;;
     mrproper)
 	rm -rf "$BASE"/monster.core ${source_dir} ${target_dir} ${system_dir}/*
