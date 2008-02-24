@@ -719,7 +719,8 @@ Usage:
   world         buildsbcl && build
 
   clean [PROJECT]  delete all compiled object files [in source/PROJECT]
-  mrproper         delete all downloaded source and fasl files
+  trash PROJECT    move source/PROJECT to trash/
+  mrproper         trash all projects
 
   slime         run the Superior Lisp Interaction Mode in a fresh Emacs
   lisp          run Lisp in the terminal (using sbcl.core)
@@ -952,6 +953,14 @@ EOF
 EOF
 }
 
+trash() {
+    mkdir -p "$BASE/trash"
+    basename=`basename $1`
+    trash=`mktemp -d $BASE/trash/trash_${basename}_XXXXXXXXXX`
+    echo moving "$1" to "$trash"
+    mv "$1" "$trash"
+}
+
 case $1 in
     check)
 	check
@@ -980,8 +989,31 @@ case $1 in
 	    clean_fasls
 	fi
 	;;
+    trash)
+	if test $# -le 1; then
+	    echo 'usage: trash [PROJECT...]'
+	    exit 1
+	fi
+	while test $# -gt 1; do
+	    d="$source_dir/$2"
+	    if test -d "$d"; then
+		trash "$d"
+	    else
+		echo "cannot trash non-existing directory $d"
+	    fi
+	    shift
+	done
+	;;
     mrproper)
-	rm -rf "$BASE"/monster.core ${source_dir} ${target_dir} ${system_dir}/*
+	for d in $source_dir/* $target_dir; do
+	    if test -d "$d"; then
+		trash "$d"
+	    else
+		echo "skipping $d"
+	    fi
+	done
+	echo "deleting monster.core systems/*"
+	rm -f "$BASE"/monster.core ${system_dir}/*
 	;;
     skip)
 	touch "$source_dir/$2/.clbuild-skip-update"
