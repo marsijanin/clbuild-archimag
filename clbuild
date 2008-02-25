@@ -948,8 +948,7 @@ EOF
     # while we're at it, also write the swank loader
     cat >$BASE/.swank-loader.lisp <<EOF
 (unless (find-package 'swank-loader)
-  (load "$source_dir/slime/swank-loader.lisp")
-  (eval (read-from-string "(swank-loader::init)")))
+  (load "$source_dir/slime/swank-loader.lisp"))
 EOF
 }
 
