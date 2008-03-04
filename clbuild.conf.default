@@ -19,9 +19,20 @@
 #
 # Uncomment the "unset" line in clbuild.conf to suppress passing a
 #  --userinit argument to the lisp.
+#
+# When doing so, you might also want to unset SETF_CENTRAL_REGISTRY below.
 
 USER_INIT=/dev/null
 #unset USER_INIT
+
+# By default, we install a new value for ASDF:*CENTRAL-REGISTRY* using SETF.
+# Uncomment the following "unset" line in clbuild.conf to use PUSH instead.
+# Beware that your personal registry directories as well as projects
+# installed asdf-install will then mix freely with clbuild's projects as
+# far as ASDF is concerned.
+
+SETF_CENTRAL_REGISTRY=yes
+#unset SETF_CENTRAL_REGISTRY
 
 
 #### binary configuration

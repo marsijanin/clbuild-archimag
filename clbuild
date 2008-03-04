@@ -103,7 +103,11 @@ else
 	source_namestring="$source_dir/"
 	target_namestring="$target_dir/"
 fi
-set_central_registry="(setq asdf:*central-registry* '(#p\"${system_namestring}\"))"
+if test -n "$SETF_CENTRAL_REGISTRY"; then
+    set_central_registry="(setq asdf:*central-registry* '(#p\"${system_namestring}\"))"
+else
+    set_central_registry="(push #p\"${system_namestring}\" asdf:*central-registry*)"
+fi
 
 if [ ! -z $CCL ]; then
     #
