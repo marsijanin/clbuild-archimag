@@ -896,7 +896,10 @@ scan_installed() {
 main_projects=`scan_projects "$BASE/projects"`
 wnpp_projects=`scan_projects "$BASE/wnpp-projects"`
 all_projects="$main_projects $wnpp_projects"
-installed_projects=`scan_installed`
+
+set_installed_projects() {
+    installed_projects=`scan_installed`
+}
 
 list() {
     pattern="$1"
@@ -979,8 +982,16 @@ EOF
 trash() {
     mkdir -p "$BASE/trash"
     basename=`basename $1`
-    trash=`mktemp -d $BASE/trash/trash_${basename}_XXXXXXXXXX`
-    echo moving "$1" to "$trash"
+    today=`date +'%Y-%m-%d'`
+    trash="$BASE/trash/$today"
+    if test -e "$trash"; then
+	if test -e "$trash/$basename"; then
+	    trash=`mktemp -d $BASE/trash/${today}_${basename}_XXXXXXXXXX`
+	fi
+    else
+	mkdir $trash
+    fi
+    echo moving "$1" to "$trash/$basename"
     mv "$1" "$trash"
 }
 
@@ -1071,6 +1082,7 @@ case $1 in
 		    shift
 		    ;;
 		--installed)
+		    set_installed_projects
 		    extra="$extra $installed_projects"
 		    shift
 		    ;;
@@ -1111,6 +1123,7 @@ case $1 in
 		    ;;
 		--installed)
 		    CLBUILD_DEPENDENCIES="yes"
+		    set_installed_projects
 		    projects="$projects $installed_projects"
 		    shift
 		    ;;
