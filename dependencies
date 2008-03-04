@@ -30,13 +30,11 @@
 acl-compat cl-ppcre puri 
 adw-charting cl-vectors salza2 vecto zpb-ttf zpng 
 alexandria 
-arnesi slime 
-atdoc closure-common cxml puri slime split-sequence trivial-gray-streams 
+arnesi 
+atdoc alexandria cl-ppcre cl-yacc closure-common closure-html cxml cxml-stp flexi-streams parse-number plexippus-xpath puri slime split-sequence trivial-gray-streams xuriella 
 babel alexandria rt trivial-features 
 beirc cl-fad cl-irc cl-ppcre clx flexi-streams flexichain mcclim slime spatial-trees split-sequence trivial-gray-streams usocket 
 bordeaux-threads 
-cells 
-cells-gtk alexandria babel cells cffi gtk-ffi ph-maths pod-utils trivial-features 
 cffi alexandria babel rt trivial-features 
 cffi-net alexandria babel cffi trivial-features 
 chipz 
@@ -71,14 +69,13 @@ cxml-rng cl-base64 cl-ppcre cl-yacc closure-common cxml parse-number puri trivia
 cxml-stp alexandria cl-ppcre cl-yacc closure-common cxml parse-number plexippus-xpath puri trivial-gray-streams 
 drakma alexandria babel cffi chunga cl+ssl cl-base64 flexi-streams puri split-sequence trivial-features trivial-gray-streams usocket 
 eclipse 
-elephant alexandria arnesi babel bordeaux-threads cffi cl-base64 clsql fiveam ieee-floats md5 postmodern slime split-sequence trivial-features trivial-utf-8 usocket 
-fiveam arnesi slime 
+elephant alexandria arnesi babel bordeaux-threads cffi cl-base64 clsql fiveam ieee-floats md5 postmodern split-sequence trivial-features trivial-utf-8 usocket 
+fiveam arnesi 
 flexi-streams trivial-gray-streams 
 flexichain 
 ftd cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees 
 graphic-forms alexandria babel cffi closer-mop lw-compat trivial-features 
 gsharp closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-gray-streams 
-gtk-ffi alexandria babel cells cffi pod-utils trivial-features 
 hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-ppcre cl-who flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 ieee-floats 
 ironclad 
@@ -94,9 +91,7 @@ mw-equiv
 net-telent-date 
 parse-html 
 parse-number 
-ph-maths 
 plexippus-xpath cl-ppcre cl-yacc closure-common cxml parse-number puri trivial-gray-streams 
-pod-utils 
 postmodern bordeaux-threads ieee-floats md5 split-sequence trivial-utf-8 usocket 
 psgraph 
 puri 
