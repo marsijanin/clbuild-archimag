@@ -585,6 +585,7 @@ update() {
 	echo "  clbuild update --main-projects     # all in projects file"
 	echo "  clbuild update --wnpp-projects     # all in wnpp-projects file"
 	echo "  clbuild update --all-projects      # both files"
+	echo "  clbuild update --installed         # everything in source/"
 	exit 1
     fi
 }
@@ -735,6 +736,7 @@ For update/recompile/build/dumpcore a PROJECT_SPEC can be used:
   --main-projects                # all in projects file
   --wnpp-projects                # all in wnpp-projects file
   --all-projects                 # both files
+  --installed                    # everything in source/
 
 Starting applications:
 
@@ -873,9 +875,28 @@ scan_projects() {
     done
 }
 
+scan_installed() {
+    for f in ${source_dir}/*; do
+	name=`basename "$f"`
+	if test -d "$f"; then
+	    if test -d "$f"/_darcs \
+		-o -d "$f"/.git \
+		-o -d "$f"/.svn \
+		-o -d "$f"/CVS \
+		&& grep "^$name " "$BASE/dependencies" >/dev/null
+	    then
+		echo $name
+	    else
+		echo "skipping $f" 1>&2
+	    fi
+	fi
+    done
+}
+
 main_projects=`scan_projects "$BASE/projects"`
 wnpp_projects=`scan_projects "$BASE/wnpp-projects"`
 all_projects="$main_projects $wnpp_projects"
+installed_projects=`scan_installed`
 
 list() {
     pattern="$1"
@@ -1049,6 +1070,10 @@ case $1 in
 		    extra="$extra $all_projects"
 		    shift
 		    ;;
+		--installed)
+		    extra="$extra $installed_projects"
+		    shift
+		    ;;
 		*)
 		    break
 		    ;;
@@ -1084,6 +1109,11 @@ case $1 in
 		    projects="$projects $all_projects"
 		    shift
 		    ;;
+		--installed)
+		    CLBUILD_DEPENDENCIES="yes"
+		    projects="$projects $installed_projects"
+		    shift
+		    ;;
 		*)
 		    break
 		    ;;
@@ -1097,6 +1127,7 @@ case $1 in
 	    echo "  clbuild $operation --main-projects     # all in projects file"
 	    echo "  clbuild $operation --wnpp-projects     # all in wnpp-projects file"
 	    echo "  clbuild $operation --all-projects      # both files"
+	    echo "  clbuild $operation --installed         # everything in source/"
 	    exit 1
 	fi
 	ensure_clppcre
