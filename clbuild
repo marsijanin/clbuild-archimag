@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# (we use env for non-Linux OSes)
 #
 # Script to update/install the latest versions of all the most
 # important Common Lisp projects. Uses SBCL but otherwise tries to be
@@ -798,7 +799,7 @@ check_program() {
 # to return a failure code when invoked using a correct --help option... 
 check_misdesigned_program() {
     if ! which "$1" >/dev/null; then
-	echo Error: Cannot find a working installation of "$1"
+	echo Error: Cannot find an installation of "$1" at all
 	exit 1
     fi
     echo "found `which $1`"
@@ -810,7 +811,9 @@ check() {
     check_program svn
     check_program darcs
     check_program wget
-    check_program tar
+    # get_tarball is evil and unused anyway, so no need to bother the FreeBSD
+    # users with warnings about their non-GNU version of tar
+#    check_program tar
     check_misdesigned_program curl
     check_misdesigned_program git
     check_misdesigned_program mktemp
