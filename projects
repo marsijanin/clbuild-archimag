@@ -37,6 +37,7 @@ chunga           get_ediware #portable chunked streams
 url-rewrite      get_ediware #(X)HTML attribute rewriting library
 cl-who           get_ediware #yet another Lisp markup language
 drakma           get_ediware #HTTP client
+html-template    get_ediware #templating library
 
 clx   get_darcs http://common-lisp.net/~crhodes/clx #X11 client library
 
