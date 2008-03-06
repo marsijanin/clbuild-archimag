@@ -76,6 +76,7 @@ flexichain
 ftd alexandria babel cffi cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees trivial-features 
 graphic-forms alexandria babel cffi closer-mop lw-compat trivial-features 
 gsharp closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-gray-streams 
+html-template 
 hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-who flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 ieee-floats 
 ironclad 
