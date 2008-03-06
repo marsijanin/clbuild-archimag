@@ -109,13 +109,9 @@ else
     set_central_registry="(push #p\"${system_namestring}\" asdf:*central-registry*)"
 fi
 
-if [ ! -z $CCL ]; then
-    #
-    # OpenMCL
-    #
-    lisp=$CCL
-
-    noinform="-Q"
+configure_ccl() {
+    lisp=$1
+    noinform=""
     end_toplevel_options="" #fixme
     quit="(ccl:quit)"
     eval="--eval"
@@ -134,10 +130,10 @@ if [ ! -z $CCL ]; then
     # fixme: this doesn't quite match the SBCL version yet:
     build_options="$noinform --batch $common_options"
     run_options="--batch $common_options"
-elif [ ! -z $CLISP ]; then
-    #
-    # CLISP
-    #
+}
+
+configure_clisp() {
+    lisp=$1
     echo '*** Using CLISP.  Please note that CLISP support is not complete.'
     lisp="$CLISP -repl"
 
@@ -164,21 +160,10 @@ elif [ ! -z $CLISP ]; then
 	echo "NEW checking out asdf for use with clisp"
 	(cd "$BASE/source" && cvs -d ${SF_USER}@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -d asdf-for-clisp sbcl/contrib/asdf)
     fi
-else
-    #
-    # SBCL
-    #
-    if [ ! -z "$SBCL" ]; then
-	lisp=$SBCL
-    elif [ -x ${target_dir}/bin/sbcl ]; then
-	export SBCL_HOME=${target_namestring}lib/sbcl/
-	lisp="${target_dir}/bin/sbcl"
-	if ! test -f "$BASE"/monster.core; then
-	    lisp="$lisp --core ${target_namestring}lib/sbcl/sbcl.core"
-	fi
-    else
-	lisp=sbcl
-    fi
+}
+
+configure_sbcl() {
+    lisp=$1
 
     noinform="--noinform"
     end_toplevel_options="--end-toplevel-options"
@@ -195,6 +180,25 @@ else
 
     build_options="$noinform --noprint --disable-debugger $common_options"
     run_options="--disable-debugger $common_options"
+}
+
+if [ ! -z $CCL ]; then
+    configure_ccl "$CCL"
+elif [ ! -z $CLISP ]; then
+    configure_clisp "$CLISP"
+elif [ ! -z "$SBCL" ]; then
+    configure_sbcl "$SBCL"
+elif [ -x ${target_dir}/bin/sbcl ]; then
+    export SBCL_HOME=${target_namestring}lib/sbcl/
+    lisp="${target_dir}/bin/sbcl"
+    if ! test -f "$BASE"/monster.core; then
+	lisp="$lisp --core ${target_namestring}lib/sbcl/sbcl.core"
+    fi
+    configure_sbcl "$lisp"
+elif [ -x ${source_dir}/ccl/lx86cl64 ]; then
+    configure_ccl ${source_dir}/ccl/lx86cl64
+else
+    configure_sbcl sbcl
 fi
 
 [ -d "$system_dir" ] || mkdir "$system_dir"
@@ -552,12 +556,12 @@ update_project() {
 	exit 1
     fi
 
-    if ! grep -h "^$1 " "$BASE/projects" "$BASE/wnpp-projects" >/dev/null; then
+    if ! grep -h "^$1 " "$BASE/projects" "$BASE/wnpp-projects" "$BASE/implementations" >/dev/null; then
        echo Error: cannot download unknown project $1
        rm "$BASE/.clbuild-resume"
        exit 1
     fi
-    found=`grep -h "^$1 " "$BASE/projects" "$BASE/wnpp-projects" | cut -d\# -f1`
+    found=`grep -h "^$1 " "$BASE/projects" "$BASE/wnpp-projects" "$BASE/implementations" | cut -d\# -f1`
     update_project_2 $found
 }
 
@@ -720,9 +724,11 @@ Usage:
   update-missing  download only projects not present yet
   register-asd PROJECT  add .asd file symlinks for PROJECT
 
-  updatesbcl    download/update SBCL
-  buildsbcl [XC_HOST]  download/update and compile SBCL
-  world         buildsbcl && build
+  compile-implementation sbcl [XC_HOST]  compile SBCL
+  compile-implementation ccl             compile Clozure CL 
+  compile-implementation clisp           compile CLISP
+
+  world         build sbcl and specified projects
 
   clean [PROJECT]  delete all compiled object files [in source/PROJECT]
   trash PROJECT    move source/PROJECT to trash/
@@ -901,6 +907,8 @@ main_projects=`scan_projects "$BASE/projects"`
 wnpp_projects=`scan_projects "$BASE/wnpp-projects"`
 all_projects="$main_projects $wnpp_projects"
 
+implementations=`scan_projects "$BASE/implementations"`
+
 set_installed_projects() {
     installed_projects=`scan_installed`
 }
@@ -916,7 +924,7 @@ list() {
     }
     trap cleanup exit
 
-    cat "$BASE/projects" "$BASE/wnpp-projects" | sort | grep -i -E "$pattern" | while read project rest; do
+    cat "$BASE/projects" "$BASE/wnpp-projects" "$BASE/implementations" | sort | grep -i -E "$pattern" | while read project rest; do
 	if test -n "$project" -a x"$project" != 'x#'; then
 	    description=`echo $rest | cut -d\# -f2`
 	    case `cd $source_dir && ${UPDATE_SCRIPT} --dry-run $project | cut -d: -f1` in
@@ -1160,20 +1168,101 @@ case $1 in
 		dumpcore "$@" $projects
 		;;
 	    world)
-		"$0" clean && "$0" buildsbcl && "$0" build "$@" $projects
+		"$0" clean && "$0" update sbcl && "$0" compile-implementation sbcl && "$0" build "$@" $projects
 		;;
 	esac
 	;;
     updatesbcl)
-	updatesbcl
+	exec 1>&2
+	echo "error: invalid command updatesbcl"
+	echo "Use 'clbuild update sbcl' instead."
+	exit 1
 	;;
     buildsbcl)
-        if [ -n "$CCL" ]; then
-            echo "Cowardly refusing to build SBCL when \$CCL is set." 1>&2
-            exit 1
-        fi
-	updatesbcl
-	(cd sbcl; sh make.sh "$2"; SBCL_HOME= INSTALL_ROOT=${target_dir} sh install.sh)
+	exec 1>&2
+	echo "error: invalid command buildsbcl"
+	echo "Use 'clbuild compile-implementation sbcl' instead."
+	exit 1
+	;;
+    compile-implementation)
+	case $2 in
+	    sbcl)
+		if [ -n "$CCL" ]; then
+		    echo "Cowardly refusing to build SBCL when \$CCL is set." 1>&2
+		    exit 1
+		fi
+		if ! test -d ${source_dir}/sbcl; then
+		    echo "sbcl not found, try running 'clbuild update sbcl'" 1>&2
+		    exit 1
+		fi
+		(cd $source_dir/sbcl; sh make.sh "$3"; SBCL_HOME= INSTALL_ROOT=${target_dir} sh install.sh)
+		;;
+	    ccl)
+		if [ -z "$CCL" ]; then
+		    echo "can't build CCL unless \$CCL is set." 1>&2
+		    exit 1
+		fi
+		if ! test -d ${source_dir}/ccl; then
+		    echo "ccl not found, try running 'clbuild update ccl'" 1>&2
+		    exit 1
+		fi
+		ccl_old=`dirname "$CCL"`
+		ccl_new=${source_dir}/ccl
+		case `uname` in
+		    Linux)
+			case `uname -m` in
+			    x86_64)
+				headerdir=x86-headers64
+				binary=lx86cl64
+				image=LX86CL64
+				;;
+			    *)
+				echo "don't know how to build CCL for your ISA, please adjust clbuild as needed" 2>&1
+				exit 1
+				;;
+			esac
+			;;
+		    *)
+			echo "don't know how to build CCL for your OS, please adjust clbuild as needed" 2>&1
+			exit 1
+			;;
+		esac
+		if ! test -f "$ccl_old/$image"; then
+		    echo "can't find existing CCL installation in $ccl_old" 2>&1
+		    exit 1
+		fi
+		# cp $ccl_old/$headerdir/libc/*.cdb $ccl_new/$headerdir/libc/
+		cp -r $ccl_old/$headerdir $ccl_new/ || true
+		cp $ccl_old/$binary $ccl_old/$image $ccl_new/
+		cd $ccl_new
+		chmod +x $binary
+		./$binary -e '(rebuild-ccl :force t)'
+		cat <<EOF
+
+
+Done compiling CCL.
+Set this in clbuild.conf to enable the new CCL:
+  CCL=$ccl_old/$binary
+EOF
+		;;
+	    clisp)
+		if ! test -d ${source_dir}/clisp; then
+		    echo "clisp not found, try running 'clbuild update clisp'" 1>&2
+		    exit 1
+		fi
+		cd $source_dir/clisp
+		./autogen.sh
+		ulimit -s 16384
+		rm -f src/config.cache
+		./configure --with-libsigsegv-prefix=/usr
+		cd src
+		make
+		;;
+	    *)
+		echo "unrecognized argument.  valid are: sbcl ccl clisp" 2>&1
+		exit 1
+		;;
+	esac
 	;;
     lisp)
 	shift;

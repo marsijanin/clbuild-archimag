@@ -62,15 +62,7 @@ unset START_SLIME_USING_CORE
 #### CVS configuration
 
 #CLNET_USER=:pserver:anonymous:anonymous
-
-# must set a default right here, because it is being used below:
 SF_USER=:pserver:anonymous:
-
-
-#### SBCL repository location
-
-#SBCL_DOWNLOAD_COMMAND="cvs -d ${SF_USER}@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co sbcl"
-SBCL_DOWNLOAD_COMMAND="get_git sbcl git://repo.or.cz/sbcl.git"
 
 
 #### download utility selection
