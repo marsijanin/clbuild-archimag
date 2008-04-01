@@ -111,7 +111,7 @@ fi
 
 configure_ccl() {
     lisp=$1
-    noinform=""
+    noinform="-Q"
     end_toplevel_options="" #fixme
     quit="(ccl:quit)"
     eval="--eval"
@@ -1302,6 +1302,13 @@ EOF
 	    hunchentoot|webdav)
 		if ! test -f /usr/lib/libssl.so; then
 		    echo "WARNING: /usr/lib/libssl.so not found, did you install OpenSSL?"
+		    echo "(type RET to continue anyway)"
+		    read
+		fi
+		;;
+	    perfectstorm)
+		if ! test -f /usr/include/GL/glut.h; then
+		    echo "WARNING: /usr/include/GL/glut.h not found, did you install OpenGL libraries?"
 		    echo "(type RET to continue anyway)"
 		    read
 		fi

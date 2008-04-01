@@ -28,7 +28,8 @@ regex      get_darcs http://www.foldr.org/~michaelw/projects/regex  #Another Reg
 clawk      get_darcs http://www.foldr.org/~michaelw/projects/clawk  #AWK embedded in CL
 
 # defines a package called GL, which conflicts with CLX
-cl-opengl        get_darcs http://common-lisp.net/~loliveira/darcs/cl-opengl-thomas # FFI bindings for OpenGL (thomas fork) 
+# cl-opengl        get_darcs http://common-lisp.net/~loliveira/darcs/cl-opengl-thomas # FFI bindings for OpenGL (thomas fork) 
+cl-opengl        get_svn svn://erleuchtet.org/cl-opengl-thomas # FFI bindings for OpenGL (erleuchtet fork of thomas fork) 
 
 # random projects suggested by users:
 zebu             get_svn https://cl-net-snmp.svn.sourceforge.net/svnroot/cl-net-snmp/zebu/trunk
@@ -41,6 +42,12 @@ s-xml-rpc        get_cvs_clnet
 s-http-client    get_darcs http://www.beta9.be/darcs/s-http-client
 s-utils          get_darcs http://www.beta9.be/darcs/s-utils
 
+
+perfectstorm get_svn svn://erleuchtet.org/perfectstorm #real time strategy game study
+cl-cairo get_svn svn://erleuchtet.org/cl-cairo #cairo bindings
+infpre get_svn svn://erleuchtet.org/infpre
+toolbox get_svn svn://erleuchtet.org/toolbox
+metabang-bind get_darcs http://common-lisp.net/project/metabang-bind/
 
 #
 # projects that are currently broken

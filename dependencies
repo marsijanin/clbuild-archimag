@@ -41,6 +41,7 @@ chipz
 chunga flexi-streams trivial-gray-streams 
 cl+ssl alexandria babel cffi flexi-streams trivial-features trivial-gray-streams 
 cl-base64 
+cl-cairo alexandria babel cffi trivial-features 
 cl-dot 
 cl-fad 
 cl-irc flexi-streams split-sequence trivial-gray-streams usocket 
@@ -73,12 +74,13 @@ elephant alexandria arnesi babel bordeaux-threads cffi cl-base64 closer-mop clsq
 fiveam arnesi 
 flexi-streams trivial-gray-streams 
 flexichain 
-ftd alexandria babel cffi cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees trivial-features 
+ftd cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees 
 graphic-forms alexandria babel cffi closer-mop lw-compat trivial-features 
 gsharp closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-gray-streams 
 html-template 
 hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-who flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 ieee-floats 
+infpre 
 ironclad 
 iterate 
 lisa 
@@ -87,11 +89,13 @@ lw-compat
 mcclim cffi clx flexichain slime spatial-trees 
 md5 
 mel-base alexandria babel cffi cl+ssl flexi-streams trivial-features trivial-gray-streams 
+metabang-bind 
 midi 
 mw-equiv 
 net-telent-date 
 parse-html 
 parse-number 
+perfectstorm alexandria babel cffi cl-cairo cl-opengl infpre metabang-bind toolbox trivial-features 
 plexippus-xpath cl-ppcre cl-yacc closure-common cxml parse-number puri trivial-gray-streams 
 postmodern bordeaux-threads closer-mop ieee-floats md5 split-sequence trivial-utf-8 usocket 
 psgraph 
@@ -113,7 +117,8 @@ skippy
 slime 
 spatial-trees 
 split-sequence 
-trivial-features 
+toolbox 
+trivial-features alexandria babel cffi rt 
 trivial-gray-streams 
 trivial-sockets 
 trivial-utf-8 
