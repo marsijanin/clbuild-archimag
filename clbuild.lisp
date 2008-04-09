@@ -648,6 +648,9 @@
       ;; .asd file assumes cells is already loaded
       "cells-test"
 
+      ;; bogus dependencies in system
+      "flexichain-test"
+
       ;; loads clsql from the asd file (argh!)
       "ele-clsql"
 
