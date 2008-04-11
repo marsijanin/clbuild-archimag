@@ -119,3 +119,22 @@ adw-charting get_darcs http://www.common-lisp.net/project/adw-charting/darcs/adw
 cl-dot           get_svn http://svn.foldr.org/~michaelw/cl-dot/trunk #Dot output from arbitrary Lisp data
 mw-equiv         get_svn http://svn.foldr.org/~michaelw/mw-equiv/trunk #extensible object equivalence
 redshank         get_darcs http://www.foldr.org/~michaelw/projects/redshank #Common Lisp editing extensions (for Emacs)
+
+metabang-bind    get_darcs http://common-lisp.net/project/metabang-bind
+cl-cont          get_darcs http://common-lisp.net/project/cl-cont/darcs/cl-cont
+cl-json          get_darcs http://common-lisp.net/project/cl-json/darcs/cl-json
+cl-prevalence    get_cvs_clnet
+fare-matcher     get_tarball http://fare.tunes.org/asdf-packages/fare-matcher.tar.gz
+fare-utils       get_tarball http://fare.tunes.org/asdf-packages/fare-utils.tar.gz
+metatilities     get_darcs http://common-lisp.net/project/metatilities
+parenscript      get_darcs http://common-lisp.net/project/parenscript/repository/parenscript
+tinaa            get_darcs http://common-lisp.net/project/tinaa
+cl-graph         get_darcs http://common-lisp.net/project/cl-graph
+cl-mathstats     get_darcs http://common-lisp.net/project/cl-mathstats
+moptilities      get_darcs http://common-lisp.net/project/moptilities
+lift             get_darcs http://common-lisp.net/project/lift
+s-sysdeps        get_darcs http://www.beta9.be/darcs/s-sysdeps
+s-xml            get_cvs_clnet
+weblocks         get_darcs http://common-lisp.net/project/cl-weblocks/darcs/cl-weblocks
+asdf-system-connections get_darcs http://common-lisp.net/project/cl-containers/asdf-system-connections/darcs/asdf-system-connections
+defsystem-compatibility get_darcs http://common-lisp.net/project/cl-containers/defsystem-compatibility/darcs/defsystem-compatibility

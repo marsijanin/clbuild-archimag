@@ -129,4 +129,13 @@ xuriella alexandria cl-ppcre cl-yacc closure-common closure-html cxml cxml-stp f
 zebu 
 zip flexi-streams salza2 trivial-gray-streams 
 zpb-ttf 
-zpng salza2 
+zpng salza2
+
+fare-matcher fare-utils
+metatilities moptilities asdf-system-connections defsystem-compatibility
+cl-json parenscript
+tinaa cl-graph
+cl-graph cl-mathstats metabang-bind metatilities moptilities
+cl-cont rt
+cl-prevalence s-sysdeps s-xml
+weblocks closer-mop metatilities hunchentoot cl-who cl-ppcre cl-json puri rt tinaa md5 cl-fad fare-matcher cl-cont cl-prevalence
