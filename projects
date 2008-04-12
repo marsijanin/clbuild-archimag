@@ -12,7 +12,7 @@
 flexichain get_cvs_clnet  #editable sequences
 mcclim     get_cvs_clnet  #implementation of the Common Lisp Interface Manager
 zip        get_cvs_clnet  #ZIP-file reader and creator
-cxml       get_cvs_clnet  #XML parser and DOM implementation
+cxml       get_git git://repo.or.cz/cxml.git  #XML parser and DOM implementation
 closure    get_cvs_clnet  #CLIM-based web browser
 gsharp     get_cvs_clnet  #interactive, extensible editor for musical scores
 climacs    get_cvs_clnet  #CLIM-based text editor
@@ -25,7 +25,7 @@ trivial-features get_darcs http://common-lisp.net/~loliveira/darcs/trivial-featu
 
 cl+ssl               get_cvs_clnet cl-plus-ssl #FFI bindings for OpenSSL
 trivial-gray-streams get_cvs_clnet cl-plus-ssl #gray stream portability layer
-closure-common       get_cvs_clnet cxml #portable unicode for closure
+closure-common       get_git git://repo.or.cz/closure-common.git #portable unicode for closure
 usocket              get_svn_clnet usocket/trunk #socket portability library
 cl-irc               get_svn_clnet trunk #IRC client library
 
