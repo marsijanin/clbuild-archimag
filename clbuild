@@ -851,21 +851,6 @@ dumpcore() {
     recompile --dump "$@"
 }
 
-updatesbcl() {
-    cd ${source_dir}
-    $SBCL_DOWNLOAD_COMMAND
-    # Enable threads
-    if test -z "$windowsp"; then
-	ctf=sbcl/customize-target-features.lisp
-	if test -f $ctf; then
-	    echo $ctf already exists
-	else
-	    echo creating $ctf
-	    echo '(lambda (list) (pushnew :sb-thread list) list)' >$ctf
-	fi
-    fi
-}
-
 if test -f "$BASE"/monster.core; then
     # Initially I thought this warning might be helpful, but it's usually
     # false alarm:
@@ -1194,6 +1179,20 @@ case $1 in
 		if ! test -d ${source_dir}/sbcl; then
 		    echo "sbcl not found, try running 'clbuild update sbcl'" 1>&2
 		    exit 1
+		fi
+                # Enable threads
+		if test -z "$windowsp"; then
+		    ctf=$source_dir/sbcl/customize-target-features.lisp
+		    if test -f $ctf; then
+			echo $ctf already exists
+		    else
+			echo creating $ctf
+			cat >$ctf <<EOF
+(lambda (list)
+  (pushnew :sb-thread list)
+  list)
+EOF
+		    fi
 		fi
 		(cd $source_dir/sbcl; sh make.sh "$3"; SBCL_HOME= INSTALL_ROOT=${target_dir} sh install.sh)
 		;;
