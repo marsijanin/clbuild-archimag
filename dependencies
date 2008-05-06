@@ -61,11 +61,11 @@ climplayer cl-ppcre clx flexichain mcclim slime spatial-trees split-sequence
 cljl 
 closer-mop 
 closure bordeaux-threads closure-common closure-html clx cxml flexi-streams flexichain mcclim puri salza2 skippy slime spatial-trees trivial-gray-streams trivial-sockets zip 
-closure-common trivial-gray-streams 
+closure-common trivial-gray-streams babel alexandria
 closure-html closure-common flexi-streams trivial-gray-streams 
 clsql alexandria babel cffi md5 rt trivial-features 
 clx 
-cxml closure-common puri trivial-gray-streams 
+cxml closure-common puri trivial-gray-streams babel alexandria trivial-features
 cxml-rng cl-base64 cl-ppcre cl-yacc closure-common cxml parse-number puri trivial-gray-streams 
 cxml-stp alexandria cl-ppcre cl-yacc closure-common cxml parse-number plexippus-xpath puri trivial-gray-streams 
 drakma alexandria babel cffi chunga cl+ssl cl-base64 flexi-streams puri split-sequence trivial-features trivial-gray-streams usocket 
@@ -76,7 +76,7 @@ flexi-streams trivial-gray-streams
 flexichain 
 ftd cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees 
 graphic-forms alexandria babel cffi closer-mop lw-compat trivial-features 
-gsharp closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-gray-streams 
+gsharp closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-gray-streams babel alexandria trivial-features
 html-template 
 hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-who flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 ieee-floats 
