@@ -43,8 +43,8 @@ clx   get_darcs http://common-lisp.net/~crhodes/clx #X11 client library
 
 babel get_darcs http://common-lisp.net/~loliveira/darcs/babel #charset encoder/decoder
 
-# get_darcs cffi http://common-lisp.net/project/cffi/darcs/cffi/ #Common Foreign Function Interface
-cffi get_darcs http://common-lisp.net/~loliveira/darcs/cffi+lotsastuff #Common Foreign Function Interface (lotsastuff fork)
+cffi get_darcs http://common-lisp.net/project/cffi/darcs/cffi #Common Foreign Function Interface
+# cffi get_darcs http://common-lisp.net/~loliveira/darcs/cffi+lotsastuff #Common Foreign Function Interface (lotsastuff fork)
 
 bordeaux-threads get_darcs http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads #threading portability layer
 
