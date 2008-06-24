@@ -658,6 +658,9 @@
       #-(or windows mswindows win32) "graphic-forms"
       #-(or windows mswindows win32) "graphic-forms-tests"
       #-(or windows mswindows win32) "graphic-forms-uitoolkit"
+
+      ;; random extra systems
+      "mcclim-gif-bitmaps" "mcclim-jpeg-bitmaps"
       ))
 
 (with-application (projects-string &key dump verbose force)
