@@ -43,13 +43,15 @@ s-xml            get_cvs_clnet
 s-xml-rpc        get_cvs_clnet
 s-http-client    get_darcs http://www.beta9.be/darcs/s-http-client
 s-utils          get_darcs http://www.beta9.be/darcs/s-utils
-
+# Projects by Gary King
+lift             get_darcs http://common-lisp.net/project/lift
+metabang-bind    get_darcs http://common-lisp.net/project/metabang-bind
+cl-containers    get_darcs http://common-lisp.net/project/cl-containers
 
 perfectstorm get_svn svn://erleuchtet.org/perfectstorm #real time strategy game study
 cl-cairo get_svn svn://erleuchtet.org/cl-cairo #cairo bindings
 infpre get_svn svn://erleuchtet.org/infpre
 toolbox get_svn svn://erleuchtet.org/toolbox
-vektor get_svn svn://erleuchtet.org/vektor
 metabang-bind get_darcs http://common-lisp.net/project/metabang-bind/
 
 #

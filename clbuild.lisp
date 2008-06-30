@@ -654,6 +654,9 @@
       ;; loads clsql from the asd file (argh!)
       "ele-clsql"
 
+      ;; Require LIFT, which isn't needed otherwise
+      "metabang-bind-test" "cl-containers-test"
+
       ;; windows only:
       #-(or windows mswindows win32) "graphic-forms"
       #-(or windows mswindows win32) "graphic-forms-tests"
