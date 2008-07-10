@@ -16,6 +16,8 @@
 xuriella   get_git git://repo.or.cz/xuriella.git #when it grows up, it'll be an XSLT 1.0 processor
 atdoc      get_lichteblau_com #docstring to HTML converter
 
+tilde get_git git://github.com/xach/tilde.git #Tilde pathname expander for SBCL
+
 # SBCL/CMUCL-only, and has trouble with current SBCL
 clg        get_cvs_sfnet  #GTK+ bindings
 
