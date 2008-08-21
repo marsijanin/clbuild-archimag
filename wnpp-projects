@@ -16,8 +16,6 @@
 atdoc      get_lichteblau_com #docstring to HTML converter
 clim-alerts    get_lichteblau_com #CLIM-based mail and blog notifications
 
-tilde get_git git://github.com/xach/tilde.git #Tilde pathname expander for SBCL
-
 # SBCL/CMUCL-only, and has trouble with current SBCL
 clg        get_cvs_sfnet  #GTK+ bindings
 
