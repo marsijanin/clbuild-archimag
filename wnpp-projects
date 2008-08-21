@@ -50,7 +50,7 @@ tinaa            get_darcs http://common-lisp.net/project/tinaa
 moptilities      get_darcs http://common-lisp.net/project/moptilities
 metatilities     get_darcs http://common-lisp.net/project/metatilities
 asdf-system-connections get_darcs http://common-lisp.net/project/cl-containers/asdf-system-connections/darcs/asdf-system-connections
-defsystem-compatibility get_darcs http://common-lisp.net/project/cl-containers/defsystem-compatibility/darcs/defsystem-compatibility
+defsystem-compatibility get_darcs http://common-lisp.net/project/cl-containers/defsystem-compatibility/
 
 # weblocks and dependencies
 cl-cont          get_darcs http://common-lisp.net/project/cl-cont/darcs/cl-cont
