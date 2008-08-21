@@ -14,6 +14,7 @@
 
 # supposed to work on SBCL "usually", but in a state of flux:
 atdoc      get_lichteblau_com #docstring to HTML converter
+clim-alerts    get_lichteblau_com #CLIM-based mail and blog notifications
 
 tilde get_git git://github.com/xach/tilde.git #Tilde pathname expander for SBCL
 
