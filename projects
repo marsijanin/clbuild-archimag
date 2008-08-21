@@ -90,6 +90,7 @@ cl-typesetting get_svn http://www.fractalconcept.com:8000/public/open-source/cl-
 cl-yacc get_darcs http://www.pps.jussieu.fr/~jch/software/repos/cl-yacc #parser generator
 
 plexippus-xpath get_darcs http://common-lisp.net/project/plexippus-xpath/darcs/plexippus-xpath #XPath 1.0 implementation
+xuriella   get_git git://repo.or.cz/xuriella.git #XSLT 1.0 processor
 
 # for hunchentoot on OpenMCL
 acl-compat get_cvs_full :pserver:anonymous@portableaserve.cvs.sourceforge.net:/cvsroot/portableaserve/ portableaserve/acl-compat #ACL compatibility library
