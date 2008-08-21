@@ -78,13 +78,9 @@ vektor get_svn svn://erleuchtet.org/vektor
 # projects that are currently broken
 #
 
-# endless problems:
-#  - doesn't build at all without a user-written my-config.sexp
-#  - needs sb-posix, but doesn't declare that dependency, meaning that
-#    it doesn't build even with a config file
-#  - ele-clsql loads clsql from the .asd file, not using :depends-on,
-#    which is completely unacceptable
-#    (we blacklist ele-clsql in clbuild.lisp because of that)
+# see http://common-lisp.net/pipermail/clbuild-devel/2008-May/000115.html
+# for things to check regarding elephant.
+#
 elephant         get_darcs http://www.common-lisp.net/project/elephant/darcs/elephant
 
 # cffi-net doesn't load either, presumably due to a cffi compatibility issue
