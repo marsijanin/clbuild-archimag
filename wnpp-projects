@@ -48,6 +48,24 @@ s-utils          get_darcs http://www.beta9.be/darcs/s-utils
 lift             get_darcs http://common-lisp.net/project/lift
 metabang-bind    get_darcs http://common-lisp.net/project/metabang-bind
 cl-containers    get_darcs http://common-lisp.net/project/cl-containers
+tinaa            get_darcs http://common-lisp.net/project/tinaa
+moptilities      get_darcs http://common-lisp.net/project/moptilities
+metatilities     get_darcs http://common-lisp.net/project/metatilities
+asdf-system-connections get_darcs http://common-lisp.net/project/cl-containers/asdf-system-connections/darcs/asdf-system-connections
+defsystem-compatibility get_darcs http://common-lisp.net/project/cl-containers/defsystem-compatibility/darcs/defsystem-compatibility
+
+# weblocks and dependencies
+cl-cont          get_darcs http://common-lisp.net/project/cl-cont/darcs/cl-cont
+cl-json          get_darcs http://common-lisp.net/project/cl-json/darcs/cl-json
+cl-prevalence    get_cvs_clnet
+fare-matcher     get_tarball http://fare.tunes.org/asdf-packages/fare-matcher.tar.gz
+fare-utils       get_tarball http://fare.tunes.org/asdf-packages/fare-utils.tar.gz
+parenscript      get_darcs http://common-lisp.net/project/parenscript/repository/parenscript
+cl-graph         get_darcs http://common-lisp.net/project/cl-graph
+cl-mathstats     get_darcs http://common-lisp.net/project/cl-mathstats
+s-sysdeps        get_darcs http://www.beta9.be/darcs/s-sysdeps
+s-xml            get_cvs_clnet
+weblocks         get_darcs http://common-lisp.net/project/cl-weblocks/darcs/cl-weblocks
 
 # perfectstorm and related projects
 perfectstorm get_svn svn://erleuchtet.org/perfectstorm #real time strategy game study
