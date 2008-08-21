@@ -22,6 +22,7 @@ beirc      get_cvs_clnet  #CLIM-based Internet Relay Chat client
 alexandria get_darcs http://common-lisp.net/project/alexandria/darcs/alexandria #utility function library
 
 trivial-features get_darcs http://common-lisp.net/~loliveira/darcs/trivial-features #ensures consistent *FEATURES* across implementations
+trivial-garbage get_darcs http://common-lisp.net/~loliveira/darcs/trivial-garbage #finalization portability library
 
 cl+ssl               get_cvs_clnet cl-plus-ssl #FFI bindings for OpenSSL
 trivial-gray-streams get_cvs_clnet cl-plus-ssl #gray stream portability layer
