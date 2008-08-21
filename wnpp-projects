@@ -31,8 +31,10 @@ clawk      get_darcs http://www.foldr.org/~michaelw/projects/clawk  #AWK embedde
 # cl-opengl        get_darcs http://common-lisp.net/~loliveira/darcs/cl-opengl-thomas # FFI bindings for OpenGL (thomas fork) 
 cl-opengl        get_svn svn://erleuchtet.org/cl-opengl-thomas # FFI bindings for OpenGL (erleuchtet fork of thomas fork) 
 
+# disabled, because the directory has disappeared
+# zebu             get_svn https://cl-net-snmp.svn.sourceforge.net/svnroot/cl-net-snmp/zebu/trunk
+
 # random projects suggested by users:
-zebu             get_svn https://cl-net-snmp.svn.sourceforge.net/svnroot/cl-net-snmp/zebu/trunk
 lisa             get_cvs_full :pserver:anonymous@lisa.cvs.sourceforge.net:/cvsroot/lisa lisa
 parse-html       get_darcs http://common-lisp.net/project/bese/repos/parse-html
 s-sysdeps        get_darcs http://www.beta9.be/darcs/s-sysdeps
