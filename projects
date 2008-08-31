@@ -122,3 +122,5 @@ mw-equiv         get_svn http://svn.foldr.org/~michaelw/mw-equiv/trunk #extensib
 redshank         get_darcs http://www.foldr.org/~michaelw/projects/redshank #Common Lisp editing extensions (for Emacs)
 
 tilde get_git git://github.com/xach/tilde.git #Tilde pathname expander for SBCL
+
+hyperdoc get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/hyperdoc/cvsroot src #hypertext documentation support system
