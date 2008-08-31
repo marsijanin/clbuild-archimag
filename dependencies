@@ -89,6 +89,7 @@ graphic-forms alexandria babel cffi closer-mop lw-compat trivial-features
 gsharp alexandria babel closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-features trivial-gray-streams 
 html-template 
 hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-who flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
+hyperdoc 
 ieee-floats 
 infpre 
 ironclad 
@@ -118,6 +119,7 @@ redshank slime
 regex 
 rfc2388 
 rt 
+rucksack 
 s-base64 
 s-http-client puri s-base64 s-sysdeps s-utils 
 s-sysdeps 
