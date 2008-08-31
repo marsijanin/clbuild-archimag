@@ -43,6 +43,7 @@ s-xml            get_cvs_clnet
 s-xml-rpc        get_cvs_clnet
 s-http-client    get_darcs http://www.beta9.be/darcs/s-http-client
 s-utils          get_darcs http://www.beta9.be/darcs/s-utils
+rucksack         get_cvs_clnet  #Persistence library for Common Lisp
 
 # Projects by Gary King
 lift             get_darcs http://common-lisp.net/project/lift
