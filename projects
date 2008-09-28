@@ -125,3 +125,5 @@ redshank         get_darcs http://www.foldr.org/~michaelw/projects/redshank #Com
 tilde get_git git://github.com/xach/tilde.git #Tilde pathname expander for SBCL
 
 hyperdoc get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/hyperdoc/cvsroot src #hypertext documentation support system
+
+parse-declarations get_darcs http://common-lisp.net/project/parse-declarations/darcs/parse-declarations
