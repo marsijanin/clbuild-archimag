@@ -106,6 +106,7 @@ salza2           get_xach_com  #ZLIB and DEFLATE compressor
 zpng             get_xach_com  #PNG creator
 vecto            get_xach_com  #cl-pdf-like API for cl-vectors
 zpb-ttf          get_xach_com  #TrueType font parser
+zs3              get_xach_com  #Amazon S3 Interface
 
 postmodern get_darcs http://common-lisp.net/project/postmodern/darcs/postmodern #CLSQL-replacement for PostgreSQL databases
 arnesi get_darcs http://common-lisp.net/project/bese/repos/arnesi_dev #bits 'n pieces of code
