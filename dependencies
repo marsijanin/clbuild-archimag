@@ -108,6 +108,7 @@ moptilities closer-mop lift
 mw-equiv 
 net-telent-date 
 parenscript 
+parse-declarations 
 parse-html 
 parse-number 
 perfectstorm alexandria asdf-system-connections babel cffi cl-cairo cl-opengl infpre lift metabang-bind toolbox trivial-features vektor 
@@ -152,3 +153,4 @@ xuriella alexandria babel cl-ppcre cl-yacc closure-common closure-html cxml cxml
 zip flexi-streams salza2 trivial-gray-streams 
 zpb-ttf 
 zpng salza2 
+zs3 alexandria babel cffi chunga cl+ssl cl-base64 closure-common cxml drakma flexi-streams ironclad puri split-sequence trivial-features trivial-gray-streams usocket 
