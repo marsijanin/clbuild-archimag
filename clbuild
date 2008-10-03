@@ -57,6 +57,14 @@ source "$BASE/clbuild.conf.default"
 if test -f "$BASE/clbuild.conf"; then
     source "$BASE/clbuild.conf"
 fi
+
+# All files which contain information about projects.  Also include
+# personal projects listed in 'my-projects'.
+PROJECT_LISTING_FILES="$BASE/projects $BASE/wnpp-projects $BASE/implementations"
+if test -f "$BASE/my-projects"; then
+    PROJECT_LISTING_FILES="$BASE/my-projects $PROJECT_LISTING_FILES"
+fi
+
 # Fix up pathnames
 make_absolute_pn() {
 	if [ -n "$1" ] ; then
@@ -562,12 +570,12 @@ update_project() {
 	exit 1
     fi
 
-    if ! grep -h "^$1 " "$BASE/projects" "$BASE/wnpp-projects" "$BASE/implementations" >/dev/null; then
+    if ! grep -h "^$1 " $PROJECT_LISTING_FILES >/dev/null; then
        echo Error: cannot download unknown project $1
        rm "$BASE/.clbuild-resume"
        exit 1
     fi
-    found=`grep -h "^$1 " "$BASE/projects" "$BASE/wnpp-projects" "$BASE/implementations" | cut -d\# -f1`
+    found=`grep -h "^$1 " $PROJECT_LISTING_FILES | cut -d\# -f1`
     update_project_2 $found
 }
 
@@ -894,9 +902,14 @@ scan_installed() {
     done
 }
 
+if test -f $BASE/my-projects; then
+    my_projects=`scan_projects "$BASE/my-projects"`
+else
+    my_projects=""
+fi
 main_projects=`scan_projects "$BASE/projects"`
 wnpp_projects=`scan_projects "$BASE/wnpp-projects"`
-all_projects="$main_projects $wnpp_projects"
+all_projects="$main_projects $wnpp_projects $my_projects"
 
 implementations=`scan_projects "$BASE/implementations"`
 
@@ -915,7 +928,7 @@ list() {
     }
     trap cleanup exit
 
-    cat "$BASE/projects" "$BASE/wnpp-projects" "$BASE/implementations" | sort | grep -i -E "$pattern" | while read project rest; do
+    cat $PROJECT_LISTING_FILES | sort | grep -i -E "$pattern" | while read project rest; do
 	if test -n "$project" -a x"$project" != 'x#'; then
 	    description=`echo $rest | cut -d\# -f2`
 	    case `cd $source_dir && ${UPDATE_SCRIPT} --dry-run $project | cut -d: -f1` in
@@ -1080,6 +1093,10 @@ case $1 in
 		    extra="$extra $wnpp_projects"
 		    shift
 		    ;;
+                --my-projects)
+                    extra="$extra $wnpp_projects"
+                    shift
+                    ;;
 		--all-projects)
 		    extra="$extra $all_projects"
 		    shift
@@ -1120,6 +1137,10 @@ case $1 in
 		    projects="$projects $wnpp_projects"
 		    shift
 		    ;;
+                --my-projects)
+                    projects="$projects $my-projects"
+                    shift
+                    ;;
 		--all-projects)
 		    projects="$projects $all_projects"
 		    shift
@@ -1142,7 +1163,8 @@ case $1 in
 	    echo "  clbuild $operation PROJECT1 PROJECT2 PROJECT3...  # only these"
 	    echo "  clbuild $operation --main-projects     # all in projects file"
 	    echo "  clbuild $operation --wnpp-projects     # all in wnpp-projects file"
-	    echo "  clbuild $operation --all-projects      # both files"
+	    echo "  clbuild $operation --my-projects       # all in my-projects file"
+	    echo "  clbuild $operation --all-projects      # all three files"
 	    echo "  clbuild $operation --installed         # everything in source/"
 	    exit 1
 	fi
