@@ -47,6 +47,12 @@ else
 	windowsp=""
 fi
 
+if test $(uname -s) = Darwin -a $(uname -p) = powerpc; then
+    darwinppc=1
+else
+    darwinppc=""
+fi
+
 source "$BASE/clbuild.conf.default"
 if test -f "$BASE/clbuild.conf"; then
     source "$BASE/clbuild.conf"
@@ -1181,7 +1187,7 @@ case $1 in
 		    exit 1
 		fi
                 # Enable threads
-		if test -z "$windowsp"; then
+		if test -z "$windowsp" -a -z "$darwinppc"; then
 		    ctf=$source_dir/sbcl/customize-target-features.lisp
 		    if test -f $ctf; then
 			echo $ctf already exists
@@ -1221,6 +1227,19 @@ EOF
 				;;
 			esac
 			;;
+                    Darwin)
+                        case `uname -p` in
+                            powerpc)
+                                headerdir=darwin-headers
+                                binary=dppccl
+                                image=dppccl.image
+                                ;;
+                            *)
+				echo "don't know how to build CCL for your ISA, please adjust clbuild as needed" 2>&1
+				exit 1
+                                ;;
+                        esac
+                        ;;
 		    *)
 			echo "don't know how to build CCL for your OS, please adjust clbuild as needed" 2>&1
 			exit 1
