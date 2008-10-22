@@ -84,6 +84,8 @@ time-interval    get_git git://cyrusharmon.org/pub/git/time-interval.git
 # Bibtex (required by smarkup)
 cl-bibtex        get_cvs_full :pserver:anonymous@cvs.sv.gnu.org:/sources/cl-bibtex cl-bibtex
 
+stefil           get_darcs http://common-lisp.net/project/stefil/darcs/stefil
+
 # weblocks and dependencies
 cl-cont          get_darcs http://common-lisp.net/project/cl-cont/darcs/cl-cont
 cl-json          get_darcs http://common-lisp.net/project/cl-json/darcs/cl-json
