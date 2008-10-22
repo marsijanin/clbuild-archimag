@@ -52,8 +52,15 @@ cl-containers    get_darcs http://common-lisp.net/project/cl-containers
 tinaa            get_darcs http://common-lisp.net/project/tinaa
 moptilities      get_darcs http://common-lisp.net/project/moptilities
 metatilities     get_darcs http://common-lisp.net/project/metatilities
-asdf-system-connections get_darcs http://common-lisp.net/project/cl-containers/asdf-system-connections/darcs/asdf-system-connections
-defsystem-compatibility get_darcs http://common-lisp.net/project/cl-containers/defsystem-compatibility/
+metatilities-base get_darcs http://common-lisp.net/project/metatilities-base
+metacopy         get_darcs http://common-lisp.net/project/metacopy/darcs/metacopy
+asdf-binary-locations get_darcs http://common-lisp.net/project/asdf-binary-locations/
+asdf-install-tester get_darcs http://common-lisp.net/project/ait/darcs/ait
+asdf-status      get_darcs http://common-lisp.net/project/cl-containers/asdf-status/darcs/asdf-status
+asdf-system-connections get_darcs http://common-lisp.net/project/cl-containers/asdf-system-connections/darcs
+defsystem-compatibility get_darcs http://common-lisp.net/project/cl-containers/defsystem-compatibility/darcs
+tinaa            get_darcs http://common-lisp.net/project/tinaa
+trivial-shell    get_darcs http://common-lisp.net/project/trivial-shell
 
 # weblocks and dependencies
 cl-cont          get_darcs http://common-lisp.net/project/cl-cont/darcs/cl-cont
