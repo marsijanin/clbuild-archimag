@@ -341,6 +341,40 @@ dry_run_missing() {
    fi
 }
 
+get_hg() {
+    local name="$1"
+    local url="$2"
+
+    if [ -d $name ]; then
+	local actual=$(cd $name && hg showconfig paths.default)
+	if [ "x$actual" = "x$url" ]; then
+	    dry_run_ok $name
+	else
+	    echo "MISMATCH: $name was installed from $actual, current is $url"
+	fi
+    else
+	dry_run_missing $name
+    fi
+    if [ -n "$dry_run" ]; then
+	exit 0
+    fi
+
+    if [ -d $name ]; then
+	dribble_get "hg pull" $name
+	(
+	    cd $name
+	    if [ ! -d ".hg" ]; then
+		echo "ERROR: not a mercurial repository"
+		exit 1
+	    fi
+	    hg pull --update
+	    )
+    else
+	dribble_get "hg clone" $name
+	hg clone $url $name
+    fi
+}
+
 get_darcs() {
     name="$1"
     url="$2"
