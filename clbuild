@@ -321,7 +321,7 @@ dribble_get() {
     label="$1"
     name="$2"
 
-    if test -d `echo ${name}*/ | awk '{print $1;}'`; then
+    if [ -d $name ]; then
 	echo -n "UPDATE "
     else
 	echo -n "NEW "
