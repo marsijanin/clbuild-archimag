@@ -97,7 +97,7 @@ cl-graph         get_darcs http://common-lisp.net/project/cl-graph
 cl-mathstats     get_darcs http://common-lisp.net/project/cl-mathstats
 s-sysdeps        get_darcs http://www.beta9.be/darcs/s-sysdeps
 s-xml            get_cvs_clnet
-weblocks         get_darcs http://common-lisp.net/project/cl-weblocks/darcs/cl-weblocks
+weblocks         get_hg http://www.bitbucket.org/skypher/weblocks-stable/
 
 # perfectstorm and related projects
 perfectstorm get_svn svn://erleuchtet.org/perfectstorm #real time strategy game study
