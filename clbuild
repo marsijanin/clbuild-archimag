@@ -847,37 +847,56 @@ clbuild run APPLICATION [ARGS...]
 EOF
 }
 
-check_program() {
-    if ! "$1" --help >/dev/null; then
-	echo Error: Cannot find a working installation of "$1"
+check_error() {
+    MISSING_PROGRAMS=$1 ${MISSING_PROGRAMS}
+    if [ -z "$2" ]; then
+	echo Error: Cannot find a working installation of "$1" 1>&2
 	exit 1
+    else
+        echo Warning: Cannot find a working installation of "$1"! 1>&2
     fi
-    echo "found `which $1`"
+}
+
+check_program() {
+    if ! "$1" --help 2>/dev/null >/dev/null; then
+        check_error $1 $2
+    else
+        echo "found `which $1`"
+    fi
 }
 
 # for programs that don't understand --help, or (like cvs) are stupid enough
 # to return a failure code when invoked using a correct --help option... 
 check_misdesigned_program() {
-    if ! which "$1" >/dev/null; then
-	echo Error: Cannot find an installation of "$1" at all
-	exit 1
+    if ! which "$1" 2>&1 >/dev/null; then
+        check_error $1 $2
+    else
+        echo "found `which $1`"
     fi
-    echo "found `which $1`"
 }
 
 check() {
+    MISSING_PROGRAMS=""
     echo "Checking for helper applications..."
     check_misdesigned_program cvs
     check_program svn
     check_program darcs
-    check_program wget
+    check_program wget warn
+    check_program hg warn
     # get_tarball is evil and unused anyway, so no need to bother the FreeBSD
     # users with warnings about their non-GNU version of tar
 #    check_program tar
-    check_misdesigned_program curl
+    check_misdesigned_program curl warn
     check_misdesigned_program git
     check_misdesigned_program mktemp
-    echo "Success: All helper applications found."
+    if [ -z ${MISSING_PROGRAMS} ]; then
+        echo "Success: All helper applications found."
+    else
+        echo "WARNING: Some projects can not be build without" \
+        "the following programs:"
+        echo ${MISSING_PROGRAMS}
+    fi
+
 	
     echo
     echo "Checking Lisp startup..."
