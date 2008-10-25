@@ -66,7 +66,6 @@ cl-ppcre cl-unicode flexi-streams trivial-gray-streams
 cl-prevalence s-sysdeps s-xml 
 cl-typesetting cl-pdf iterate 
 cl-unicode cl-ppcre 
-cl-unicode cl-ppcre 
 cl-vectors zpb-ttf 
 cl-webdav alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre closure-common cxml flexi-streams hunchentoot lib md5 puri rfc2388 trivial-features trivial-gray-streams url-rewrite 
 cl-who 
@@ -176,6 +175,7 @@ url-rewrite
 usocket lib split-sequence 
 vecto cl-vectors salza2 zpb-ttf zpng 
 vektor 
+weblocks alexandria asdf-system-connections babel cffi chunga cl+ssl cl-base64 cl-cont cl-containers cl-fad cl-json cl-ppcre cl-who closer-mop fare-matcher fare-utils flexi-streams hunchentoot lib lift md5 metabang-bind metatilities moptilities parenscript puri rfc2388 rt trivial-features trivial-gray-streams url-rewrite 
 xuriella alexandria babel cl-ppcre cl-yacc closure-common closure-html cxml cxml-stp flexi-streams parse-number plexippus-xpath puri split-sequence trivial-features trivial-gray-streams 
 zip flexi-streams salza2 trivial-gray-streams 
 zpb-ttf 
