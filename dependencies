@@ -133,6 +133,7 @@ parse-html
 parse-number 
 perfectstorm alexandria babel cffi cl-cairo cl-opengl infpre lift metabang-bind toolbox trivial-features vektor 
 plexippus-xpath alexandria babel cl-ppcre cl-yacc closure-common cxml parse-number puri trivial-features trivial-gray-streams 
+portable-threads 
 postmodern bordeaux-threads closer-mop ieee-floats lib lift md5 split-sequence trivial-utf-8 usocket 
 psgraph 
 puri 
