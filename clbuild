@@ -1309,6 +1309,11 @@ EOF
                                 binary=dppccl
                                 image=dppccl.image
                                 ;;
+                            i386)
+                                headerdir=darwin-x86-headers64
+                                binary=dx86cl64
+                                image=dx86cl64.image
+                                ;;
                             *)
 				echo "don't know how to build CCL for your ISA, please adjust clbuild as needed" 2>&1
 				exit 1
@@ -1335,7 +1340,7 @@ EOF
 
 Done compiling CCL.
 Set this in clbuild.conf to enable the new CCL:
-  CCL=$ccl_old/$binary
+  CCL=$ccl_new/$binary
 EOF
 		;;
 	    clisp)
