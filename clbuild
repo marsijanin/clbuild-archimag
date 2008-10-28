@@ -329,6 +329,15 @@ dribble_get() {
     echo "$label $name"
 }
 
+darcs_record_import() {
+    local name="$1"
+    local url="$2"
+
+    IMPORT_MESSAGE="Imported $name from $url on $(date)"
+
+    darcs record -a -l -A clbuild -m "$IMPORT_MESSAGE"
+}
+
 dry_run_ok() {
    if test -n "$dry_run"; then
        echo "OK: $1"
@@ -496,43 +505,60 @@ get_cvs_full() {
 }
 
 get_tarball() {
-    name="$1"
-    url="$2"
-    flags="${3:-z}"
+    local name="$1"
+    local url="$2"
+    local flags="${3:-z}"
 
-    echo "Warning: Using deprecated method get_tarball."
-
-    if test -n "$dry_run"; then
-	if ls -d ${name}* >/dev/null; then
-	    directories="`ls -d ${name}*`"
-	    echo "TARBALL: $directories installed from a tarball, cannot check"
-	else
-	    dry_run_missing $1
-	fi
+    if [ -d $name ]; then
+	dry_run_ok $name
+    else
+	dry_run_missing $name
+    fi
+    if [ -n "$dry_run" ]; then
 	exit 0
     fi
 
-    tmp=$TMPDIR/${name}.tar.gz
-
-    dribble_get wget $name
-
-    # We used to delete old directories completely here.  Unfortunately,
-    # that can easily lead to loss of changes, a problem all the VC checkout
-    # method do not have to the extent.  Save all old data instead.  Users
-    # can delete the resulting backup directories easily enough themselves.
-    if ls ${name}* >/dev/null; then
-	echo got here
-	backup=`mktemp -d backup_${name}_XXXXXXXXXX`
-	mv ${name}* "$backup/"
+    # if repository does not exist, then create and populate one
+    if [ ! -d "$name/_darcs" ]; then
+       	(
+	    darcs init --repodir=$name
+	    cd $name
+	    darcs_record_import $name $url
+	    )
     fi
-    wget \
-	--no-check-certificate \
-	--progress=dot \
-	-O "$tmp" \
-	$url \
-	2>&1 | tail_last
-    tar v${flags}xf "$tmp" | tail_last
-    rm "$tmp"
+
+    # pull repository into temporary directory
+    dribble_get "wget" $name
+    (
+	local tmp="${name}.tar.gz"
+
+	cd $TMPDIR
+
+	# clone the original directory
+	darcs get "${source_dir}/${name}"
+
+	wget \
+	    --no-check-certificate \
+	    --progress=dot \
+	    -O "$tmp" \
+	    $url \
+	    2>&1 | tail_last
+	tar v${flags}xf "$tmp" | tail_last
+	rm $tmp
+
+	# if directory names differ, copy into main directory
+	local other_dir=$(echo ${name}?*/ | awk '{print $1}')
+	if [ -d $other_dir ]; then
+	    cp -R ${other_dir}* $name
+	fi
+	)
+
+    # record any changes and pull back into original directory
+    (
+	cd $TMPDIR/$name
+	darcs_record_import $name $url
+	darcs push -a -p "$IMPORT_MESSAGE" "$source_dir/$name"
+	)
 }
 
 get_svn_clnet() {
