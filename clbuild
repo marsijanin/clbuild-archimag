@@ -776,16 +776,24 @@ link_extra_asds() {
 short_help() {
 	cat <<EOF
 Usage:
+  $0 COMMAND [ARGS...]
 
-  list              show a list of projects
+Important commansd are:
 
-  update PROJECT    install this project
-  trash PROJECT     uninstall this project
+  list                  show a list of projects
 
-  slime             run Lisp in Emacs using SLIME
-  lisp              run Lisp directly
+  install   PROJECT     install this project
+  uninstall PROJECT     uninstall this project
 
-  check             check for helper applications
+  slime                 run Lisp (using Emacs, recommended)
+  lisp                  run Lisp (using the Terminal)
+
+  check                 check for helper applications
+
+After starting "clbuild slime", use ASDF to load and compile installed
+programs, for example by typing
+
+  (asdf:operate 'asdf:load-op 'ENTER-NAME-OF-SYSTEM-HERE).
 
 See also 'clbuild --long-help' for a full list of commands.
 
@@ -1161,9 +1169,9 @@ case $1 in
 	    clean_fasls
 	fi
 	;;
-    trash)
+    trash|uninstall)
 	if test $# -le 1; then
-	    echo 'usage: trash [PROJECT...]'
+	    echo 'usage: $1 [PROJECT...]'
 	    exit 1
 	fi
 	while test $# -gt 1; do
@@ -1190,7 +1198,7 @@ case $1 in
     skip)
 	touch "$source_dir/$2/.clbuild-skip-update"
 	;;
-    update)
+    update|install)
 	unset clbuild_resume
 	unset extra
 	while test -n "$2"; do
