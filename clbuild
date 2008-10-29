@@ -789,7 +789,12 @@ Important commansd are:
 
   check                 check for helper applications
 
-After starting "clbuild slime", use ASDF to load and compile installed
+EXAMPLE:
+
+  $0 install cl-ppcre
+  $0 slime
+
+After starting SLIME, use ASDF to load and compile installed
 programs, for example by typing
 
   (asdf:operate 'asdf:load-op 'ENTER-NAME-OF-SYSTEM-HERE).
