@@ -1048,6 +1048,30 @@ EOF
 EOF
 }
 
+wnpp_check() {
+        error=""
+        for project in $main_projects; do
+	    for dependency in `grep "^$project " dependencies`; do
+		if ! grep "^$dependency " projects >/dev/null; then
+		    echo "Warning: main project $project depends on non-main project $dependency."
+		    error=1
+		fi
+	    done
+	done
+	if test -n "$error"; then
+	    echo
+	    echo "Please demote each project listed above to wnpp-projects,"
+	    echo "unless its dependency is known to be stable enough that"
+	    echo "it can be promoted to the main project list instead."
+	    echo
+	    echo "Alternatively, consider blacklisting parts of the projects"
+	    echo "that might be causing an unnecessary dependency of this"
+	    echo "kind."
+	else
+	    echo ok
+	fi
+}
+
 trash() {
     mkdir -p "$BASE/trash"
     basename=`basename $1`
@@ -1424,6 +1448,7 @@ EOF
 	# hack: don't want the core here
 	run_options="$build_options"
 	start_application record-dependencies "$all_projects"
+	wnpp_check
 	;;
     check-urls)
 	cd "$source_dir"
@@ -1464,6 +1489,9 @@ EOF
 	link_extra_asds
 	count_systems
 	;;
+    wnpp-check)
+        wnpp_check
+        ;;
     diff)
 	diff="${source_dir}/.diff"
 	cp /dev/null "$diff"
