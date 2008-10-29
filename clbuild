@@ -773,7 +773,26 @@ link_extra_asds() {
     ln -sf $source_dir/cffi/uffi-compat/uffi.asd ${system_dir}/
 }
 
-help() {
+short_help() {
+	cat <<EOF
+Usage:
+
+  list              show a list of projects
+
+  update PROJECT    install this project
+  trash PROJECT     uninstall this project
+
+  slime             run Lisp in Emacs using SLIME
+  lisp              run Lisp directly
+
+  check             check for helper applications
+
+See also 'clbuild --long-help' for a full list of commands.
+
+EOF
+}
+
+long_help() {
 	cat <<EOF
 Usage:
   check         check availability of all necessary helper applications
@@ -1547,13 +1566,22 @@ EOF
 	done
 	less "$diff"
 	;;
-    help|--long-help|-H|""|--help|-h)
+    --long-help)
 	case $2 in
 	    run)
 		help_run
 		;;
 	    *)
-		help
+		long_help
+	esac
+	;;
+    help|-H|""|--help|-h)
+	case $2 in
+	    run)
+		help_run
+		;;
+	    *)
+		short_help
 	esac
 	;;
     *)
