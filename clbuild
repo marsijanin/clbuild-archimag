@@ -780,8 +780,7 @@ Usage:
 
 Important commansd are:
 
-  list                  show a list of projects
-
+  projects              show a list of projects
   install   PROJECT     install this project
   uninstall PROJECT     uninstall this project
 
@@ -1147,6 +1146,35 @@ case $1 in
 	;;
     list)
 	list "${2:-.*}"
+	;;
+    projects)
+	cat <<EOF
+
+************************************************************************
+*** The following projects are part of the main project list.  This list
+*** includes software that is tested regularly by clbuild committers and
+*** that (usually) compiles without problems on at least SBCL.
+
+$main_projects
+
+************************************************************************
+*** The following projects are part of the wnpp project list, including
+*** "work-needing and prospective projects".  (Some of these projects
+*** are known be broken at this point.)
+
+$wnpp_projects
+
+************************************************************************
+*** The following projects (if any) are part of your local project list:
+
+${my_projects:-(none)}
+
+
+************************************************************************
+
+Use "$0 install PROJECT" to download a project from one of these lists.
+
+EOF
 	;;
     clean)
 	clean_fasls() {
