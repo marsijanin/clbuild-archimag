@@ -664,7 +664,9 @@
 
       ;; random extra systems
       "mcclim-gif-bitmaps" "mcclim-jpeg-bitmaps"
-      ))
+
+      ;; blacklist funny test systems for no particular reason:
+      "babel-tests"))
 
 (with-application (projects-string &key dump verbose force)
   (let ((projects (cl-ppcre:split "\\s+" projects-string))
