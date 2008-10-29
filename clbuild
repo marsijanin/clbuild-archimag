@@ -17,6 +17,11 @@
 #   David Lichteblau <david@lichteblau.com>
 #   Eric Marsden <eric.marsden@free.fr>
 #   Andreas Fuchs <asf@boinkor.net>
+#   Albert Krewinkel
+#   Daniel White
+#   Ryan Davis
+#   Michael Weber
+#   (and probably others)
 
 set -e
 
