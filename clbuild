@@ -906,6 +906,8 @@ clbuild run APPLICATION [ARGS...]
   run adw-charting-demo  generate a test image using adw-charting
 
   run ltk-demo      show a dialog using ltk
+
+  run clpython      run the CLPython REPL
 EOF
 }
 

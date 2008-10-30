@@ -116,6 +116,20 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; CLPython
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::clpython
+#+clbuild::clpython
+
+(make :clpython)
+
+(with-application ()
+  (setf common-lisp-user::*clpython-module-search-paths* "/usr/lib/python2.5/")
+  (clpython:repl))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; WebDAV
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -666,7 +680,7 @@
       "mcclim-gif-bitmaps" "mcclim-jpeg-bitmaps"
 
       ;; blacklist funny test systems for no particular reason:
-      "babel-tests"))
+      "babel-tests" "clpython-test"))
 
 (with-application (projects-string &key dump verbose force)
   (let ((projects (cl-ppcre:split "\\s+" projects-string))
