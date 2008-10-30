@@ -783,14 +783,14 @@ short_help() {
 Usage:
   $0 COMMAND [ARGS...]
 
-Important commansd are:
+Important commands are:
 
   projects              show a list of projects
   install   PROJECT     install this project
   uninstall PROJECT     uninstall this project
 
   slime                 run Lisp (using Emacs, recommended)
-  lisp                  run Lisp (using the Terminal)
+  lisp                  run Lisp (using the terminal)
 
   check                 check for helper applications
 
@@ -799,10 +799,10 @@ EXAMPLE:
   $0 install cl-ppcre
   $0 slime
 
-After starting SLIME, use ASDF to load and compile installed
+After starting SLIME, use ASDF to compile and load installed
 programs, for example by typing
 
-  (asdf:operate 'asdf:load-op 'ENTER-NAME-OF-SYSTEM-HERE).
+  (asdf:operate 'asdf:load-op 'ENTER-NAME-OF-SYSTEM-HERE)
 
 See also 'clbuild --long-help' for a full list of commands.
 
