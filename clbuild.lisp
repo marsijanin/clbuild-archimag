@@ -489,10 +489,15 @@
   (defvar *hidden-projects* '("clg" "graphic-forms" "eclipse"))
 
   (defun project-to-systems (name)
-    (mapcar (lambda (x) (pathname-name x))
-	    (directory (if (find name *hidden-projects* :test #'equal)
-			   (format nil "source/~A/**/*.asd" name)
-			   (format nil "source/~A/*.asd" name))))))
+    (remove-if (lambda (name)
+		 ;; I've had it with broken test systems.
+		 ;; Let's blacklist them unconditionally.
+		 (search "-test" name))
+	       (mapcar (lambda (x) (pathname-name x))
+		       (directory
+			(if (find name *hidden-projects* :test #'equal)
+			    (format nil "source/~A/**/*.asd" name)
+			    (format nil "source/~A/*.asd" name)))))))
 
 #+clbuild::record-dependencies
 #+clbuild::record-dependencies
