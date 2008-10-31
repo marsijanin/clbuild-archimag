@@ -30,6 +30,7 @@
 acl-compat cl-ppcre puri 
 adw-charting alexandria babel cffi chunga cl+ssl cl-base64 cl-vectors drakma flexi-streams puri salza2 split-sequence trivial-features trivial-gray-streams usocket vecto zpb-ttf zpng 
 alexandria 
+anaphora
 arnesi 
 asdf-binary-locations lift 
 asdf-install-tester cl-fad net-telent-date 
@@ -93,7 +94,7 @@ cxml-stp alexandria babel cl-ppcre cl-yacc closure-common cxml parse-number plex
 defsystem-compatibility lift metatilities-base 
 drakma alexandria babel cffi chunga cl+ssl cl-base64 flexi-streams puri split-sequence trivial-features trivial-gray-streams usocket 
 eclipse 
-elephant alexandria babel bordeaux-threads cffi cl-base64 closer-mop clsql ieee-floats lift md5 postmodern split-sequence trivial-features trivial-utf-8 usocket 
+elephant alexandria arnesi babel bordeaux-threads cffi cl-base64 closer-mop clsql fiveam ieee-floats lift md5 postmodern split-sequence trivial-features trivial-utf-8 usocket 
 fare-matcher fare-utils 
 fare-utils 
 fiveam arnesi 
@@ -123,7 +124,7 @@ md5
 mel-base alexandria babel cffi cl+ssl flexi-streams trivial-features trivial-gray-streams 
 metabang-bind lift 
 metacopy closer-mop lift moptilities 
-metatilities asdf-system-connections cl-containers closer-mop lift metabang-bind metatilities-base moptilities 
+metatilities asdf-system-connections cl-containers closer-mop lift metabang-bind moptilities 
 metatilities-base lift 
 midi 
 moptilities closer-mop lift 
@@ -179,7 +180,7 @@ url-rewrite
 usocket split-sequence 
 vecto cl-vectors salza2 zpb-ttf zpng 
 vektor 
-weblocks alexandria asdf-system-connections babel cffi chunga cl+ssl cl-base64 cl-cont cl-containers cl-fad cl-json cl-ppcre cl-who closer-mop fare-matcher fare-utils flexi-streams hunchentoot lift md5 metabang-bind metatilities metatilities-base moptilities parenscript puri rfc2388 rt trivial-features trivial-gray-streams url-rewrite 
+weblocks alexandria asdf-system-connections babel cffi chunga cl+ssl cl-base64 cl-cont cl-containers cl-fad cl-json cl-ppcre cl-who closer-mop fare-matcher fare-utils flexi-streams hunchentoot lift md5 metabang-bind metatilities moptilities parenscript puri rfc2388 rt trivial-features trivial-gray-streams url-rewrite 
 xuriella alexandria babel cl-ppcre cl-yacc closure-common closure-html cxml cxml-stp flexi-streams parse-number plexippus-xpath puri split-sequence trivial-features trivial-gray-streams 
 zip flexi-streams salza2 trivial-gray-streams 
 zpb-ttf 

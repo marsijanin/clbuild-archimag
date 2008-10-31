@@ -88,6 +88,8 @@ cl-bibtex        get_cvs_full :pserver:anonymous@cvs.sv.gnu.org:/sources/cl-bibt
 stefil           get_darcs http://common-lisp.net/project/stefil/darcs/stefil
 
 # weblocks and dependencies
+f-underscore     get_darcs http://common-lisp.net/project/bpm/darcs/f-underscore
+anaphora         get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/anaphora/cvsroot src
 cl-cont          get_darcs http://common-lisp.net/project/cl-cont/darcs/cl-cont
 cl-json          get_darcs http://common-lisp.net/project/cl-json/darcs/cl-json
 cl-prevalence    get_cvs_clnet
