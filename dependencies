@@ -32,14 +32,14 @@ adw-charting alexandria babel cffi chunga cl+ssl cl-base64 cl-vectors drakma fle
 alexandria 
 arnesi 
 asdf-binary-locations lift 
-asdf-install-tester cl-fad defsystem-compatibility lift metatilities-base net-telent-date 
+asdf-install-tester cl-fad net-telent-date 
 asdf-status asdf-system-connections cl-containers cl-fad closer-mop lift metabang-bind metatilities moptilities net-telent-date 
 asdf-system-connections 
 atdoc alexandria babel cl-ppcre cl-yacc closer-mop closure-common closure-html cxml cxml-stp flexi-streams parse-number plexippus-xpath puri slime split-sequence trivial-features trivial-gray-streams xuriella 
-babel alexandria iterate lift metabang-bind slime stefil trivial-features trivial-gray-streams 
+babel alexandria trivial-features trivial-gray-streams 
 beirc cl-fad cl-irc cl-ppcre clx flexi-streams mcclim slime spatial-trees split-sequence trivial-gray-streams usocket 
 bordeaux-threads lift 
-cffi alexandria babel rt trivial-features 
+cffi alexandria babel trivial-features 
 cffi-net alexandria babel cffi trivial-features 
 ch-asdf ch-util puri 
 ch-image ch-asdf ch-util cl-bibtex cl-fad cl-pdf cl-typesetting clem iterate puri salza2 smarkup split-sequence zpng 
@@ -52,7 +52,7 @@ cl-bibtex split-sequence
 cl-bio alexandria babel cffi ch-asdf ch-util chunga cl+ssl cl-base64 cl-bibtex cl-fad cl-graph cl-pdf cl-ppcre cl-typesetting cl-yacc closure-common cxml cxml-stp drakma flexi-streams flexichain iterate lift parse-number plexippus-xpath puri rucksack smarkup split-sequence trivial-features trivial-gray-streams usocket 
 cl-biodas alexandria babel cffi ch-asdf ch-util chunga cl+ssl cl-base64 cl-bio cl-fad cl-ppcre cl-yacc closure-common cxml cxml-rng cxml-stp drakma flexi-streams flexichain hunchentoot md5 parse-number plexippus-xpath puri rfc2388 split-sequence trivial-features trivial-gray-streams url-rewrite usocket 
 cl-cairo alexandria babel cffi trivial-features 
-cl-cont closer-mop rt 
+cl-cont closer-mop 
 cl-containers lift 
 cl-dot 
 cl-fad 
@@ -62,7 +62,7 @@ cl-json parenscript
 cl-mathstats cl-containers lift metatilities-base 
 cl-opengl alexandria babel cffi trivial-features 
 cl-pdf iterate 
-cl-ppcre cl-unicode flexi-streams trivial-gray-streams 
+cl-ppcre cl-unicode 
 cl-prevalence s-sysdeps s-xml 
 cl-typesetting cl-pdf iterate 
 cl-unicode cl-ppcre 
@@ -81,8 +81,9 @@ closer-mop
 closure alexandria babel bordeaux-threads closure-common closure-html clx cxml flexi-streams lift mcclim puri salza2 skippy slime spatial-trees trivial-features trivial-gray-streams trivial-sockets zip 
 closure-common alexandria babel trivial-features trivial-gray-streams 
 closure-html alexandria babel closure-common flexi-streams trivial-features trivial-gray-streams 
-clsql alexandria babel cffi md5 rt trivial-features 
-clsr alexandria babel ch-asdf ch-util cl-bibtex cl-fad cl-pdf cl-typesetting clem closure-common cxml gcc-xml-ffi iterate puri smarkup split-sequence trivial-features trivial-gray-streams 
+clpython closer-mop 
+clsql alexandria babel cffi md5 trivial-features 
+clsr alexandria babel ch-asdf ch-util cl-bibtex cl-fad cl-pdf cl-typesetting closure-common cxml gcc-xml-ffi iterate puri smarkup split-sequence trivial-features trivial-gray-streams 
 cluster-ffi 
 clx 
 cxml alexandria babel closure-common puri trivial-features trivial-gray-streams 
@@ -91,19 +92,19 @@ cxml-stp alexandria babel cl-ppcre cl-yacc closure-common cxml parse-number plex
 defsystem-compatibility lift metatilities-base 
 drakma alexandria babel cffi chunga cl+ssl cl-base64 flexi-streams puri split-sequence trivial-features trivial-gray-streams usocket 
 eclipse 
-elephant alexandria arnesi babel bordeaux-threads cffi cl-base64 closer-mop clsql fiveam ieee-floats lift md5 postmodern split-sequence trivial-features trivial-utf-8 usocket 
+elephant alexandria babel bordeaux-threads cffi cl-base64 closer-mop clsql ieee-floats lift md5 postmodern split-sequence trivial-features trivial-utf-8 usocket 
 fare-matcher fare-utils 
 fare-utils 
 fiveam arnesi 
 flexi-streams trivial-gray-streams 
 flexichain 
 ftd alexandria babel cffi cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees trivial-features 
-gcc-xml-ffi alexandria babel cffi ch-asdf ch-util closure-common cxml puri trivial-features trivial-gray-streams 
+gcc-xml-ffi alexandria babel ch-asdf ch-util closure-common cxml puri trivial-features trivial-gray-streams 
 graphic-forms alexandria babel cffi closer-mop lw-compat trivial-features 
 gsharp alexandria babel closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-features trivial-gray-streams 
 html-template 
-hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-who flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
-hunchentoot-auth alexandria babel bordeaux-threads cffi ch-asdf ch-util chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-who flexi-streams hunchentoot lift md5 puri rfc2388 trivial-features trivial-gray-streams url-rewrite 
+hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
+hunchentoot-auth alexandria babel bordeaux-threads cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-who flexi-streams hunchentoot lift md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 hunchentoot-cgi alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre flexi-streams hunchentoot md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 hunchentoot-vhost alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre flexi-streams hunchentoot md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 hyperdoc 
