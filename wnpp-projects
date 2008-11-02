@@ -50,7 +50,6 @@ portable-threads get_tarball http://common-lisp.net/project/cl-containers/portab
 lift             get_darcs http://common-lisp.net/project/lift
 metabang-bind    get_darcs http://common-lisp.net/project/metabang-bind
 cl-containers    get_darcs http://common-lisp.net/project/cl-containers
-tinaa            get_darcs http://common-lisp.net/project/tinaa
 moptilities      get_darcs http://common-lisp.net/project/moptilities
 metatilities     get_darcs http://common-lisp.net/project/metatilities
 metatilities-base get_darcs http://common-lisp.net/project/metatilities-base
