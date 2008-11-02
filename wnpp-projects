@@ -61,6 +61,7 @@ asdf-system-connections get_darcs http://common-lisp.net/project/cl-containers/a
 defsystem-compatibility get_darcs http://common-lisp.net/project/cl-containers/defsystem-compatibility/darcs
 tinaa            get_darcs http://common-lisp.net/project/tinaa
 trivial-shell    get_darcs http://common-lisp.net/project/trivial-shell
+cl-markdown      get_darcs http://common-lisp.net/project/cl-markdown
 
 # Projects by Cyrus Harmon
 ch-asdf          get_git git://cyrusharmon.org/pub/git/ch-asdf.git
