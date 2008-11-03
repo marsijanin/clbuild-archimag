@@ -751,7 +751,7 @@ update_1() {
 		echo "resume: skipping update of $project"
 	    else
 		${UPDATE_SCRIPT} ${UPDATE_ARGS} $project
-		ln -f -s $(pwd)/${project}*/*.asd "${system_dir}"/
+		register_asd $project "quiet"
 		touch "$skipfile"
 	    fi
 	done
@@ -763,6 +763,21 @@ update_1() {
 	echo "update complete"
 	count_systems
         cd ..
+}
+
+register_asd() {
+    local project="$1"
+    local quiet="$2" # any value will stop printing the linked .asd files
+    local dir="$source_dir/$project"
+
+    for f in $dir/*.asd; do
+	if [ -f "$f" ]; then
+	    if [ -z $quiet ]; then
+		echo "$f"
+	    fi
+	    ln -f -s $f "${system_dir}"/
+	fi
+    done
 }
 
 link_extra_asds() {
@@ -1582,12 +1597,8 @@ EOF
 	    echo "cannot find $dir" 1>&2
 	    exit 1
 	fi
-	for f in $dir/*.asd; do
-	    if test -f "$f"; then
-		echo "$f"
-		ln -f -s $f "${system_dir}"/
-	    fi
-	done
+
+	register_asd $project
 	link_extra_asds
 	count_systems
 	;;
