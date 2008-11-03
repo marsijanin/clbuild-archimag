@@ -1,4 +1,4 @@
-# -*- fill-column: nil; indent-tabs: nil -*-
+# -*- fill-column: nil; indent-tabs-mode: nil -*-
 #
 # List of Lisp implementations.  Some of these bootstrap reliably without
 # human intervention (SBCL), others not quite as reliably (CCL).

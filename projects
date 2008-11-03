@@ -1,4 +1,4 @@
-# -*- fill-column: nil; indent-tabs: nil -*-
+# -*- fill-column: nil; indent-tabs-mode: nil -*-
 #
 # Main list of projects, including software that is tested regularly
 # by clbuild committers and that (usually) compiles without problems
