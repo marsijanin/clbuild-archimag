@@ -527,10 +527,17 @@
   (defun system-to-project (name)
     (let* ((pathname (asdf:component-pathname (asdf:find-system name)))
 	   (relative (enough-namestring pathname)))
-      (when (eq :absolute (car (pathname-directory relative)))
-	(error "found ~A outside of clbuild, can't translate to project"
-	       name))
-      (third (pathname-directory relative))))
+      (cond
+	((eq :absolute (car (pathname-directory relative)))
+	 (error "found ~A outside of clbuild, can't translate to project"
+		name))
+	((equal "target" (second (pathname-directory relative)))
+	 "sbcl")
+	((equal "source" (second (pathname-directory relative)))
+	 (third (pathname-directory relative)))
+	(t
+	 (error "found ~A outside of clbuild, can't translate to project"
+		name)))))
 
   (defmacro without-errors ((error-value description) &body body)
     `(handler-case
@@ -574,6 +581,7 @@
 				       (system-dependencies system)))))))
       (setf projects (append projects (extra-project-dependencies project)))
       (setf projects (remove nil projects))
+      (setf projects (remove "sbcl" projects :test 'equal))
       (setf projects (remove project projects :test 'equal))
       (setf projects (remove-duplicates projects :test 'equal))
       (sort projects #'string-lessp)))
