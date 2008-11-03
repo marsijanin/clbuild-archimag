@@ -550,6 +550,8 @@
     (let ((dependencies '())
 	  (seen '()))
       (labels ((walk-dependency (sym)
+		 (when (and (consp sym) (eq (car sym) :version))
+		   (setf sym (second sym)))
 		 (unless (find sym seen)
 		   (push sym seen)
 		   (let ((name (string-downcase sym)))
