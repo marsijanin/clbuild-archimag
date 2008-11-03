@@ -831,6 +831,7 @@ Usage:
   diff          show local changes (for all version-controlled projects)
   check-urls    compared installed repository urls agains current locations
   clean-links   remove broken symlinks in systems/
+  rebuild-links removes and adds .asd file symlinks for all projects
   update-missing  download only projects not present yet
   register-asd PROJECT  add .asd file symlinks for PROJECT
 
@@ -1560,6 +1561,14 @@ EOF
 		fi
 	    fi
 	done
+	;;
+    rebuild-links)
+	rm -f ${system_dir}/*
+	for project in ${all_projects}; do
+	    register_asd $project
+	done
+	link_extra_asds
+	count_systems
 	;;
     register-asd)
 	project="$2"
