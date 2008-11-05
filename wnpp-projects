@@ -46,6 +46,7 @@ s-utils          get_darcs http://www.beta9.be/darcs/s-utils
 rucksack         get_cvs_clnet  #Persistence library for Common Lisp
 portable-threads get_tarball http://common-lisp.net/project/cl-containers/portable-threads/portable-threads_latest.tar.gz
 html-encode      get_tarball http://www.unmutual.info/software/html-encode-1.2.tar.gz
+cl-html-diff     get_tarball http://lemonodor.com/code/cl-html-diff_0.1.tar.gz
 cl-difflib       get_tarball http://lemonodor.com/code/cl-difflib_0.1.tar.gz
 
 # Projects by Gary King
