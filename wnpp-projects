@@ -64,6 +64,7 @@ asdf-install-tester get_darcs http://common-lisp.net/project/ait/darcs/ait
 asdf-status      get_darcs http://common-lisp.net/project/cl-containers/asdf-status/darcs/asdf-status
 asdf-system-connections get_darcs http://common-lisp.net/project/cl-containers/asdf-system-connections/darcs
 defsystem-compatibility get_darcs http://common-lisp.net/project/cl-containers/defsystem-compatibility/darcs
+dynamic-classes  get_darcs http://common-lisp.net/project/dynamic-classes
 tinaa            get_darcs http://common-lisp.net/project/tinaa
 trivial-shell    get_darcs http://common-lisp.net/project/trivial-shell
 cl-markdown      get_darcs http://common-lisp.net/project/cl-markdown
