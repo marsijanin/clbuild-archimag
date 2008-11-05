@@ -48,6 +48,7 @@ portable-threads get_tarball http://common-lisp.net/project/cl-containers/portab
 html-encode      get_tarball http://www.unmutual.info/software/html-encode-1.2.tar.gz
 cl-html-diff     get_tarball http://lemonodor.com/code/cl-html-diff_0.1.tar.gz
 cl-difflib       get_tarball http://lemonodor.com/code/cl-difflib_0.1.tar.gz
+lml2             get_git git://git.b9.com/lml2.git
 
 # Projects by Gary King
 lift             get_darcs http://common-lisp.net/project/lift
