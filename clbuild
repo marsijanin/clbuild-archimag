@@ -853,8 +853,6 @@ Usage:
   compile-implementation ccl             compile Clozure CL 
   compile-implementation clisp           compile CLISP
 
-  world         build sbcl and specified projects
-
   clean [PROJECT]  delete all compiled object files [in source/PROJECT]
   trash PROJECT    move source/PROJECT to trash/
   mrproper         trash all projects
@@ -878,7 +876,7 @@ Starting applications:
   run APPLICATION   run this application
   run --help        show help for applications
 
-If you do 'world' or 'buildsbcl' then SBCL will be installed in
+If you do 'compile-implementation sbcl' then SBCL will be installed in
 target/ and used for future commands. If you don't run these commands
 (or you remove target/) then clbuild uses the 'sbcl' in your PATH.
 
@@ -1308,7 +1306,7 @@ EOF
 	    fi
 	done
 	;;
-    recompile|dumpcore|world)
+    recompile|dumpcore)
 	operation="$1"
 	shift
 	unset projects
@@ -1360,9 +1358,6 @@ EOF
 		;;
 	    dumpcore)
 		dumpcore "$@" $projects
-		;;
-	    world)
-		"$0" clean && "$0" update sbcl && "$0" compile-implementation sbcl && "$0" recompile "$@" $projects
 		;;
 	esac
 	;;
