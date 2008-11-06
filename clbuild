@@ -841,7 +841,6 @@ Usage:
 
   recompile PROJECT_SPEC compile fasls
   dumpcore PROJECT_SPEC  recompile and dump a core file for faster startup
-  build PROJECT_SPEC     update && dumpcore
 
   diff          show local changes (for all version-controlled projects)
   check-urls    compared installed repository urls agains current locations
@@ -867,7 +866,7 @@ Usage:
 
   record-dependencies   rebuild dependency information file
 
-For update/recompile/build/dumpcore a PROJECT_SPEC can be used:
+For update/recompile/dumpcore a PROJECT_SPEC can be used:
   PROJECT1 PROJECT2 PROJECT3...  # only these
   --main-projects                # all in projects file
   --wnpp-projects                # all in wnpp-projects file
@@ -1309,7 +1308,7 @@ EOF
 	    fi
 	done
 	;;
-    recompile|build|dumpcore|world)
+    recompile|dumpcore|world)
 	operation="$1"
 	shift
 	unset projects
@@ -1359,15 +1358,11 @@ EOF
 	    recompile)
 		recompile "$@" $projects
 		;;
-	    build)
-		update "$@" $projects
-		dumpcore "$@" $projects
-		;;
 	    dumpcore)
 		dumpcore "$@" $projects
 		;;
 	    world)
-		"$0" clean && "$0" update sbcl && "$0" compile-implementation sbcl && "$0" build "$@" $projects
+		"$0" clean && "$0" update sbcl && "$0" compile-implementation sbcl && "$0" recompile "$@" $projects
 		;;
 	esac
 	;;
