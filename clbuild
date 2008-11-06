@@ -850,8 +850,6 @@ Usage:
   register-asd PROJECT  add .asd file symlinks for PROJECT
 
   compile-implementation sbcl [XC_HOST]  compile SBCL
-  compile-implementation ccl             compile Clozure CL 
-  compile-implementation clisp           compile CLISP
 
   clean [PROJECT]  delete all compiled object files [in source/PROJECT]
   trash PROJECT    move source/PROJECT to trash/
