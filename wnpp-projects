@@ -68,6 +68,7 @@ dynamic-classes  get_darcs http://common-lisp.net/project/dynamic-classes
 tinaa            get_darcs http://common-lisp.net/project/tinaa
 trivial-shell    get_darcs http://common-lisp.net/project/trivial-shell
 cl-markdown      get_darcs http://common-lisp.net/project/cl-markdown
+docudown         get_darcs http://common-lisp.net/project/docudown
 
 # Projects by Cyrus Harmon
 ch-asdf          get_git git://cyrusharmon.org/pub/git/ch-asdf.git
