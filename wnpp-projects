@@ -135,3 +135,6 @@ linedit get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/lined
 osicat get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/osicat/cvsroot src #interface for Common Lisp on POSIX-like systems
 
 clpython    get_cvs_full :pserver:cvspublic:cvspublic@cvspublic.franz.com:/cvs-public clpython  #An implementation of the Python language
+
+fset get_svn_clnet trunk
+misc-extensions get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/misc-extensions/cvsroot devel
