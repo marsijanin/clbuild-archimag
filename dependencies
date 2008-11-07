@@ -94,6 +94,7 @@ cxml alexandria babel closure-common puri trivial-features trivial-gray-streams
 cxml-rng alexandria babel cl-base64 cl-ppcre cl-yacc closure-common cxml parse-number puri trivial-features trivial-gray-streams 
 cxml-stp alexandria babel cl-ppcre cl-yacc closure-common cxml parse-number plexippus-xpath puri trivial-features trivial-gray-streams 
 defsystem-compatibility lift metatilities-base 
+docudown anaphora cl-containers cl-markdown cl-ppcre closer-mop dynamic-classes lift metabang-bind metatilities-base moptilities trivial-shell 
 drakma alexandria babel cffi chunga cl+ssl cl-base64 flexi-streams puri split-sequence trivial-features trivial-gray-streams usocket 
 dynamic-classes lift metatilities-base 
 eclipse 
