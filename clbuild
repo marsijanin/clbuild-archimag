@@ -912,6 +912,8 @@ clbuild run APPLICATION [ARGS...]
   run html-to-xhtml HTML-FILENAME OUTPUT-FILENAME
   run xhtml-to-html XML-FILENAME OUTPUT-FILENAME
                 convert between HTML 4 and XHTMl
+  run xuriella [--output OUTPUT-FILENAME] XSL-FILENAME XML-FILENAME
+                    apply an XSLT stylesheet
 
   run vecto-demo         generate a test image using vecto
   run adw-charting-demo  generate a test image using adw-charting

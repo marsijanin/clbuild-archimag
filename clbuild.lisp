@@ -340,6 +340,27 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; xuriella
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::xuriella
+#+clbuild::xuriella
+
+(make :xuriella)
+
+(with-application (xsl-filename xml-filename &key (output nil))
+  (handler-case
+      (xuriella:apply-stylesheet (pathname xsl-filename)
+				 (pathname xml-filename)
+				 :output (if output
+					     (pathname output)
+					     *standard-output*))
+    (error (c)
+      (format t "~A~%" c)
+      (quit 1))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; html-to-xhtml
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
