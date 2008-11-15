@@ -189,6 +189,25 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; CLIM Desktop Launcher
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::clim-launcher
+#+clbuild::clim-launcher
+
+(progn
+  (make-clim :clim-clx)			;closure build order issue
+  (make-clim :clim-desktop))
+
+(with-application ()
+  #+clim-gtkairo (cerror "okay, I've been warned"
+			 "this won't work well with gtkairo")
+  (setf clim:*default-frame-manager*
+	(make-instance 'climi::pixie/clx-look :port (clim:find-port)))
+  (clim-launcher::start))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Gsharp
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

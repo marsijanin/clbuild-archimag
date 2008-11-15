@@ -887,6 +887,7 @@ help_run() {
 	cat <<EOF
 clbuild run APPLICATION [ARGS...]
 
+  run clim-launcher run clim-launcher (from clim-desktop)
   run listener      run the McCLIM listener
   run gsharp        run the Gsharp score editor 
   run climacs       run the Climacs text editor

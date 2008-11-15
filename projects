@@ -16,6 +16,7 @@ cxml       get_git git://repo.or.cz/cxml.git  #XML parser and DOM implementation
 closure    get_cvs_clnet  #CLIM-based web browser
 gsharp     get_cvs_clnet  #interactive, extensible editor for musical scores
 climacs    get_cvs_clnet  #CLIM-based text editor
+clim-desktop get_cvs_clnet  #integrates several McCLIM apps
 slime      get_cvs_clnet  #Emacs mode for Common Lisp development
 beirc      get_cvs_clnet  #CLIM-based Internet Relay Chat client
 
