@@ -78,6 +78,7 @@ clawk regex
 clem ch-asdf ch-util cl-bibtex cl-fad cl-pdf cl-typesetting iterate puri smarkup split-sequence 
 clg parse-number s-xml 
 clim-alerts alexandria babel bordeaux-threads cffi chunga cl+ssl cl-base64 cl-ppcre cl-yacc closure closure-common closure-html clx cxml cxml-stp drakma flexi-streams flexichain lift mcclim mel-base net-telent-date parse-number plexippus-xpath puri salza2 skippy slime spatial-trees split-sequence trivial-features trivial-gray-streams trivial-sockets usocket zip 
+clim-desktop alexandria babel beirc bordeaux-threads cl-fad cl-irc cl-ppcre climacs closure closure-common closure-html clx cxml flexi-streams flexichain lift mcclim puri salza2 skippy slime spatial-trees split-sequence trivial-features trivial-gray-streams trivial-sockets usocket zip 
 climacs clx flexichain mcclim slime spatial-trees 
 climplayer cl-ppcre clx flexichain mcclim slime spatial-trees split-sequence 
 cljl 
