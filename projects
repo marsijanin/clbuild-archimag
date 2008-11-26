@@ -44,7 +44,7 @@ cl-unicode       get_ediware #Portable Unicode library
 
 clx   get_darcs http://common-lisp.net/~crhodes/clx #X11 client library
 
-babel get_darcs http://common-lisp.net/~loliveira/darcs/babel #charset encoder/decoder
+babel get_darcs http://common-lisp.net/project/babel/darcs/babel #charset encoder/decoder
 
 cffi get_darcs http://common-lisp.net/project/cffi/darcs/cffi #Common Foreign Function Interface
 # cffi get_darcs http://common-lisp.net/~loliveira/darcs/cffi+lotsastuff #Common Foreign Function Interface (lotsastuff fork)
