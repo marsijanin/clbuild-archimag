@@ -133,7 +133,7 @@ cffi-net get_darcs http://cffi-net.accela.net/darcs/cffi-net/
 ftd get_darcs http://common-lisp.net/~dlichteblau/inofficial/ftd/ #The Flexi-Trivial Dired-style file manager using CLIM (~dlichteblau fork)
 
 linedit get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/linedit/cvsroot src #readline-style library written in Common Lisp
-osicat get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/osicat/cvsroot src #interface for Common Lisp on POSIX-like systems
+osicat get_git http://common-lisp.net/project/osicat/git/osicat.git #interface for Common Lisp on POSIX-like systems
 
 clpython    get_cvs_full :pserver:cvspublic:cvspublic@cvspublic.franz.com:/cvs-public clpython  #An implementation of the Python language
 
