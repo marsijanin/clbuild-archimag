@@ -107,7 +107,7 @@ fiveam arnesi
 flexi-streams trivial-gray-streams 
 flexichain 
 fset misc-extensions 
-ftd alexandria babel cffi cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees trivial-features 
+ftd cffi-net cl-fad cl-ppcre clx flexichain mcclim slime spatial-trees 
 gcc-xml-ffi alexandria babel ch-asdf ch-util closure-common cxml puri trivial-features trivial-gray-streams 
 graphic-forms alexandria babel cffi closer-mop lw-compat trivial-features 
 gsharp alexandria babel closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-features trivial-gray-streams 
@@ -120,6 +120,7 @@ hunchentoot-vhost alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre 
 hyperdoc 
 ieee-floats 
 infpre 
+iolib alexandria babel bordeaux-threads cffi lift osicat trivial-features trivial-garbage 
 ironclad 
 iterate 
 kmrcl 
