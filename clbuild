@@ -931,7 +931,6 @@ link_extra_asds() {
     ln -f -s $source_dir/graphic-forms/src/external-libraries/*/*/*.asd \
 	${system_dir}
     ln -sf $source_dir/clg/*/*.asd ${system_dir}
-    ln -sf $source_dir/cells-gtk/*/*.asd ${system_dir}
 
     # also, override uffi:
     ln -sf $source_dir/cffi/uffi-compat/uffi.asd ${system_dir}/
