@@ -1063,7 +1063,7 @@ For update/recompile/dumpcore a PROJECT_SPEC can be used:
   --installed                    # everything in source/
 
 For all commands, the lisp implementation to be invoked can be specified using
-  clbuild --implementation LISP_IMPLEMENTATION COMMANDS+
+  clbuild --implementation LISP_IMPLEMENTATION COMMAND...
 where LISP_IMPLEMENTATION can be one of sbcl, clisp, ccl or ecl or the path to
 a lisp executable.  Please note that only sbcl is fully supported at this time!
 
