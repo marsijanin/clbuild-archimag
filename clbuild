@@ -142,7 +142,7 @@ set_lisp_command() {
                 if ! test -f "$BASE"/monster.core; then
 	            SBCL="$SBCL --core ${target_namestring}lib/sbcl/sbcl.core"
                 fi
-            elif [ -n "$(which sbcl)" ]; then
+            elif which sbcl >/dev/null ; then
                 export SBCL="$(which sbcl)"
             else
                 set_lisp_warning sbcl
@@ -318,8 +318,8 @@ configure_ecl() {
 }
 
 configure_lisp_implementation() {
-    local lisp_command="${1}"
-    local implementation=${lisp_command}
+    lisp_command="${1}"
+    implementation=${lisp_command}
     # Get the implementation type (member sbcl ccl clisp ecl)
     if [ -n "${lisp_command}" ]; then
         implementation=$(basename "$implementation")
@@ -355,7 +355,14 @@ configure_lisp_implementation() {
     esac
 }
 
-configure_lisp_implementation
+export implementation=''
+if [ $1 = "--implementation" ]; then
+    implementation=$2
+    configure_lisp_implementation $implementation
+    shift 2
+else
+    configure_lisp_implementation
+fi
 
 [ -d "$system_dir" ] || mkdir "$system_dir"
 [ -d "$source_dir" ] || mkdir "$source_dir"
@@ -367,14 +374,6 @@ clbuild_lisp() {
 	$eval "$set_central_registry" \
 	$eval "$EXTRA_CLIM_FEATURES" \
 	"$@"
-}
-
-custom_lisp() {
-    configure_lisp_implementation "$1"
-    if [ $# -ge 1 ]; then
-        shift
-    fi
-    clbuild_lisp "$@"
 }
 
 lisp_trampoline() {
@@ -1014,6 +1013,11 @@ For update/recompile/dumpcore a PROJECT_SPEC can be used:
   --all-projects                 # both files
   --installed                    # everything in source/
 
+For all commands, the lisp implementation to be invoked can be specified using
+  clbuild --implementation LISP_IMPLEMENTATION COMMANDS+
+where LISP_IMPLEMENTATION can be one of sbcl, clisp, ccl or ecl or the path to
+a lisp executable.  Please note that only sbcl is fully supported at this time!
+
 Starting applications:
 
   run APPLICATION   run this application
@@ -1259,7 +1263,7 @@ write_slime_configuration() {
 (setq slime-backend "$BASE/.swank-loader.lisp")
 (setq inhibit-splash-screen t)
 (load "${source_namestring}slime/slime")
-(setq inferior-lisp-program "$BASE/clbuild $cmd")
+(setq inferior-lisp-program "$BASE/clbuild --implementation $implementation $cmd")
 (setq slime-use-autodoc-mode nil)
 (slime-setup '(slime-fancy slime-tramp slime-asdf))
 (slime)
@@ -1659,10 +1663,6 @@ EOF
 	    common_options="$core_option "$BASE"/monster.core $common_options"
 	fi
         clbuild_lisp "$@"
-        ;;
-    run-lisp)
-        shift;
-        custom_lisp "$@"
         ;;
     slime)
 	shift
