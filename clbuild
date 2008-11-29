@@ -149,8 +149,8 @@ set_lisp_command() {
             fi
             ;;
         ecl)
-            export DYLD_LIBRARY_PATH="${target_namestring}lib:$DYLD_LIBRARY_PATH"
-            ECL="${target_namestring}bin/ecl"
+            export DYLD_LIBRARY_PATH="${target_dir}/lib:$DYLD_LIBRARY_PATH"
+            export ECL="${target_dir}/bin/ecl"
             ;;
         ccl)
 	    case `uname` in
@@ -196,6 +196,13 @@ set_lisp_command() {
             else
                 set_lisp_warning clisp
                 exit 1
+            fi
+            ;;
+        ecl)
+            if [ -x "${target_namestring}bin/ecl" ]; then
+                export ECL="${target_namestring}bin/ecl"
+            else
+                set_lisp_warning ecl
             fi
             ;;
         *)
@@ -326,6 +333,10 @@ configure_lisp_implementation() {
         implementation=ecl
     else
         implementation=sbcl
+    fi
+
+    if [ ! -x "$lisp_command" ]; then
+        lisp_command=""
     fi
 
     case $implementation in
