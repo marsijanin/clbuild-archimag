@@ -128,8 +128,87 @@ else
     set_central_registry="(push #p\"${system_namestring}\" asdf:*central-registry*)"
 fi
 
+set_lisp_warning() {
+    echo "Warning: Cannot find an executable for implementation $1" 1>&2
+}
+
+# Try to find an executable/command for a given lisp implementation
+set_lisp_command() {
+    case "$1" in
+        sbcl)
+            if [ -x ${target_dir}/bin/sbcl ]; then
+                export SBCL_HOME=${target_namestring}lib/sbcl/
+                export SBCL="${target_dir}/bin/sbcl"
+                if ! test -f "$BASE"/monster.core; then
+	            SBCL="$SBCL --core ${target_namestring}lib/sbcl/sbcl.core"
+                fi
+            elif [ -n "$(which sbcl)" ]; then
+                export SBCL="$(which sbcl)"
+            else
+                set_lisp_warning sbcl
+            fi
+            ;;
+        ecl)
+            export DYLD_LIBRARY_PATH="${target_namestring}lib:$DYLD_LIBRARY_PATH"
+            ECL="${target_namestring}bin/ecl"
+            ;;
+        ccl)
+	    case `uname` in
+		Linux)
+		    case `uname -m` in
+			x86_64)
+			    binary=lx86cl64
+			    ;;
+                        *)
+                            set_lisp_warning ccl
+			    exit 1
+			    ;;
+			esac
+		    ;;
+                Darwin)
+                    case `uname -p` in
+                        powerpc)
+                            binary=dppccl
+                            ;;
+                        i386)
+                            binary=dx86cl64
+                            ;;
+                        *)
+                            set_lisp_warning ccl
+			    exit 1
+                            ;;
+                    esac
+                    ;;
+                *)
+                    set_lisp_warning ccl
+                    ;;
+            esac
+            if [ -x ${source_dir}/ccl/${binary} ]; then
+                export CCL=${source_dir}/ccl/${binary}
+            else
+                set_lisp_warning ccl
+                exit 1
+            fi
+            ;;
+        clisp)
+            if [ -x "${target_dir}/bin/clisp" ]; then
+                export CLISP="${target_dir}/bin/clisp"
+            else
+                set_lisp_warning clisp
+                exit 1
+            fi
+            ;;
+        *)
+            set_lisp_warning "$1"
+            ;;
+    esac
+}
+
 configure_ccl() {
-    lisp=$1
+    if [ -z "$CCL" ]; then
+        set_lisp_command ccl
+    fi
+    lisp=${1:-$CCL}
     noinform="-Q"
     end_toplevel_options="" #fixme
     quit="(ccl:quit)"
@@ -152,7 +231,11 @@ configure_ccl() {
 }
 
 configure_clisp() {
-    lisp=$1
+    if [ -z "$CLISP" ]; then
+        set_lisp_command clisp
+    fi
+    lisp={$1:-$CLISP}
+
     echo '*** Using CLISP.  Please note that CLISP support is not complete.'
     lisp="$CLISP -repl"
 
@@ -182,7 +265,10 @@ configure_clisp() {
 }
 
 configure_sbcl() {
-    lisp=$1
+    if [ -z "$SBCL" ]; then
+        set_lisp_command sbcl
+    fi
+    lisp=${1:-$SBCL}
 
     noinform="--noinform"
     end_toplevel_options="--end-toplevel-options"
@@ -201,24 +287,36 @@ configure_sbcl() {
     run_options="--disable-debugger $common_options"
 }
 
-if [ ! -z $CCL ]; then
-    configure_ccl "$CCL"
-elif [ ! -z $CLISP ]; then
-    configure_clisp "$CLISP"
-elif [ ! -z "$SBCL" ]; then
-    configure_sbcl "$SBCL"
-elif [ -x ${target_dir}/bin/sbcl ]; then
-    export SBCL_HOME=${target_namestring}lib/sbcl/
-    lisp="${target_dir}/bin/sbcl"
-    if ! test -f "$BASE"/monster.core; then
-	lisp="$lisp --core ${target_namestring}lib/sbcl/sbcl.core"
+configure_lisp_implementation() {
+    local lisp_command="${1}"
+    local implementation=${lisp_command}
+    # Get the implementation type (member sbcl ccl clisp ecl)
+    if [ -n "${lisp_command}" ]; then
+        implementation=$(basename "$implementation")
+    elif [ -n "${DEFAULT_LISP_IMPLEMENTATION}" ]; then
+        implementation=${DEFAULT_LISP_IMPLEMENTATION}
+    elif [ -n "${CCL}" ]; then
+        implementation=ccl
+    elif [ -n "${CLISP}" ]; then
+        implementation=clisp
+    else
+        implementation=sbcl
     fi
-    configure_sbcl "$lisp"
-elif [ -x ${source_dir}/ccl/lx86cl64 ]; then
-    configure_ccl ${source_dir}/ccl/lx86cl64
-else
-    configure_sbcl sbcl
-fi
+
+    case $implementation in
+        ccl)
+            configure_ccl ${lisp_command}
+            ;;
+        sbcl)
+            configure_sbcl ${lisp_command}
+            ;;
+        clisp)
+            configure_clisp ${lisp_command}
+            ;;
+    esac
+}
+
+configure_lisp_implementation
 
 [ -d "$system_dir" ] || mkdir "$system_dir"
 [ -d "$source_dir" ] || mkdir "$source_dir"
@@ -230,6 +328,14 @@ clbuild_lisp() {
 	$eval "$set_central_registry" \
 	$eval "$EXTRA_CLIM_FEATURES" \
 	"$@"
+}
+
+custom_lisp() {
+    configure_lisp_implementation "$1"
+    if [ $# -ge 1 ]; then
+        shift
+    fi
+    clbuild_lisp "$@"
 }
 
 lisp_trampoline() {
@@ -1502,6 +1608,10 @@ EOF
 	    common_options="$core_option "$BASE"/monster.core $common_options"
 	fi
         clbuild_lisp "$@"
+        ;;
+    run-lisp)
+        shift;
+        custom_lisp "$@"
         ;;
     slime)
 	shift
