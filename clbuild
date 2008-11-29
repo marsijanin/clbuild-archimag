@@ -1468,17 +1468,23 @@ Set this in clbuild.conf to enable the new CCL:
 EOF
 		;;
 	    clisp)
+                if [ `uname` = 'Darwin' ]; then
+                    LIBSIGSEGV_PREFIX=/sw
+                else
+                    LIBSIGSEGV_PREFIX=/usr
+                fi
 		if ! test -d ${source_dir}/clisp; then
 		    echo "clisp not found, try running 'clbuild update clisp'" 1>&2
 		    exit 1
 		fi
 		cd $source_dir/clisp
-		./autogen.sh
+		#./autogen.sh
 		ulimit -s 16384
 		rm -f src/config.cache
-		./configure --with-libsigsegv-prefix=/usr
+		./configure --with-libsigsegv-prefix=${LIBSIGSEGV_PREFIX} --prefix=$target_dir
 		cd src
 		make
+                make install
 		;;
 	    *)
 		echo "unrecognized argument.  valid are: sbcl ccl clisp" 2>&1
