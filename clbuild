@@ -914,14 +914,38 @@ register_asd() {
     local quiet="$2" # any value will stop printing the linked .asd files
     local dir="$source_dir/$project"
 
-    for f in $dir/*.asd; do
-	if [ -f "$f" ]; then
-	    if [ -z $quiet ]; then
-		echo "$f"
-	    fi
-	    ln -f -s $f "${system_dir}"/
-	fi
+    register_all_asd_in_path $dir
+}
+
+register_all_asd_in_path() {
+    local path="$1"
+    local quiet="$2"
+
+    for file in $path/*.asd; do
+	register_single_asd $file $quiet
     done
+}
+
+register_single_asd() {
+    local asd_file="$1"
+    local quiet="$2" # any value will stop printing the linked .asd files
+    local name="$3"  # optionally provide a different name for link
+
+    : ${name:=$(basename $asd_file)} # default to the name of the asd file
+
+    if [ -f "$asd_file" ]; then
+	if [ -z $quiet ]; then
+	    echo "$asd_file"
+	fi
+	register_single_asd_as $name $asd_file
+    fi
+}
+
+register_single_asd_as() {
+    local name="$1"
+    local asd_file="$2"
+
+    ln -f -s $asd_file "${system_dir}/${name}"
 }
 
 link_extra_asds() {
