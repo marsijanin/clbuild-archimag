@@ -917,6 +917,33 @@ register_asd() {
     register_all_asd_in_path $dir
 }
 
+register_other_asd() {
+    local path="${source_dir}/$1"
+    local quiet=""
+
+    # Test if path given is not a globbed pattern
+    if [ -f "$path" ]; then
+	register_single_asd $path ${quiet:-""} $name
+    elif [ -d "$path" ]; then
+	local pattern="$2"
+	# use given directory to search for files with either
+	# a default pattern of *.asd or a provided pattern
+	for file in ${path}/${pattern:-*.asd}; do
+	    register_single_asd $file $quiet
+	done
+    elif [ "$path" == "$(echo $path)" ]; then
+        # if pattern and expansion are identical, globbing failed
+	if [ -z $quiet ]; then
+	    echo "Ignoring invalid path: $path"
+	fi
+    else
+	# path must be a valid pattern so register *.asd for each path
+	for path in $path; do
+ 	    register_all_asd_in_path $path $quiet
+	done
+    fi
+}
+
 register_all_asd_in_path() {
     local path="$1"
     local quiet="$2"
@@ -950,14 +977,13 @@ register_single_asd_as() {
 
 link_extra_asds() {
     # some (buggy) projects try to hide their .asd files from us:
-    ln -sf $source_dir/mcclim/Experimental/freetype/*.asd ${system_dir}/
-    ln -sf $source_dir/eclipse/system.lisp ${system_dir}/eclipse.asd
-    ln -f -s $source_dir/graphic-forms/src/external-libraries/*/*/*.asd \
-	${system_dir}
-    ln -sf $source_dir/clg/*/*.asd ${system_dir}
+    register_other_asd mcclim/Experimental/freetype
+    register_other_asd graphic-forms/src/external-libraries/*/*
+    register_other_asd clg/*
+    register_other_asd eclipse/system.lisp eclipse.asd
 
     # also, override uffi:
-    ln -sf $source_dir/cffi/uffi-compat/uffi.asd ${system_dir}/
+    register_other_asd cffi/uffi-compat/uffi.asd
 }
 
 short_help() {
