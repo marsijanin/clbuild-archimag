@@ -12,3 +12,5 @@ sbcl       get_cvs_sfnet     #Steel Bank Common Lisp (CVS)
 ccl        get_svn http://svn.clozure.com/publicsvn/openmcl/trunk/source #Clozure CL aka OpenMCL (trunk)
 
 clisp      get_cvs_sfnet     #CLISP
+# Embeddedable Common Lisp
+ecl        get_cvs_full :pserver:anonymous@ecls.cvs.sf.net:/cvsroot/ecls ecl

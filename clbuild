@@ -287,6 +287,29 @@ configure_sbcl() {
     run_options="--disable-debugger $common_options"
 }
 
+configure_ecl() {
+    if [ -z "$ECL" ]; then
+        set_lisp_command ecl
+    fi
+    lisp=${1:-$ECL}
+
+    noinform="-q"
+    end_toplevel_options="--"
+    quit="(cl-user:quit)"
+    eval="-eval"
+    require_asdf="(require :asdf)"
+    core_option="-c"
+    
+    if test -n "$USER_INIT"; then
+        common_options="-load $USER_INIT"
+    else
+        common_options=""
+    fi
+
+    build_options="$noinform $common_options"
+    run_options="$common_options"
+}
+
 configure_lisp_implementation() {
     local lisp_command="${1}"
     local implementation=${lisp_command}
@@ -299,6 +322,8 @@ configure_lisp_implementation() {
         implementation=ccl
     elif [ -n "${CLISP}" ]; then
         implementation=clisp
+    elif [ -n "${ECL}" ]; then
+        implementation=ecl
     else
         implementation=sbcl
     fi
@@ -312,6 +337,9 @@ configure_lisp_implementation() {
             ;;
         clisp)
             configure_clisp ${lisp_command}
+            ;;
+        ecl)
+            configure_ecl ${lisp_command}
             ;;
     esac
 }
@@ -1592,6 +1620,18 @@ EOF
 		make
                 make install
 		;;
+            ecl)
+                cd $source_dir/ecl
+                # If we don't clean the directory first, we get strange errors
+                # on some mac systems, telling that there is no applicable
+                # type for cl-fixnum..
+                make distclean || make clean || true
+                ./configure --enable-slow-config --with-system-gmp=no \
+                            --prefix=${target_dir}
+                make
+                make install
+                ;;
+
 	    *)
 		echo "unrecognized argument.  valid are: sbcl ccl clisp" 2>&1
 		exit 1
