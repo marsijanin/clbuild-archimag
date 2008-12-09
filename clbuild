@@ -926,12 +926,8 @@ register_other_asd() {
 	local name="$2"
 	register_single_asd $path ${quiet:-""} $name
     elif [ -d "$path" ]; then
-	local pattern="$2"
-	# use given directory to search for files with either
-	# a default pattern of *.asd or a provided pattern
-	for file in ${path}/${pattern:-*.asd}; do
-	    register_single_asd $file $quiet
-	done
+	# use given directory to register .asd files
+	register_all_asd_in_path $path $quiet
     elif [ "$path" == "$(echo $path)" ]; then
         # if pattern and expansion are identical, globbing failed
 	if [ -z $quiet ]; then
