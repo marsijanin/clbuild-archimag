@@ -923,6 +923,7 @@ register_other_asd() {
 
     # Test if path given is not a globbed pattern
     if [ -f "$path" ]; then
+	local name="$2"
 	register_single_asd $path ${quiet:-""} $name
     elif [ -d "$path" ]; then
 	local pattern="$2"
