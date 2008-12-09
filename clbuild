@@ -919,7 +919,7 @@ register_asd() {
 
 register_other_asd() {
     local path="${source_dir}/$1"
-    local quiet=""
+    local quiet="quiet"
 
     # Test if path given is not a globbed pattern
     if [ -f "$path" ]; then
