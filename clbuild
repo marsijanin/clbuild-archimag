@@ -914,7 +914,7 @@ register_asd() {
     local quiet="$2" # any value will stop printing the linked .asd files
     local dir="$source_dir/$project"
 
-    register_all_asd_in_path $dir
+    register_all_asd_in_path $dir $quiet
 }
 
 register_other_asd() {
