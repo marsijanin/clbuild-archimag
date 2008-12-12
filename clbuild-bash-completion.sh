@@ -82,7 +82,7 @@ function _clbuild_completion {
             _clbuild_applications $cur
             ;;
         *clbuild)
-            COMPREPLY=( $(compgen -W "${global_options} ${commands}" -- ${cur}) )
+            COMPREPLY=( $(compgen -W "${global_options} ${clbuild_commands}" -- ${cur}) )
             ;;
         *)
             if [ -n $cmd ]; then
