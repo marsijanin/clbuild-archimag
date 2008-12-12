@@ -41,7 +41,7 @@ function _clbuild_projects {
 function _clbuild_commands {
     local cur prev
     cur=${1}
-    COMPREPLY=( $(compgen -W "${commands}" -- ${cur}) )
+    COMPREPLY=( $(compgen -W "${clbuild_commands}" -- ${cur}) )
     return 0
 }
 
@@ -82,7 +82,7 @@ function _clbuild_completion {
             _clbuild_applications $cur
             ;;
         *clbuild)
-            COMPREPLY=( $(compgen -W "${global_options} ${commands}" -- ${cur}) )
+            COMPREPLY=( $(compgen -W "${global_options} ${clbuild_commands}" -- ${cur}) )
             ;;
         *)
             if [ -n $cmd ]; then
