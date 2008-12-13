@@ -5,6 +5,8 @@ clbuild_dir=$(pwd)
 
 project_files="projects wnpp-projects my-projects implementations"
 
+project_groups="--all-projects --main-projects --wnpp-projects --installed"
+
 applications="clim-launcher listener gsharp climacs closure beirc climplayer
 demodemo clim-alerts eclipse hunchentoot webdav parse-xml validate-xml
 valideate-relax-ng html-to-xhtml xhtml-to-html xuriella vecto-demo
@@ -26,67 +28,53 @@ function _clbuild_set_cmd {
     done
 }
 
+function _clbuildcomp {
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=( $(compgen -W  "$1" -- ${cur}) )
+}
 
 function _clbuild_projects {
-    local cur prev
-    cur=${1}
-    prev=${2}
-    #opts="update install"
-    projects=$(cut -d' ' -f1 $(for proj in ${project_files}; do echo ${clbuild_dir}/${proj}; done) | grep -ve '^#' | grep -v '^$')
-    project_groups="--all-projects --main-projects --wnpp-projects --installed"
-    COMPREPLY=( $(compgen -W "${project_groups} ${projects}" -- ${cur}) )
-    return 0
+    local projects=$(cut -d' ' -f1 $(for proj in ${project_files}; do echo ${clbuild_dir}/${proj}; done) | grep -ve '^#' | grep -v '^$')
+    _clbuildcomp "${project_groups} ${projects}"
 }
 
 function _clbuild_commands {
-    local cur prev
-    cur=${1}
-    COMPREPLY=( $(compgen -W "${clbuild_commands}" -- ${cur}) )
-    return 0
+    _clbuildcomp "${clbuild_commands}"
 }
 
 function _clbuild_implementations {
-    local cur prev implementations
-    cur=$1
+    local implementations
     implementations=$(cut -d' ' -f1 ${clbuild_dir}/implementations | grep -v '^#' | grep -v '^$')
-    COMPREPLY=( $(compgen -W "${implementations}" -- ${cur}) )
-    return 0
+    _clbuildcomp "${implementations}"
 }
 
 function _clbuild_applications {
-    local cur
-    cur=$1
-    COMPREPLY=( $(compgen -W "${applications}" -- ${cur}) )
-    return 0
+    _clbuildcomp "${applications}"
 }
 
 function _clbuild_completion {
-    local cur prev implementations
+    local cur prev
     COMPREPLY=()
-    #cur="${COMP_WORDS[COMP_CWORD]}"
-    #prev="${COMP_WORDS[COMP_CWORD-1]}"
-    # Ignore COMP_WORDS.  We get all we need passed as parameters
-    clbuild=$1
-    cur=$2
-    prev=$3
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
     # set the `cmd' variable.
     _clbuild_set_cmd "$@"
     case $prev in
         --implementation)
-            _clbuild_implementations $cur
+            _clbuild_implementations
             ;;
         update|install|uninstall)
-            _clbuild_projects $cur
+            _clbuild_projects
             ;;
         run)
-            _clbuild_applications $cur
+            _clbuild_applications
             ;;
         *clbuild)
-            COMPREPLY=( $(compgen -W "${global_options} ${clbuild_commands}" -- ${cur}) )
+	    _clbuildcomp "${global_options} ${clbuild_commands}"
             ;;
         *)
             if [ -n $cmd ]; then
-                _clbuild_commands $cur
+                _clbuild_commands
             fi
             ;;
     esac
