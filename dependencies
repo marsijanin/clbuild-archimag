@@ -177,6 +177,7 @@ smarkup ch-asdf ch-util cl-bibtex cl-fad cl-pdf cl-typesetting iterate puri spli
 spatial-trees 
 split-sequence 
 stefil alexandria iterate lift metabang-bind slime 
+swf2 
 tiff-ffi alexandria babel ch-asdf ch-util closure-common cxml gcc-xml-ffi puri trivial-features trivial-gray-streams 
 tilde 
 time-interval cl-ppcre 
