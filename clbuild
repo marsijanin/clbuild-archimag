@@ -986,6 +986,7 @@ link_extra_asds() {
     register_other_asd mcclim/Experimental/freetype
     register_other_asd "graphic-forms/src/external-libraries/*/*"
     register_other_asd "clg/*"
+    register_other_asd "swf2/*"
     register_other_asd eclipse/system.lisp eclipse.asd
 
     # also, override uffi:
