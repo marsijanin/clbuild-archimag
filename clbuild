@@ -1491,7 +1491,7 @@ EOF
 		    shift
 		    ;;
                 --my-projects)
-                    extra="$extra $wnpp_projects"
+                    extra="$extra $my_projects"
                     shift
                     ;;
 		--all-projects)
