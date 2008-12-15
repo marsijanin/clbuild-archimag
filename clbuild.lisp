@@ -628,7 +628,7 @@
       (setf projects (remove-duplicates projects :test 'equal))
       (sort projects #'string-lessp)))
 
-  (with-application (project-string)
+  (with-application (project-string dependency-file-name)
     (let ((projects (cl-ppcre:split "\\s+" project-string)))
       #+nil
       (setf projects
@@ -639,7 +639,7 @@
 	(dolist (system (project-to-systems project))
 	  (without-errors (nil "in find-system")
 	    (asdf:find-system system nil))))
-      (with-open-file (s "dependencies"
+      (with-open-file (s dependency-file-name
 			 :direction :output
 			 :if-exists :rename-and-delete)
 	(format s 

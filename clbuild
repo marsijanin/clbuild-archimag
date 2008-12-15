@@ -1771,8 +1771,18 @@ EOF
 	update_missing "$all_projects"
 	# hack: don't want the core here
 	run_options="$build_options"
-	start_application record-dependencies "$all_projects"
+	start_application record-dependencies \
+	    "$main_projects $wnpp_projects" \
+	    dependencies
+	start_application record-dependencies \
+	    "$my_projects" \
+	    my-dependencies.new
 	wnpp_check
+	if ! test -f my-dependencies; then
+	    mv my-dependencies.new my-dependencies
+	elif ! cmp my-dependencies.new my-dependencies >/dev/null; then
+	    mv -i my-dependencies.new my-dependencies
+	fi
 	;;
     check-urls)
 	cd "$source_dir"
