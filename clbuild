@@ -70,6 +70,13 @@ if test -f "$BASE/my-projects"; then
     PROJECT_LISTING_FILES="$BASE/my-projects $PROJECT_LISTING_FILES"
 fi
 
+
+if test -f "$BASE/my-dependencies"; then
+    DEPENDENCY_FILES="$BASE/dependencies $BASE/my-dependencies"
+else
+    DEPENDENCY_FILES="$BASE/dependencies"
+fi
+
 # Fix up pathnames
 make_absolute_pn() {
 	if [ -n "$1" ] ; then
@@ -843,8 +850,8 @@ update_1() {
 	touch $TMPDIR/dependencies0
 	while test $# -ge 1; do
 	    echo $1 >>$TMPDIR/arguments0
-	    if grep "^$1 " ../dependencies >/dev/null; then
-		found=`grep "^$1 " ../dependencies`
+	    if cat $DEPENDENCY_FILES | grep "^$1 ">/dev/null; then
+		found=`cat $DEPENDENCY_FILES |grep "^$1 "`
 		for x in $found; do
 		    echo $x >>$TMPDIR/dependencies0
 		done
