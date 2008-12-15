@@ -1370,6 +1370,15 @@ trash() {
     mv "$1" "$trash"
 }
 
+update_missing() {
+    local CLBUILD_DEPENDENCIES=no
+    for project in $1; do
+	if ! test -d "${source_dir}/$project"; then
+	    update $project
+	fi
+    done
+}
+
 case $1 in
     check)
 	check
@@ -1505,11 +1514,7 @@ EOF
 	update "$@" $extra
 	;;
     update-missing)
-	for project in ${2:-$main_projects}; do
-	    if ! test -d "${source_dir}/$project"; then
-		update $project
-	    fi
-	done
+	update_missing "${2:-$main_projects}"
 	;;
     recompile|dumpcore)
 	operation="$1"
@@ -1762,11 +1767,7 @@ EOF
 	;;
     record-dependencies)
 	cd "$BASE"
-	for project in $all_projects; do
-	    if ! test -d "${source_dir}/$project"; then
-		update $project
-	    fi
-	done
+	update_missing "$all_projects"
 	# hack: don't want the core here
 	run_options="$build_options"
 	start_application record-dependencies "$all_projects"
