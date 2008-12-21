@@ -916,6 +916,45 @@ update_1() {
         cd ..
 }
 
+show_project() {
+    name=$1
+
+    unset match
+    for f in $PROJECT_LISTING_FILES; do
+	match=$(grep "^$name " $f || true)
+	if test -n "$match"; then
+	    matching_file=$f
+	    break;
+	fi
+    done
+    if test -z "$match"; then
+	echo Error: no such project: $name
+	exit 1
+    fi
+    case $(basename $matching_file) in
+	projects) 
+	    comment="this is a main project"
+	    ;;
+	wnpp-projects) 
+	    comment="this is a work-needing or prospective project"
+	    ;;
+	my-projects) 
+	    comment="this is a local project"
+	    ;;
+    esac
+    cat <<EOF
+Package: $name
+  Project file: $matching_file ($comment)
+  Installed: $(if test -d $source_dir/$name; then echo yes; else echo no; fi)
+
+  Description:
+    $(echo "$match" | cut -d\# -f 2)
+
+  Will be downloaded using:
+    $(echo "$match" | cut -d\# -f 1)
+EOF
+}
+
 register_asd() {
     local project="$1"
     local quiet="$2" # any value will stop printing the linked .asd files
@@ -1451,6 +1490,15 @@ EOF
 	    fi
 	    shift
 	done
+	;;
+    show)
+	if test $# -ne 2; then
+	    exec 1>&2
+	    echo error: invalid number of arguments
+	    echo usage: $0 show PROJECT_NAME
+	    exit 1
+	fi
+	show_project $2
 	;;
     mrproper)
 	for d in $source_dir/* $target_dir; do
