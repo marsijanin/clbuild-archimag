@@ -329,6 +329,10 @@ configure_lisp_implementation() {
     implementation=${lisp_command}
     # Get the implementation type (member sbcl ccl clisp ecl)
     if [ -n "${lisp_command}" ]; then
+        # if the given parameter specifies a lisp implementation by name, use
+        # the name.  If it is an executable, take the filename as the
+        # implementation name.  This is buggy and will fail for some lisps
+        # (e.g. CMUCL).
         implementation=$(basename "$implementation")
     elif [ -n "${DEFAULT_LISP_IMPLEMENTATION}" ]; then
         implementation=${DEFAULT_LISP_IMPLEMENTATION}
@@ -342,8 +346,15 @@ configure_lisp_implementation() {
         implementation=sbcl
     fi
 
+    # Check if the given command is an executable.  If it is, we will use the
+    # command as out lisp-implementations executable.  (FIXME: commands like
+    # "/sw/bin/sbcl --core /sw/lib/sbcl/sbcl.core" will not have the intended
+    # effect.)
     if [ ! -x "$lisp_command" ]; then
-        lisp_command=""
+        # when lisp-command is unset, the configuration functions will set it
+        # to reasonable defaults (e.g. by using a implementation specific
+        # variable like $SBCL to determine the lisp-command).
+        unset lisp_command
     fi
 
     case $implementation in
