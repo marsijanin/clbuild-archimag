@@ -350,7 +350,7 @@ configure_lisp_implementation() {
     # command as out lisp-implementations executable.  (FIXME: commands like
     # "/sw/bin/sbcl --core /sw/lib/sbcl/sbcl.core" will not have the intended
     # effect.)
-    if [ ! -x "$lisp_command" ]; then
+    if [ ! -f "$lisp_command" -o ! -x "$lisp_command" ]; then
         # when lisp-command is unset, the configuration functions will set it
         # to reasonable defaults (e.g. by using a implementation specific
         # variable like $SBCL to determine the lisp-command).
