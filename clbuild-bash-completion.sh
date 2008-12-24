@@ -34,8 +34,14 @@ function _clbuildcomp {
 }
 
 function _clbuild_projects {
+    local include_groups="$1"
     local projects=$(cut -d' ' -f1 $(for proj in ${project_files}; do echo ${clbuild_dir}/${proj}; done) | grep -ve '^#' | grep -v '^$')
-    _clbuildcomp "${project_groups} ${projects}"
+
+    # include project groups if the first parameter is not empty
+    if [ -n "$include_groups" ]; then
+	projects="${project_groups} ${projects}"
+    fi
+    _clbuildcomp "${projects}"
 }
 
 function _clbuild_commands {
@@ -64,8 +70,11 @@ function _clbuild_completion {
             _clbuild_implementations
             ;;
         update|install|uninstall)
-            _clbuild_projects
+            _clbuild_projects "+groups"
             ;;
+	recompile)
+	    _clbuild_projects
+	    ;;
         run)
             _clbuild_applications
             ;;
