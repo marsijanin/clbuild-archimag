@@ -52,6 +52,7 @@ lml2             get_git git://git.b9.com/lml2.git
 kmrcl            get_tarball http://files.b9.com/kmrcl/kmrcl-latest.tar.gz
 iolib            get_git http://common-lisp.net/project/iolib/git/iolib.git
 swf2             get_git git://repo.or.cz/swf2.git #avm2 bytecode generator
+cl-utilities     get_cvs_clnet cl-utilities
 
 # Projects by Gary King
 lift             get_darcs http://common-lisp.net/project/lift
