@@ -100,3 +100,12 @@ CLBUILD_DEPENDENCIES="ask"
 #CLIM_BACKEND=graphic-forms
 #CLIM_BACKEND=clx
 #CLIM_BACKEND=beagle
+
+
+#### Personal repositories
+## Use the following scheme to create your own download commands.  Those come
+## in handy if you add your own projects into the my-projects file.
+#get_moltkeplatz_de() {
+#    project="$1"
+#    get_git $project http://git.moltkeplatz.de/$project
+#}
