@@ -301,6 +301,12 @@ configure_sbcl() {
     run_options="--disable-debugger $common_options"
 }
 
+# Allow --implementation system_sbcl
+configure_system_sbcl() {
+    configure_sbcl
+    lisp=$(which sbcl)
+}
+
 configure_ecl() {
     if [ -z "$ECL" ]; then
         set_lisp_command ecl
