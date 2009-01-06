@@ -325,52 +325,33 @@ configure_ecl() {
 }
 
 configure_lisp_implementation() {
-    lisp_command="${1}"
-    implementation=${lisp_command}
     # Get the implementation type (member sbcl ccl clisp ecl)
-    if [ -n "${lisp_command}" ]; then
-        # if the given parameter specifies a lisp implementation by name, use
-        # the name.  If it is an executable, take the filename as the
-        # implementation name.  This is buggy and will fail for some lisps
-        # (e.g. CMUCL).
-        implementation=$(basename "$implementation")
-    elif [ -n "${DEFAULT_LISP_IMPLEMENTATION}" ]; then
-        implementation=${DEFAULT_LISP_IMPLEMENTATION}
-    elif [ -n "${CCL}" ]; then
-        implementation=ccl
-    elif [ -n "${CLISP}" ]; then
-        implementation=clisp
-    elif [ -n "${ECL}" ]; then
-        implementation=ecl
+    implementation=${1}
+
+    # if the given parameter specifies a lisp implementation by name, the name
+    # is used.  Otherwise the DEFAULT_LISP_IMPLEMENTATION is used.  Also check
+    # for environment variables for backwards comparability. Defaults to SBCL.
+    if [ -z ${implementation} ]; then
+        if [ -n "${DEFAULT_LISP_IMPLEMENTATION}" ]; then
+            implementation=${DEFAULT_LISP_IMPLEMENTATION}
+        elif [ -n "${CCL}" ]; then
+            implementation=ccl
+        elif [ -n "${CLISP}" ]; then
+            implementation=clisp
+        elif [ -n "${ECL}" ]; then
+            implementation=ecl
+        else
+            implementation=sbcl
+        fi
+    fi
+
+    if [ "$(type -t "configure_$implementation")" = function ] && \
+        "configure_$implementation"; then
+        return
     else
-        implementation=sbcl
+        echo "Unknown implementation '$implementation'" 1>&2
+        exit 1
     fi
-
-    # Check if the given command is an executable.  If it is, we will use the
-    # command as out lisp-implementations executable.  (FIXME: commands like
-    # "/sw/bin/sbcl --core /sw/lib/sbcl/sbcl.core" will not have the intended
-    # effect.)
-    if [ ! -f "$lisp_command" -o ! -x "$lisp_command" ]; then
-        # when lisp-command is unset, the configuration functions will set it
-        # to reasonable defaults (e.g. by using a implementation specific
-        # variable like $SBCL to determine the lisp-command).
-        unset lisp_command
-    fi
-
-    case $implementation in
-        ccl)
-            configure_ccl ${lisp_command}
-            ;;
-        sbcl)
-            configure_sbcl ${lisp_command}
-            ;;
-        clisp)
-            configure_clisp ${lisp_command}
-            ;;
-        ecl)
-            configure_ecl ${lisp_command}
-            ;;
-    esac
 }
 
 export implementation=''
