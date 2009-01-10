@@ -52,7 +52,7 @@ else
 	windowsp=""
 fi
 
-if test $(uname -s) = Darwin -a $(uname -p) = powerpc; then
+if test "$(uname -s)" = Darwin -a "$(uname -p)" = powerpc; then
     darwinppc=1
 else
     darwinppc=""
