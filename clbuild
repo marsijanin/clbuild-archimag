@@ -1408,6 +1408,19 @@ trash() {
     mv "$1" "$trash"
 }
 
+clean_links() {
+    local quiet="$1"
+    for link in $(find "$BASE/systems" -maxdepth 1 -type l); do
+	local link_target=$(readlink "$link")
+	if [ ! -e $link_target ]; then
+	    if [ -z $quiet ]; then
+		echo "removing broken link from $link to $link_target"
+	    fi
+	    rm -- "$link"
+	fi
+    done
+}
+
 update_missing() {
     local CLBUILD_DEPENDENCIES=no
     for project in $1; do
@@ -1483,6 +1496,7 @@ EOF
 	    d="$source_dir/$2"
 	    if test -d "$d"; then
 		trash "$d"
+		clean_links "quiet"
 	    else
 		echo "cannot trash non-existing directory $d"
 	    fi
@@ -1837,16 +1851,7 @@ EOF
 	done
 	;;
     clean-links)
-	cd "$system_dir"
-	for f in *; do
-	    if test -h "$f"; then
-		link_target=`readlink "$f"`
-		if ! test -e "$link_target"; then
-		    echo "removing broken link from $f to $link_target"
-		    rm "$f"
-		fi
-	    fi
-	done
+	clean_links
 	;;
     rebuild-links)
 	rm -f ${system_dir}/*
