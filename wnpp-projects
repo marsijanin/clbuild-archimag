@@ -142,7 +142,3 @@ clpython    get_cvs_full :pserver:cvspublic:cvspublic@cvspublic.franz.com:/cvs-p
 
 fset get_svn_clnet trunk
 misc-extensions get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/misc-extensions/cvsroot devel
-
-# currently broken, because it depends on cl-ppcre internals from an
-# out-of-date cl-ppcre version:
-cxml-rng       get_lichteblau_com #Relax NG for cxml

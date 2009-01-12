@@ -59,6 +59,7 @@ lw-compat  get_darcs http://common-lisp.net/project/closer/repos/lw-compat #Lisp
 closure-html   get_git git://repo.or.cz/closure-html.git #Closure's HTML parser
 
 cxml-stp       get_lichteblau_com #STP, a DOM alternative
+cxml-rng       get_lichteblau_com #Relax NG for cxml
 
 midi           get_darcs http://rvw.doc.gold.ac.uk/gibbons/darcs/midi #MIDI parser
 
