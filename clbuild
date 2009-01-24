@@ -768,6 +768,10 @@ get_tarball_bz2() {
     get_tarball "$1" "$2" j
 }
 
+get_lispbuilder() {
+    get_svn http://lispbuilder.googlecode.com/svn/trunk/${1}/
+}
+
 update_project() {
     if test x$1 = x--dry-run; then
 	shift
