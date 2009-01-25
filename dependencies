@@ -122,13 +122,27 @@ hyperdoc hyperspec-lookup
 hyperspec-lookup 
 ieee-floats 
 infpre 
-iolib alexandria babel bordeaux-threads cffi lift osicat trivial-features trivial-garbage 
+iolib alexandria babel bordeaux-threads cffi lift lispbuilder-sdl osicat trivial-features 
 ironclad 
 iterate 
 kmrcl 
 lift 
 linedit alexandria babel cffi osicat trivial-features 
 lisa 
+lispbuilder-cal3d alexandria babel cffi lispbuilder-openrm lispbuilder-sdl trivial-features 
+lispbuilder-clawk 
+lispbuilder-lexer 
+lispbuilder-net alexandria babel cffi trivial-features 
+lispbuilder-opengl alexandria babel cffi lispbuilder-sdl trivial-features 
+lispbuilder-openrm alexandria babel cffi lispbuilder-sdl trivial-features 
+lispbuilder-regex 
+lispbuilder-sdl alexandria babel cffi cl-vectors salza2 trivial-features vecto zpb-ttf zpng 
+lispbuilder-sdl-gfx alexandria babel cffi lispbuilder-sdl trivial-features 
+lispbuilder-sdl-image alexandria babel cffi lispbuilder-sdl trivial-features 
+lispbuilder-sdl-mixer alexandria babel cffi lispbuilder-sdl trivial-features 
+lispbuilder-sdl-ttf alexandria babel cffi lispbuilder-sdl trivial-features 
+lispbuilder-windows alexandria babel cffi trivial-features 
+lispbuilder-yacc 
 lml2 kmrcl 
 ltk 
 lw-compat 
