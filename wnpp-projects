@@ -93,8 +93,9 @@ smarkup          get_git git://cyrusharmon.org/pub/git/smarkup.git
 tiff-ffi         get_git git://cyrusharmon.org/pub/git/tiff-ffi.git
 time-interval    get_git git://cyrusharmon.org/pub/git/time-interval.git
 
-# Bibtex (required by smarkup)
+# Misc projects
 cl-bibtex        get_cvs_full :pserver:anonymous@cvs.sv.gnu.org:/sources/cl-bibtex cl-bibtex
+cl-store         get_darcs http://common-lisp.net/project/cl-store/darcs/cl-store/ #A Common Lisp Serialization Package
 
 stefil           get_darcs http://common-lisp.net/project/stefil/darcs/stefil
 
