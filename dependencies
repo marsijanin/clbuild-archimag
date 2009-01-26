@@ -68,6 +68,7 @@ cl-opengl alexandria babel cffi trivial-features
 cl-pdf iterate 
 cl-ppcre cl-unicode 
 cl-prevalence s-sysdeps s-xml 
+cl-store 
 cl-typesetting cl-pdf iterate 
 cl-unicode cl-ppcre 
 cl-utilities 
@@ -115,7 +116,7 @@ gsharp alexandria babel closure-common clx cxml flexichain mcclim midi puri slim
 html-encode 
 html-template 
 hunchentoot alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre flexi-streams md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
-hunchentoot-auth alexandria babel bordeaux-threads cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-who flexi-streams hunchentoot lift md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
+hunchentoot-auth alexandria babel bordeaux-threads cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-store cl-who flexi-streams hunchentoot lift md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 hunchentoot-cgi alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre flexi-streams hunchentoot md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 hunchentoot-vhost alexandria babel cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre flexi-streams hunchentoot md5 rfc2388 trivial-features trivial-gray-streams url-rewrite 
 hyperdoc hyperspec-lookup 
@@ -144,6 +145,7 @@ lispbuilder-sdl-ttf alexandria babel cffi lispbuilder-sdl trivial-features
 lispbuilder-windows alexandria babel cffi trivial-features 
 lispbuilder-yacc 
 lml2 kmrcl 
+log5 lift 
 ltk 
 lw-compat 
 mcclim cffi cljl clx flexichain skippy slime spatial-trees 
@@ -159,7 +161,7 @@ montezuma cl-fad cl-ppcre
 moptilities closer-mop lift 
 mw-equiv 
 net-telent-date 
-nuclblog alexandria babel bordeaux-threads cffi ch-asdf ch-util chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-who flexi-streams hunchentoot hunchentoot-auth hunchentoot-vhost lift md5 puri rfc2388 trivial-features trivial-gray-streams url-rewrite 
+nuclblog alexandria babel bordeaux-threads cffi ch-asdf ch-util chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-store cl-who flexi-streams hunchentoot hunchentoot-auth hunchentoot-vhost lift md5 puri rfc2388 trivial-features trivial-gray-streams url-rewrite 
 osicat 
 parenscript 
 parse-declarations 
