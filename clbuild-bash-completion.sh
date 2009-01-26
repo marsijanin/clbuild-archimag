@@ -13,7 +13,7 @@ valideate-relax-ng html-to-xhtml xhtml-to-html xuriella vecto-demo
 adw-charting-demo ltk-demo clpython"
 
 clbuild_commands="help update install uninstall diff slime lisp preloaded check\
-                  list recompile run show"
+                  list recompile record-dependencies run show"
 
 global_options=" --help --implementation --long-help"
 
