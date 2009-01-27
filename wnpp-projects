@@ -127,6 +127,24 @@ infpre get_svn svn://erleuchtet.org/infpre
 toolbox get_svn svn://erleuchtet.org/toolbox
 vektor get_svn svn://erleuchtet.org/vektor
 
+climc get_svn http://climc.googlecode.com/svn/trunk/ #Instant Messaging Client (CLIM GUI)
+
+# Lispbuilder
+lispbuilder-clawk       get_lispbuilder
+lispbuilder-net         get_lispbuilder
+lispbuilder-openrm      get_lispbuilder
+lispbuilder-sdl         get_lispbuilder
+lispbuilder-sdl-image   get_lispbuilder
+lispbuilder-sdl-ttf     get_lispbuilder
+lispbuilder-yacc        get_lispbuilder
+lispbuilder-cal3d       get_lispbuilder
+lispbuilder-lexer       get_lispbuilder
+lispbuilder-opengl      get_lispbuilder
+lispbuilder-regex       get_lispbuilder
+lispbuilder-sdl-gfx     get_lispbuilder
+lispbuilder-sdl-mixer   get_lispbuilder
+lispbuilder-windows     get_lispbuilder
+
 #
 # projects that are currently broken
 #
