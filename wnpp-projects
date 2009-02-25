@@ -115,11 +115,6 @@ s-sysdeps        get_darcs http://www.beta9.be/darcs/s-sysdeps
 s-xml            get_cvs_clnet
 weblocks         get_hg http://www.bitbucket.org/skypher/weblocks-stable/
 
-# Symbolic Web and dependencies
-symbolicweb      get_darcs http://common-lisp.net/~lnostdal/programming/lisp/symbolicweb/
-aromyxo          get_darcs http://common-lisp.net/~lnostdal/programming/lisp/aromyxo/
-sw-http          get_darcs http://common-lisp.net/~lnostdal/programming/lisp/sw-http/
-
 # perfectstorm and related projects
 perfectstorm get_svn svn://erleuchtet.org/perfectstorm #real time strategy game study
 cl-cairo get_svn svn://erleuchtet.org/cl-cairo #cairo bindings
