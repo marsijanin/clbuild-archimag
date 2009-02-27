@@ -361,7 +361,7 @@ configure_lisp_implementation() {
 }
 
 export implementation=''
-if [ $1 = "--implementation" ]; then
+if [ "$1" = "--implementation" ]; then
     implementation=$2
     configure_lisp_implementation $implementation
     shift 2
