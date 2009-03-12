@@ -1101,6 +1101,8 @@ Usage:
   preloaded     run Lisp in the terminal (using monster.core)
   slime-configuration  print .emacs excerpt for slime
 
+  make-project NAME   set up an new, empty project
+
   record-dependencies   rebuild dependency information file
 
 For update/recompile/dumpcore a PROJECT_SPEC can be used:
@@ -1168,6 +1170,8 @@ clbuild run APPLICATION [ARGS...]
   run ltk-demo      show a dialog using ltk
 
   run clpython      run the CLPython REPL
+
+  run any SYSTEM FORM  load this system, eval this form
 EOF
 }
 
@@ -1802,12 +1806,106 @@ EOF
 	echo ';;'
 	write_slime_configuration
 	;;
+    make-project)
+	if test $# -ne 2; then
+	    exec 1>&2
+	    echo error: invalid number of arguments
+	    echo usage: $0 create-new-project NEW_PROJECT_NAME
+	    exit 1
+	fi
+	project="$2"
+	if echo "$project" | grep '[ :/\\"'\'']' >/dev/null; then
+	    exec 1>&2
+	    echo error: invalid project name
+	    exit 1
+	fi
+	for existing in $all_projects; do
+	    if test x"$existing" = x"$project"; then
+		exec 1>&2
+		echo error: project name already known: "$project"
+		exit 1
+	    fi
+	done
+	if test -f "$source_dir/$project"; then
+	    exec 1>&2
+	    echo error: "$source_dir/$project" already exists
+	    exit 1
+	fi
+	mkdir "$source_dir/$project"
+	cd "$source_dir/$project"
+	cat >>$project.asd <<EOF
+;;; -*- mode: lisp; indent-tabs: nil -*-
+
+(defsystem :$project
+  :serial t
+  ;; add new files to this list:
+  :components ((:file "package") (:file "$project"))
+  :depends-on (#+nil :cl-ppcre))
+EOF
+	cat >>package.lisp <<EOF
+;;; -*- mode: lisp; indent-tabs: nil -*-
+
+(defpackage :$project
+  (:use :cl)
+  (:export #:test))
+EOF
+	cat >>$project.lisp <<EOF
+;;; -*- mode: lisp; indent-tabs: nil -*-
+
+(in-package :$project)
+
+(defun test ()
+  (format t "Hello World from new project $project~%"))
+EOF
+	cat >>$project.sh <<EOF
+#!/bin/sh
+clbuild run any :$project "($project:test)"
+EOF
+	chmod +x "$project.sh"
+	git init
+	git add .
+	git commit -m "New project $project initialized by clbuild"
+	register_asd "$project"
+	cat <<EOF
+
+A new project directory $source_dir/$project has been set up.
+
+Run
+  $source_dir/$project.sh
+
+to try it from the shell or run clbuild slime and type this in the lisp
+listener:
+
+  (asdf:operate 'asdf:load-op :$project)
+  ($project:test)
+
+EOF
+        ;;
     run)
 	shift
 	case $1 in
 	    --help)
 		help_run
 		exit 0
+		;;
+	    any)
+		if test $# -ne 3; then
+		    exec 1>&2
+		    echo error: invalid number of arguments
+		    echo usage: clbuild run any SYSTEM FORM
+		    exit 1
+		fi
+		system="$2"
+		form="$3"
+		common_options="$noinform $common_options"
+		if test -f "$BASE"/monster.core; then
+		    common_options="$core_option "$BASE"/monster.core $common_options"
+		fi
+		clbuild_lisp \
+		    $eval "(asdf:operate 'asdf:load-op :$system)" \
+		    $eval "$form" \
+		    $eval "$quit"
+		exit $?
 		;;
 	    climplayer)
 		check_program fileschanged
