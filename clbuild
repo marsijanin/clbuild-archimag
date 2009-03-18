@@ -607,6 +607,42 @@ get_git() {
     fi
 }
 
+# special case this for now, because the extra "git checkout" is needed
+get_commonqt() {
+    name="$1"
+    url="$2"
+
+    if [ -d $name ]; then
+	actual="`cd $name && git config --get remote.origin.url`"
+	if test "x$actual" = "x$url"; then
+	    dry_run_ok $1
+	else
+	    echo "MISMATCH: $1 was installed from $actual, current is $url"
+	fi
+    else
+	dry_run_missing $1
+    fi
+    if test -n "$dry_run"; then
+	exit 0
+    fi
+
+    if [ -d $name ]; then
+	dribble_get "git pull" $name
+	(
+	    cd $name
+	    if ! test -d .git; then
+		echo ERROR: not a git repository
+		exit 1
+	    fi
+	    git pull
+	    )
+    else
+	dribble_get "git clone" $name
+	git clone $url $name || :
+	(cd $name && git checkout -b smoke1 origin/smoke1)
+    fi
+}
+
 get_svn() {
     name="$1"
     url="$2"
