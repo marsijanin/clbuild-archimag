@@ -101,6 +101,14 @@ cl-store         get_darcs http://common-lisp.net/project/cl-store/darcs/cl-stor
 
 stefil           get_darcs http://common-lisp.net/project/stefil/darcs/stefil
 
+# endless attilaware
+cl-quasi-quote   get_darcs http://common-lisp.net/project/cl-quasi-quote/darcs/cl-quasi-quote
+cl-syntax-sugar get_darcs http://common-lisp.net/project/cl-syntax-sugar/darcs/cl-syntax-sugar
+cl-walker get_darcs http://common-lisp.net/project/cl-walker/darcs/cl-walker
+cl-def get_darcs http://common-lisp.net/project/cl-def/darcs/cl-def
+defclass-star get_darcs http://common-lisp.net/project/defclass-star/darcs/defclass-star
+
+
 # weblocks and dependencies
 f-underscore     get_darcs http://common-lisp.net/project/bpm/darcs/f-underscore
 anaphora         get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/anaphora/cvsroot src
