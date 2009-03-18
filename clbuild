@@ -1209,6 +1209,8 @@ clbuild run APPLICATION [ARGS...]
 
   run clpython      run the CLPython REPL
 
+  run qt-tutorial-14  step 14 of the Qt tutorial
+
   run any SYSTEM FORM  load this system, eval this form
 EOF
 }
