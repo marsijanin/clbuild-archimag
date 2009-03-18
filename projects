@@ -130,5 +130,6 @@ hyperdoc get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/hype
 hyperspec-lookup get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/hyperspec-lookup/cvsroot hyperspec-lookup #interface to mapping symbols to URLs for CLHS and MOP
 
 parse-declarations get_darcs http://common-lisp.net/project/parse-declarations/darcs/parse-declarations
+editor-hints get_darcs http://common-lisp.net/~trittweiler/darcs/editor-hints
 
 montezuma        get_svn http://montezuma.googlecode.com/svn/trunk/montezuma

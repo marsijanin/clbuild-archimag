@@ -1026,6 +1026,7 @@ link_extra_asds() {
     # some (buggy) projects try to hide their .asd files from us:
     register_other_asd mcclim/Experimental/freetype
     register_other_asd iolib/src
+    register_other_asd editor-hints/named-readtables
     register_other_asd "graphic-forms/src/external-libraries/*/*"
     register_other_asd "clg/*"
     register_other_asd "swf2/*"
