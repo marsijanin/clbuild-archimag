@@ -146,7 +146,7 @@ vektor get_svn svn://erleuchtet.org/vektor
 
 climc get_svn http://climc.googlecode.com/svn/trunk/ #Instant Messaging Client (CLIM GUI)
 
-commonqt get_commonqt git://repo.or.cz/commonqt.git #Qt bindings
+commonqt get_git git://repo.or.cz/commonqt.git #Qt bindings
 
 # Lispbuilder
 lispbuilder-clawk       get_lispbuilder
