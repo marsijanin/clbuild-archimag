@@ -1371,6 +1371,7 @@ write_slime_configuration() {
 (setq inferior-lisp-program "$BASE/clbuild --implementation $implementation $cmd")
 (setq slime-use-autodoc-mode nil)
 (slime-setup '(slime-fancy slime-tramp slime-asdf))
+(slime-require :swank-listener-hooks)
 (slime)
 EOF
     # while we're at it, also write the swank loader
