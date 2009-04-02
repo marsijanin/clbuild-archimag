@@ -107,7 +107,13 @@ cl-syntax-sugar get_darcs http://common-lisp.net/project/cl-syntax-sugar/darcs/c
 cl-walker get_darcs http://common-lisp.net/project/cl-walker/darcs/cl-walker
 cl-def get_darcs http://common-lisp.net/project/cl-def/darcs/cl-def
 defclass-star get_darcs http://common-lisp.net/project/defclass-star/darcs/defclass-star
+cl-perec get_darcs http://common-lisp.net/project/cl-perec/darcs/cl-perec
+cl-rdbms get_darcs http://common-lisp.net/project/cl-rdbms/darcs/cl-rdbms
+cl-yalog get_darcs http://www.common-lisp.net/project/cl-dwim/darcs/cl-yalog/
+cl-serializer get_darcs http://www.common-lisp.net/project/cl-serializer/darcs/cl-serializer/
+computed-class get_darcs http://www.common-lisp.net/project/computed-class/darcs/computed-class/
 
+verrazano get_darcs http://common-lisp.net/project/fetter/darcs/verrazano/
 
 # weblocks and dependencies
 f-underscore     get_darcs http://common-lisp.net/project/bpm/darcs/f-underscore
