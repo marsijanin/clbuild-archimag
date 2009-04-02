@@ -29,7 +29,8 @@ clawk      get_darcs http://www.foldr.org/~michaelw/projects/clawk  #AWK embedde
 
 # defines a package called GL, which conflicts with CLX
 # cl-opengl        get_darcs http://common-lisp.net/~loliveira/darcs/cl-opengl-thomas # FFI bindings for OpenGL (thomas fork) 
-cl-opengl        get_svn svn://erleuchtet.org/cl-opengl-thomas # FFI bindings for OpenGL (erleuchtet fork of thomas fork) 
+# cl-opengl        get_svn svn://erleuchtet.org/cl-opengl-thomas # FFI bindings for OpenGL (erleuchtet fork of thomas fork) 
+cl-opengl get_darcs http://www.common-lisp.net/project/cl-opengl/darcs/cl-opengl # FFI bindings for OpenGL (c-l.net project)
 
 # disabled, because the directory has disappeared
 # zebu             get_svn https://cl-net-snmp.svn.sourceforge.net/svnroot/cl-net-snmp/zebu/trunk
