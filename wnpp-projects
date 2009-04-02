@@ -64,7 +64,8 @@ cl-containers    get_darcs http://common-lisp.net/project/cl-containers
 moptilities      get_darcs http://common-lisp.net/project/moptilities
 metatilities     get_darcs http://common-lisp.net/project/metatilities
 metatilities-base get_darcs http://common-lisp.net/project/metatilities-base
-metacopy         get_darcs http://common-lisp.net/project/metacopy/darcs/metacopy
+# metacopy         get_darcs http://common-lisp.net/project/metacopy/darcs/metacopy
+metacopy get_darcs http://www.common-lisp.net/project/cl-dwim/darcs/metacopy
 asdf-binary-locations get_darcs http://common-lisp.net/project/asdf-binary-locations/
 asdf-install-tester get_darcs http://common-lisp.net/project/ait/darcs/ait
 asdf-status      get_darcs http://common-lisp.net/project/cl-containers/asdf-status/darcs/asdf-status
