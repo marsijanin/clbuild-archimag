@@ -405,7 +405,7 @@ lisp_trampoline() {
         cleanup() {
             rm -rf $TMPDIR
         }
-        trap cleanup exit
+        trap cleanup EXIT
 
 	while test -n "$1"; do
 	    # fixme: whitespacea
@@ -845,7 +845,7 @@ update_1() {
 	    fi
             rm -rf $TMPDIR
         }
-        trap cleanup exit
+        trap cleanup EXIT
 
 	cd "$source_dir"
 
@@ -1311,7 +1311,7 @@ list() {
     cleanup() {
         rm -rf $TMPDIR
     }
-    trap cleanup exit
+    trap cleanup EXIT
 
     cat $PROJECT_LISTING_FILES | sort | grep -i -E "$pattern" | while read project rest; do
 	if test -n "$project" -a x"$project" != 'x#'; then
