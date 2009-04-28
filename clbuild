@@ -960,30 +960,31 @@ EOF
 register_asd() {
     local project="$1"
     local quiet="$2" # any value will stop printing the linked .asd files
-    local dir="$source_dir/$project"
+    local dir="source/$project"
 
     register_all_asd_in_path $dir $quiet
 }
 
 register_other_asd() {
-    local path="${source_dir}/$1"
+    local path="source/$1"
     local quiet="quiet"
+    local abspath="$BASE/$path"
 
     # Test if path given is not a globbed pattern
-    if [ -f "$path" ]; then
+    if [ -f "$abspath" ]; then
 	local name="$2"
 	register_single_asd $path ${quiet:-""} $name
-    elif [ -d "$path" ]; then
+    elif [ -d "$abspath" ]; then
 	# use given directory to register .asd files
 	register_all_asd_in_path $path $quiet
-    elif [ "$path" == "$(echo $path)" ]; then
+    elif [ "$abspath" == "$(echo $abspath)" ]; then
         # if pattern and expansion are identical, globbing failed
 	if [ -z $quiet ]; then
 	    echo "Ignoring invalid path: $path"
 	fi
     else
 	# path must be a valid pattern so register *.asd for each directory
-	for path in $path; do
+	for path in $(relative_glob "$path"); do
 	    if [ -d $path ]; then
 		register_all_asd_in_path $path $quiet
 	    fi
@@ -991,11 +992,16 @@ register_other_asd() {
     fi
 }
 
+relative_glob() {
+    cd "$BASE"
+    echo $1
+}
+
 register_all_asd_in_path() {
     local path="$1"
     local quiet="$2"
 
-    for file in $path/*.asd; do
+    for file in $(relative_glob "$path/*.asd"); do
 	register_single_asd $file $quiet
     done
 }
@@ -1007,7 +1013,7 @@ register_single_asd() {
 
     : ${name:=$(basename $asd_file)} # default to the name of the asd file
 
-    if [ -f "$asd_file" ]; then
+    if [ -f "$BASE/$asd_file" ]; then
 	if [ -z $quiet ]; then
 	    echo "$asd_file"
 	fi
@@ -1019,7 +1025,7 @@ register_single_asd_as() {
     local name="$1"
     local asd_file="$2"
 
-    ln -f -s $asd_file "${system_dir}/${name}"
+    ln -f -s "../$asd_file" "${system_dir}/${name}"
 }
 
 link_extra_asds() {
