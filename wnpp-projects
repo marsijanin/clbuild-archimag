@@ -57,6 +57,7 @@ cl-utilities     get_cvs_clnet cl-utilities
 external-program get_darcs http://common-lisp.net/project/external-program/darcs/external-program/
 contextl         get_darcs http://common-lisp.net/project/closer/repos/contextl
 cl-unification   get_cvs_clnet cl-unification
+cl-cairo2        get_git git://github.com/tpapp/cl-cairo2.git #cairo bindings
 cl-sqlite        get_git git://repo.or.cz/cl-sqlite.git #sqlite library
 
 # Projects by Gary King
