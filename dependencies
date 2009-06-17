@@ -228,11 +228,13 @@ tilde
 time-interval cl-ppcre 
 tinaa anaphora asdf-system-connections cl-containers cl-graph closer-mop defsystem-compatibility dynamic-classes kmrcl lift lml2 metabang-bind metatilities metatilities-base moptilities trivial-shell 
 toolbox 
+trivial-backtrace lift 
 trivial-features 
 trivial-garbage 
 trivial-gray-streams 
 trivial-shell lift 
 trivial-sockets 
+trivial-timeout lift 
 trivial-utf-8 
 ucw arnesi bordeaux-threads cl-fad cl-ppcre closer-mop iterate lift local-time net-telent-date rfc2109 slime split-sequence trivial-garbage usocket yaclml 
 url-rewrite 
