@@ -745,7 +745,7 @@
       #-(or windows mswindows win32) "graphic-forms-uitoolkit"
 
       ;; random extra systems
-      "mcclim-gif-bitmaps" "mcclim-jpeg-bitmaps"
+      "mcclim-gif-bitmaps" "mcclim-jpeg-bitmaps" "mcclim-tiff-bitmaps"
 
       ;; blacklist funny test systems for no particular reason:
       "babel-tests" "clpython-test"))
