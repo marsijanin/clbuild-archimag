@@ -60,6 +60,7 @@ cl-unification   get_cvs_clnet cl-unification
 cl-cairo2        get_git git://github.com/tpapp/cl-cairo2.git #cairo bindings
 cl-colors        get_git git://github.com/tpapp/cl-colors.git #color library
 cl-sqlite        get_git git://repo.or.cz/cl-sqlite.git #sqlite library
+cl-smtp          get_cvs_clnet cl-smtp
 
 # Projects by Gary King
 lift             get_darcs http://common-lisp.net/project/lift
