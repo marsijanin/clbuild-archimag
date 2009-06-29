@@ -77,6 +77,7 @@ cl-qprint
 cl-quasi-quote alexandria babel cffi cl-def cl-ppcre cl-syntax-sugar cl-walker closer-mop defclass-star iterate lift metabang-bind trivial-features trivial-gray-streams 
 cl-rdbms alexandria anaphora babel cl-def cl-fad cl-syntax-sugar cl-walker cl-yalog closer-mop defclass-star ironclad iterate lift local-time metabang-bind trivial-features 
 cl-serializer alexandria babel cl-def cl-syntax-sugar closer-mop iterate lift metabang-bind trivial-features 
+cl-smtp alexandria babel cffi cl+ssl cl-base64 flexi-streams split-sequence trivial-features trivial-gray-streams usocket 
 cl-sqlite alexandria babel cffi iterate trivial-features 
 cl-store 
 cl-syntax-sugar alexandria lift metabang-bind 
