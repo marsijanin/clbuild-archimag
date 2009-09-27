@@ -2031,6 +2031,9 @@ EOF
 	link_extra_asds
 	count_systems
 	;;
+    pwd)
+	echo $BASE
+	;;
     wnpp-check)
         wnpp_check
         ;;
