@@ -202,3 +202,5 @@ clpython    get_cvs_full :pserver:cvspublic:cvspublic@cvspublic.franz.com:/cvs-p
 
 fset get_svn_clnet trunk
 misc-extensions get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/project/misc-extensions/cvsroot devel
+
+cl-ncurses get_tarball http://common-lisp.net/project/cl-ncurses/files/cl-ncurses_latest-version.tgz #curses bindings
