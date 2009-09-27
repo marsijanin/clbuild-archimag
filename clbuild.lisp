@@ -797,6 +797,42 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Hemlock
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::hemlock
+#+clbuild::hemlock
+
+(make :hemlock)
+
+(with-application (&key file)
+  (if file (ed file) (ed)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Hemlock Slave
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+clbuild::hemlock-slave
+#+clbuild::hemlock-slave
+
+(let ((*load-verbose* t)
+      (*load-print* t))
+  (make :hemlock))
+
+(with-application (&key editor slave-buffer background-buffer)
+  #+ccl (setf ccl::*quiet-flag* nil)
+  (format t "Starting Slave...~%")
+  (force-output)
+;;;   (write `(hemlock::start-slave ,editor ,slave-buffer ,background-buffer)
+;;; 	 :escape t
+;;; 	 :readably t)
+;;;   (force-output)
+;;;   (read-line)
+  (hemlock::start-slave editor slave-buffer background-buffer))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; fell through
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (error "command not found")

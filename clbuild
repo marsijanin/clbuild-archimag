@@ -1976,6 +1976,10 @@ EOF
 		    read
 		fi
 		;;
+	    hemlock-slave)
+		# override --disable-debugger etc. for this command
+		run_options="$common_options"
+		;;
 	esac
 	start_application "$@"
 	;;
