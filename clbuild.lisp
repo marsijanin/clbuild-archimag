@@ -35,6 +35,7 @@
      and collect (pop args) into keys
      else collect arg into normals
      finally (return (append normals keys))))
+(defparameter *clean-features* *features*)
 (push (intern (string-upcase *cmd*) :clbuild) *features*)
 
 (defun quit (rc)
@@ -57,6 +58,7 @@
     `(let ((non-keys ',non-keys)
 	   (keys ',keys))
        #+sbcl (declare (optimize sb-ext:inhibit-warnings))
+       (setf *features* *clean-features*)
        (flet ((usage ()
 		(format t "Usage: clbuild ~A~:[~; [KEYS]~]~{ ~(~A~)~}~%"
 			*cmd* keys non-keys)
