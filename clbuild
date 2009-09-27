@@ -155,6 +155,13 @@ set_lisp_command() {
                 set_lisp_warning sbcl
             fi
             ;;
+        cmu)
+	    if which lisp >/dev/null ; then
+                export CMU="$(which lisp)"
+            else
+                set_lisp_warning cmu
+            fi
+            ;;
         ecl)
             export DYLD_LIBRARY_PATH="${target_dir}/lib:$DYLD_LIBRARY_PATH"
             export ECL="${target_dir}/bin/ecl"
@@ -301,6 +308,36 @@ configure_sbcl() {
     run_options="--disable-debugger $common_options"
 }
 
+configure_cmu() {
+    if [ -z "$CMU" ]; then
+        set_lisp_command cmu
+    fi
+    lisp=${1:-$CMU}
+
+    noinform="-quiet"
+    end_toplevel_options="--"
+    quit="(ext:quit)"
+    eval="-eval"
+    # require_asdf="(require :asdf)"
+    require_asdf="(let* ((lisp \"$BASE/source/asdf/asdf.lisp\") (fasl (compile-file-pathname lisp))) (unless (probe-file fasl) (compile-file lisp)) (load fasl :verbose nil :print nil))"
+    core_option="-core"
+
+    if test x"$USER_INIT" = x/dev/null; then
+	common_options="-noinit"
+    elif test -n "$USER_INIT"; then
+	common_options="-init $USER_INIT"
+    else
+	common_options=""
+    fi
+
+    build_options="$noinform -batch $common_options"
+    run_options="-batch $common_options"
+
+    if ! test -d "$BASE/source/asdf"; then
+	(cd "$BASE/source" && cvs -d ${SF_USER}@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -d asdf sbcl/contrib/asdf)
+    fi
+}
+
 # Allow --implementation system_sbcl
 configure_system_sbcl() {
     configure_sbcl
@@ -331,7 +368,7 @@ configure_ecl() {
 }
 
 configure_lisp_implementation() {
-    # Get the implementation type (member sbcl ccl clisp ecl)
+    # Get the implementation type (member sbcl ccl clisp ecl cmu)
     implementation=${1}
 
     # if the given parameter specifies a lisp implementation by name, the name
@@ -346,6 +383,8 @@ configure_lisp_implementation() {
             implementation=clisp
         elif [ -n "${ECL}" ]; then
             implementation=ecl
+        elif [ -n "${CMU}" ]; then
+            implementation=cmu
         else
             implementation=sbcl
         fi
