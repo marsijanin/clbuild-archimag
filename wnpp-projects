@@ -130,8 +130,8 @@ anaphora         get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/proj
 cl-cont          get_darcs http://common-lisp.net/project/cl-cont/darcs/cl-cont
 cl-json          get_darcs http://common-lisp.net/project/cl-json/darcs/cl-json
 cl-prevalence    get_cvs_clnet
-fare-matcher     get_tarball http://fare.tunes.org/asdf-packages/fare-matcher.tar.gz
-fare-utils       get_tarball http://fare.tunes.org/asdf-packages/fare-utils.tar.gz
+fare-matcher     get_git git://common-lisp.net/users/frideau/fare-matcher.git
+fare-utils       get_git git://common-lisp.net/users/frideau/fare-utils.git
 parenscript      get_git http://common-lisp.net/project/parenscript/git/parenscript
 cl-graph         get_darcs http://common-lisp.net/project/cl-graph
 cl-mathstats     get_darcs http://common-lisp.net/project/cl-mathstats
