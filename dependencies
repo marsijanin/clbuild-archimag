@@ -60,8 +60,10 @@ cl-def alexandria cl-syntax-sugar iterate lift metabang-bind
 cl-difflib 
 cl-dot 
 cl-fad 
+cl-gd alexandria babel cffi trivial-features 
 cl-graph cl-containers lift metatilities-base 
 cl-html-diff cl-difflib 
+cl-interpol cl-ppcre cl-unicode 
 cl-irc flexi-streams split-sequence trivial-gray-streams usocket 
 cl-json 
 cl-markdown anaphora cl-containers cl-difflib cl-html-diff cl-ppcre dynamic-classes html-encode kmrcl lift lml2 metabang-bind metatilities-base trivial-shell 
@@ -121,7 +123,6 @@ docudown anaphora cl-containers cl-markdown cl-ppcre closer-mop dynamic-classes 
 drakma alexandria babel cffi chunga cl+ssl cl-base64 flexi-streams puri split-sequence trivial-features trivial-gray-streams usocket 
 dynamic-classes lift metatilities-base 
 eclipse 
-editor-hints 
 elephant alexandria babel bordeaux-threads cffi cl-base64 closer-mop clsql ieee-floats lift md5 postmodern split-sequence trivial-features trivial-utf-8 usocket 
 external-program 
 f-underscore 
@@ -184,6 +185,7 @@ misc-extensions
 montezuma alexandria babel cl-fad cl-ppcre trivial-features 
 moptilities closer-mop lift 
 mw-equiv 
+named-readtables 
 net-telent-date 
 nuclblog alexandria babel bordeaux-threads cffi ch-asdf chunga cl+ssl cl-base64 cl-fad cl-ppcre cl-store cl-who flexi-streams hunchentoot hunchentoot-auth hunchentoot-vhost lift md5 puri rfc2388 split-sequence trivial-features trivial-gray-streams usocket 
 osicat 
