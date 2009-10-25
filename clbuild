@@ -1837,6 +1837,12 @@ EOF
 	shift;
         clbuild_lisp "$@"
         ;;
+    prepl)
+	shift;
+        clbuild_lisp "$@" \
+	    $eval "(asdf:operate 'asdf:load-op :prepl)" \
+	    $eval "(prepl:repl)"
+        ;;
     preloaded)
 	shift;
 	if test -f "$BASE"/monster.core; then
