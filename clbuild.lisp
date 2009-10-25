@@ -560,6 +560,16 @@
 (make :cl-ppcre)
 
 (progn
+  ;; Stop broken .asds from loading stuff without our permission.
+  ;; ASDF extensions can be whitelisted here.
+  (let ((*load-time-dependency-whitelist* '(#:cffi-grovel)))
+    (defmethod asdf:perform :before ((op t) (system asdf:system))
+      (unless (find (asdf:component-name system)
+		    *load-time-dependency-whitelist*
+		    :test #'string-equal)
+	(error "Confusion between system definition an load time. Attempt to load ASDF systems during .asd parsing: ~A."
+	       system))))
+
   (defun extra-system-dependencies (system)
     ;; add magic dependencies to ensure that clbuild configuration doesn't
     ;; leak into the dependency file too easily.  In this case, we don't
@@ -598,7 +608,7 @@
     `(handler-case
 	 (progn ,@body)
        (error (c)
-	 (format t "Ignoring error ~A: ~A~%~%" ',description c)
+	 (format t "Ignoring error ~A: ~A~%~%" ,description c)
 	 ,error-value)))
 
   (defun system-dependencies (name)
@@ -652,7 +662,7 @@
       (setf projects (sort projects #'string-lessp))
       (dolist (project projects)
 	(dolist (system (project-to-systems project))
-	  (without-errors (nil "in find-system")
+	  (without-errors (nil (format nil "in find-system of ~A" system))
 	    (asdf:find-system system nil))))
       (with-open-file (s dependency-file-name
 			 :direction :output
