@@ -132,4 +132,4 @@ hyperspec-lookup get_cvs_full :pserver:anonymous:anonymous@common-lisp.net:/proj
 parse-declarations get_darcs http://common-lisp.net/project/parse-declarations/darcs/parse-declarations
 named-readtables get_darcs http://common-lisp.net/project/editor-hints/darcs/named-readtables/ #associate readtables with names
 
-montezuma        get_svn http://montezuma.googlecode.com/svn/trunk/montezuma
+montezuma        get_svn http://montezuma.googlecode.com/svn/trunk/montezuma #lucene clone
