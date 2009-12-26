@@ -811,11 +811,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 #+clbuild::hemlock
-#+clbuild::hemlock
 
-(make :hemlock)
-
-(with-application (&key file)
+(with-application (&key file backend)
+  (case backend
+    (:qt
+     (make :hemlock.qt))
+    (:tty
+     (make :hemlock.tty))
+    ((nil)
+     (make :hemlock.tty)
+     (make :hemlock.qt)))
   (if file (ed file) (ed)))
 
 
@@ -826,20 +831,16 @@
 #+clbuild::hemlock-slave
 #+clbuild::hemlock-slave
 
-(let ((*load-verbose* t)
-      (*load-print* t))
-  (make :hemlock))
+(let ((*load-verbose* t))
+  (make :hemlock.tty))
 
 (with-application (&key editor slave-buffer background-buffer)
   #+ccl (setf ccl::*quiet-flag* nil)
-  (format t "Starting Slave...~%")
+  (format t "clbuild: Starting Slave...~%")
   (force-output)
-;;;   (write `(hemlock::start-slave ,editor ,slave-buffer ,background-buffer)
-;;; 	 :escape t
-;;; 	 :readably t)
-;;;   (force-output)
-;;;   (read-line)
-  (hemlock::start-slave editor slave-buffer background-buffer))
+  (hemlock::start-slave editor
+			:slave-buffer slave-buffer
+			:background-buffer background-buffer))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
