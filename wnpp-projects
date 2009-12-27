@@ -214,4 +214,4 @@ cl-ncurses get_tarball http://common-lisp.net/project/cl-ncurses/files/cl-ncurse
 # Hemlock stuff
 prepl get_git git://gitorious.org/prepl/prepl.git #Portable lisp listener
 conium get_git git://gitorious.org/conium/conium.git #Compiler/debugging portability library (fork of swank-backend)
-hemlock get_git git://gitorious.org/qthemlock/qthemlock.git #Hemlock (version of portable hemlock with Qt backend)
+hemlock get_git git://gitorious.org/themlock/themlock.git #the Hemlock editor
