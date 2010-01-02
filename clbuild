@@ -1277,7 +1277,11 @@ check() {
 	
     echo
     echo "Checking Lisp startup..."
-    if ${lisp} $run_options $eval $quit >/dev/null; then
+    if ! test -e "${lisp}"; then
+      echo "Error: Don't have a Lisp system to bootstrap from."
+      echo "Please install e.g. ${implementation} and try again."
+      exit 1
+    elif ${lisp} $run_options $eval $quit >/dev/null; then
 	echo "Success: Lisp starts up using \"$lisp\""
     else
 	echo "Error: Cannot run Lisp using \"$lisp\""
