@@ -250,3 +250,9 @@ zip flexi-streams salza2 trivial-gray-streams
 zpb-ttf 
 zpng salza2 
 zs3 alexandria babel cffi chunga cl+ssl cl-base64 closure-common cxml drakma flexi-streams ironclad puri split-sequence trivial-features trivial-gray-streams usocket 
+
+cl-routes lift puri iterate split-sequence
+wiki-parser cl-ppcre iterate alexandria
+cl-closure-template lift asdf-system-connections wiki-parser split-sequence parenscript
+garbage-pools lift
+restas asdf-system-connections cl-routes hunchentoot garbage-pools
