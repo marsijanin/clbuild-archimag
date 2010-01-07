@@ -1277,7 +1277,7 @@ check() {
 	
     echo
     echo "Checking Lisp startup..."
-    if ! test -e "${lisp}"; then
+    if ! test -e "${lisp% *}"; then
       echo "Error: Don't have a Lisp system to bootstrap from."
       echo "Please install e.g. ${implementation} and try again."
       exit 1
