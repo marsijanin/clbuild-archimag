@@ -526,9 +526,12 @@
 
 (make :swank)
 
-(with-application (&key (port "4005") (address "127.0.0.1"))
+(with-application (&key (port "4005") (address "127.0.0.1")
+			(coding-system "utf-8-unix"))
   (let ((swank::*loopback-interface* address))
-    (swank:create-server :port (parse-integer port) :dont-close t))
+    (swank:create-server :port (parse-integer port)
+			 :dont-close t
+			 :coding-system coding-system))
   (format t "Swank is running on port ~A. Press RET to exit.~%" port)
   (read-line))
 
