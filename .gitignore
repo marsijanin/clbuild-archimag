@@ -5,4 +5,7 @@ target*
 abl-cfg.lisp
 my-projects
 my-dependencies
+.start-slime.el
+.swank-loader.lisp
+.test
 
