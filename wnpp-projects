@@ -222,3 +222,7 @@ wiki-parser get_tarball_bz2 http://cl-closure-template.googlecode.com/files/wiki
 cl-closure-template get_tarball_bz2 http://cl-closure-template.googlecode.com/files/cl-closure-template-0.1.1.tar.bz2
 garbage-pools get_tarball_bz2 http://garbage-pools.googlecode.com/files/garbage-pools-0.1.2.tar.bz2
 restas get_tarball_bz2 http://cloud.github.com/downloads/archimag/restas/restas-20091215.tar.bz2
+
+# marsijanin
+iolib.termios get_git git://github.com/marsijanin/iolib.termios.git #iolib extention for serial devices
+iolib.ieee1284 get_git git://github.com/marsijanin/iolib.ieee1284.git #iolib extention for parallel (ieee1284) devices
