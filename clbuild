@@ -199,6 +199,9 @@ set_lisp_command() {
 			x86_64)
 			    binary=lx86cl64
 			    ;;
+			i686|i386)
+			    binary=lx86cl
+                            ;;
                         *)
                             set_lisp_warning ccl
 			    exit 1
