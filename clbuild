@@ -63,6 +63,32 @@ if test -f "$BASE/clbuild.conf"; then
     source "$BASE/clbuild.conf"
 fi
 
+#user defined configureation file for share clbuild usage:
+if test -f "$HOME/.clbuild.conf"; then
+    source "$HOME/.clbuild.conf"
+fi
+
+#share usege requre asdf-binary-locations usage
+#asdf-binary-locations support by David Lichteblau:
+LOAD_ASDF_BIN_LOCATIONS_CFG="nil"
+if test -f "$BASE/abl-cfg.lisp" ; then
+    LOAD_ASDF_BIN_LOCATIONS_CFG="(load \"$BASE/abl-cfg.lisp\")"
+fi
+#and use defined config
+if test -f "$HOME/.abl-cfg.lisp" ; then
+    LOAD_ASDF_BIN_LOCATIONS_CFG="(load \"$HOME/.abl-cfg.lisp\")"
+fi
+
+#Check write permitions for $BASE
+if touch $BASE/.test &> /dev/null; then
+    START_SLIME_EL=$BASE/.start-slime.el
+    SWANK_LOADER_LISP=$BASE/.swank-loader.lisp
+else 
+    START_SLIME_EL=/tmp/start-slime.el
+    SWANK_LOADER_LISP=/tmp/swank-loader.lisp
+fi
+
+
 # All files which contain information about projects.  Also include
 # personal projects listed in 'my-projects'.
 PROJECT_LISTING_FILES="$BASE/projects $BASE/wnpp-projects $BASE/implementations"
@@ -416,6 +442,7 @@ clbuild_lisp() {
     ${lisp} $common_options \
 	$eval "$require_asdf" \
 	$eval "$set_central_registry" \
+        $eval "$LOAD_ASDF_BIN_LOCATIONS_CFG" \
 	$eval "$EXTRA_CLIM_FEATURES" \
 	"$@"
 }
@@ -433,6 +460,7 @@ lisp_trampoline() {
 	    $options \
 	    $eval "$require_asdf" \
 	    $eval "$set_central_registry" \
+	    $eval "$LOAD_ASDF_BIN_LOCATIONS_CFG" \
 	    $eval "$EXTRA_CLIM_FEATURES" \
 	    $eval "(load \"$BASE/clbuild.lisp\")" \
 	    $end_toplevel_options \
@@ -456,6 +484,7 @@ lisp_trampoline() {
 	    $options \
 	    $eval "$require_asdf" \
 	    $eval "$set_central_registry" \
+	    $eval "$LOAD_ASDF_BIN_LOCATIONS_CFG" \
 	    $eval "$EXTRA_CLIM_FEATURES" \
 	    $eval "(defparameter cl-user::*clbuild-args* \"$TMPDIR/args\")" \
 	    $eval "(load \"$BASE/clbuild.lisp\")"
@@ -1414,7 +1443,7 @@ write_slime_configuration() {
 ;; load slime:
 (setq load-path (cons "${source_namestring}slime" load-path))
 (setq load-path (cons "${source_namestring}slime/contrib" load-path))
-(setq slime-backend "$BASE/.swank-loader.lisp")
+(setq slime-backend "${SWANK_LOADER_LISP}")
 (setq inhibit-splash-screen t)
 (load "${source_namestring}slime/slime")
 (setq inferior-lisp-program "$BASE/clbuild $cmd")
@@ -1424,7 +1453,7 @@ write_slime_configuration() {
 (slime)
 EOF
     # while we're at it, also write the swank loader
-    cat >$BASE/.swank-loader.lisp <<EOF
+    cat > $SWANK_LOADER_LISP <<EOF
 (unless (find-package 'swank-loader)
   (load "$source_dir/slime/swank-loader.lisp"))
 EOF
@@ -1532,8 +1561,17 @@ EOF
     clean)
 	clean_fasls() {
 	    echo cleaning fasls in `pwd`
-	    find . -name "*.fasl" -exec rm {} \;
-	    find . -name "*.lx64fsl" -exec rm {} \;
+	    if [ "$LOAD_ASDF_BIN_LOCATIONS_CFG" = "nil" ] ; then
+		find . -name "*.fasl" -exec rm {} \;
+		find . -name "*.lx64fsl" -exec rm {} \;
+		find . -name "*.lx32fsl" -exec rm {} \;
+		find . -name "*.fas" -or -name "*.lib" -exec rm {} \;
+	    else 
+		#Regexps are not my strong point
+		find . -type d -name 'sbcl-*-*-*'  | xargs rm -rf 
+		find . -type d -name 'ccl-*-*-*'   | xargs rm -rf
+		find . -type d -name 'clisp-*-*-*' | xargs rm -rf 
+	    fi
 	}
 	if test $# -gt 1; then
 	    while test $# -gt 1; do
@@ -1861,8 +1899,8 @@ EOF
 	shift
 	emacs_args="$@"
 	emacs=${EMACS-emacs}
-	write_slime_configuration >"$BASE/.start-slime.el"
-	$emacs -l "$BASE/.start-slime.el" ${emacs_args}
+	write_slime_configuration > ${START_SLIME_EL}
+	$emacs -l ${START_SLIME_EL} ${emacs_args}
 	;;
     slime-configuration)
 	shift
