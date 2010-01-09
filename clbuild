@@ -1867,7 +1867,7 @@ EOF
                 # type for cl-fixnum..
                 make distclean || make clean || true
                 ./configure --enable-slow-config --with-system-gmp=no \
-                            --prefix=${target_dir}
+                            --enable-unicode --prefix=${target_dir}
                 make
                 make install
                 ;;
