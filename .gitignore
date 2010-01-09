@@ -1,3 +1,8 @@
 .core-is-stale
 source/*
 systems/*
+target*
+abl-cfg.lisp
+my-projects
+my-dependencies
+
