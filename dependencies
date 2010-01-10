@@ -256,3 +256,7 @@ wiki-parser cl-ppcre iterate alexandria
 cl-closure-template lift asdf-system-connections wiki-parser split-sequence parenscript
 garbage-pools lift
 restas asdf-system-connections cl-routes hunchentoot garbage-pools
+
+iolib.termios iolib
+iolib.ieee1284 iolib
+
