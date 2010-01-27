@@ -219,7 +219,7 @@ hemlock get_git git://gitorious.org/themlock/themlock.git #the Hemlock editor
 # archimag
 cl-routes get_tarball_bz2 http://cl-routes.googlecode.com/files/cl-routes-0.2.tar.bz2
 wiki-parser get_tarball_bz2 http://cl-closure-template.googlecode.com/files/wiki-parser-0.1.tar.bz2
-cl-closure-template get_tarball_bz2 http://cl-closure-template.googlecode.com/files/cl-closure-template-0.1.1.tar.bz2
+cl-closure-template get_tarball_bz2 http://cl-closure-template.googlecode.com/files/cl-closure-template-0.1.2.tar.bz2
 garbage-pools get_tarball_bz2 http://garbage-pools.googlecode.com/files/garbage-pools-0.1.2.tar.bz2
 restas get_tarball_bz2 http://restas.googlecode.com/files/restas-0.0.3.tar.bz2
 
