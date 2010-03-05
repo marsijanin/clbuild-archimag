@@ -30,6 +30,7 @@ trivial-gray-streams get_cvs_clnet cl-plus-ssl #gray stream portability layer
 closure-common       get_git git://repo.or.cz/closure-common.git #portable unicode for closure
 usocket              get_svn_clnet usocket/trunk #socket portability library
 cl-irc               get_svn_clnet trunk #IRC client library
+gzip-stream          get_darcs http://common-lisp.net/project/gzip-stream/repos/gzip-stream #GZIP'd stream library
 
 cl-ppcre         get_ediware #Portable Perl-compatible regular expressions
 flexi-streams    get_ediware #Flexible bivalent streams
