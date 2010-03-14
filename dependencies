@@ -110,7 +110,7 @@ clsql alexandria babel cffi md5 trivial-features
 clsr alexandria babel ch-asdf ch-util closure-common cxml gcc-xml-ffi puri trivial-features trivial-gray-streams 
 cluster-ffi 
 clx 
-commonqt alexandria babel bordeaux-threads cffi cl-ppcre closer-mop editor-hints iterate lift trivial-features trivial-garbage 
+commonqt alexandria babel bordeaux-threads cffi cl-ppcre closer-mop named-readtables iterate lift trivial-features trivial-garbage 
 computed-class alexandria anaphora cl-def cl-fad cl-syntax-sugar cl-yalog closer-mop iterate lift local-time metabang-bind 
 conium closer-mop 
 contextl closer-mop lw-compat 
@@ -136,7 +136,7 @@ ftd alexandria babel cffi cffi-net cl-fad cl-ppcre clx flexichain mcclim slime s
 gcc-xml-ffi alexandria babel ch-asdf closure-common cxml puri trivial-features trivial-gray-streams 
 graphic-forms alexandria babel cffi closer-mop lw-compat trivial-features 
 gsharp alexandria babel closure-common clx cxml flexichain mcclim midi puri slime spatial-trees trivial-features trivial-gray-streams 
-hemlock alexandria babel bordeaux-threads cffi cl-ppcre closer-mop commonqt conium editor-hints iterate lift prepl trivial-features trivial-garbage trivial-gray-streams 
+hemlock alexandria babel bordeaux-threads cffi cl-ppcre closer-mop commonqt conium named-readtables iterate lift prepl trivial-features trivial-garbage trivial-gray-streams command-line-arguments iolib osicat clx
 html-encode 
 html-template 
 hunchentoot alexandria babel bordeaux-threads cffi chunga cl+ssl cl-base64 cl-fad cl-ppcre flexi-streams lift md5 rfc2388 split-sequence trivial-features trivial-gray-streams usocket 
@@ -196,7 +196,7 @@ parse-number
 plexippus-xpath alexandria babel cl-ppcre cl-yacc closure-common cxml parse-number puri trivial-features trivial-gray-streams 
 portable-threads 
 postmodern bordeaux-threads closer-mop ieee-floats lift md5 split-sequence trivial-utf-8 usocket 
-prepl bordeaux-threads closer-mop conium editor-hints iterate lift 
+prepl bordeaux-threads closer-mop conium named-readtables iterate lift 
 psgraph 
 puri 
 quicktime-ffi alexandria babel ch-asdf ch-util closure-common cxml gcc-xml-ffi puri trivial-features trivial-gray-streams 
