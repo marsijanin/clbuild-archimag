@@ -20,7 +20,7 @@ clim-desktop get_cvs_clnet  #integrates several McCLIM apps
 slime      get_cvs_clnet  #Emacs mode for Common Lisp development
 beirc      get_cvs_clnet  #CLIM-based Internet Relay Chat client
 
-alexandria get_darcs http://common-lisp.net/project/alexandria/darcs/alexandria #utility function library
+alexandria get_git git://common-lisp.net/projects/alexandria/alexandria.git #utility function library
 
 trivial-features get_darcs http://common-lisp.net/~loliveira/darcs/trivial-features #ensures consistent *FEATURES* across implementations
 trivial-garbage get_darcs http://common-lisp.net/~loliveira/darcs/trivial-garbage #finalization portability library
