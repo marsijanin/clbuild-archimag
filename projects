@@ -14,7 +14,7 @@ mcclim     get_cvs_clnet  #implementation of the Common Lisp Interface Manager
 zip        get_cvs_clnet  #ZIP-file reader and creator
 cxml       get_git git://repo.or.cz/cxml.git  #XML parser and DOM implementation
 closure    get_cvs_clnet  #CLIM-based web browser
-gsharp     get_cvs_clnet  #interactive, extensible editor for musical scores
+gsharp     get_git git://common-lisp.net/projects/gsharp/gsharp.git  #interactive, extensible editor for musical scores
 climacs    get_cvs_clnet  #CLIM-based text editor
 clim-desktop get_cvs_clnet  #integrates several McCLIM apps
 slime      get_cvs_clnet  #Emacs mode for Common Lisp development
