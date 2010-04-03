@@ -165,7 +165,7 @@ relational-objects-for-lisp     get_darcs http://common-lisp.net/project/lisp-on
 
 climc get_svn http://climc.googlecode.com/svn/trunk/ #Instant Messaging Client (CLIM GUI)
 
-commonqt get_git git://repo.or.cz/commonqt.git #Qt bindings
+commonqt get_git git://gitorious.org/commonqt/commonqt.git #Qt bindings
 
 # Lispbuilder
 lispbuilder-clawk       get_lispbuilder
