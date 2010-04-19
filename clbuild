@@ -190,6 +190,7 @@ set_lisp_command() {
             ;;
         ecl)
             export DYLD_LIBRARY_PATH="${target_dir}/lib:$DYLD_LIBRARY_PATH"
+            export LD_LIBRARY_PATH="${target_dir}/lib:$LD_LIBRARY_PATH"
             export ECL="${target_dir}/bin/ecl"
             ;;
         ccl)
