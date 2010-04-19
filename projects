@@ -111,7 +111,7 @@ vecto            get_xach_com  #cl-pdf-like API for cl-vectors
 zpb-ttf          get_xach_com  #TrueType font parser
 zs3              get_xach_com  #Amazon S3 Interface
 
-postmodern get_darcs http://common-lisp.net/project/postmodern/darcs/postmodern #CLSQL-replacement for PostgreSQL databases
+postmodern get_git http://marijn.haverbeke.nl/git/postmodern #library for interacting with PostgreSQL databases
 arnesi get_darcs http://common-lisp.net/project/bese/repos/arnesi_dev #bits 'n pieces of code
 fiveam get_darcs http://common-lisp.net/project/bese/repos/fiveam #regression testing framework
 ieee-floats get_darcs http://common-lisp.net/project/ieee-floats/darcs/ieee-floats #IEEE 754 encoder/decoder
