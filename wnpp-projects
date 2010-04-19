@@ -165,7 +165,7 @@ relational-objects-for-lisp     get_darcs http://common-lisp.net/project/lisp-on
 
 climc get_svn http://climc.googlecode.com/svn/trunk/ #Instant Messaging Client (CLIM GUI)
 
-commonqt get_git git://repo.or.cz/commonqt.git #Qt bindings
+commonqt get_git git://gitorious.org/commonqt/commonqt.git #Qt bindings
 
 # Lispbuilder
 lispbuilder-clawk       get_lispbuilder
@@ -216,6 +216,10 @@ prepl get_git git://gitorious.org/prepl/prepl.git #Portable lisp listener
 conium get_git git://gitorious.org/conium/conium.git #Compiler/debugging portability library (fork of swank-backend)
 hemlock get_git git://gitorious.org/hemlock/hemlock.git #the Hemlock editor
 command-line-arguments get_git http://common-lisp.net/project/qitab/git/command-line-arguments.git
+
+# ?
+lisp-magick get_tarball http://www.nil.at/download/lisp-magick-0.71.tar.gz
+uxul-world get_git git://github.com/dasuxullebt/uxul-world.git
 
 # archimag
 cl-routes get_tarball_bz2 http://cl-routes.googlecode.com/files/cl-routes-0.2.1.tar.bz2
