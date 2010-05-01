@@ -65,7 +65,7 @@ cl-interpol      get_ediware #string interpolation
 cl-gd            get_ediware #ffi for GD library
 
 # Projects by Gary King
-lift             get_git git://git://github.com/gwkkwg/lift 
+lift             get_git git://github.com/gwkkwg/lift 
 metabang-bind    get_darcs http://common-lisp.net/project/metabang-bind
 cl-containers    get_darcs http://common-lisp.net/project/cl-containers
 moptilities      get_darcs http://common-lisp.net/project/moptilities
