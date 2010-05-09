@@ -59,16 +59,16 @@ lw-compat  get_darcs http://common-lisp.net/project/closer/repos/lw-compat #Lisp
 
 closure-html   get_git git://repo.or.cz/closure-html.git #Closure's HTML parser
 
-cxml-stp       get_lichteblau_com #STP, a DOM alternative
-cxml-rng       get_lichteblau_com #Relax NG for cxml
+cxml-stp       get_git http://www.lichteblau.com/git/cxml-stp.git #STP, a DOM alternative
+cxml-rng       get_git http://www.lichteblau.com/git/cxml-rng.git #Relax NG for cxml
 
 midi           get_darcs http://rvw.doc.gold.ac.uk/sullivan/darcs/midi #MIDI parser
 
-puri      get_b9_com #URI library
-md5       get_b9_com #MD5 digest implementation
-cl-base64 get_b9_com #Base64 encoder/decoder
-clsql     get_b9_com #database interface Library
-rt        get_b9_com #regression test driver
+puri      get_git git://git.b9.com/puri.git #URI library
+md5       get_git git://git.b9.com/md5.git #MD5 digest implementation
+cl-base64 get_git git://git.b9.com/cl-base64.git #Base64 encoder/decoder
+clsql     get_git git://git.b9.com/clsql.git #database interface Library
+rt        get_git git://git.b9.com/rt.git #regression test driver
 
 spatial-trees get_darcs http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees #dynamic index structures for spatially-extended data
 
@@ -105,11 +105,11 @@ mel-base get_darcs http://common-lisp.net/~dlichteblau/inofficial/mel-base #E-Ma
 iterate get_darcs http://common-lisp.net/project/iterate/darcs/iterate #extensible iteration macro
 
 cl-vectors       get_git git://git.tuxee.net/cl-vectors #vector rasterization and manipulation system
-salza2           get_xach_com  #ZLIB and DEFLATE compressor
-zpng             get_xach_com  #PNG creator
-vecto            get_xach_com  #cl-pdf-like API for cl-vectors
-zpb-ttf          get_xach_com  #TrueType font parser
-zs3              get_xach_com  #Amazon S3 Interface
+salza2           get_git http://git.xach.com/salza2.git  #ZLIB and DEFLATE compressor
+zpng             get_git http://git.xach.com/zpng.git  #PNG creator
+vecto            get_git http://git.xach.com/vecto.git  #cl-pdf-like API for cl-vectors
+zpb-ttf          get_git http://git.xach.com/zpb-ttf.git  #TrueType font parser
+zs3              get_git http://git.xach.com/zs3.git  #Amazon S3 Interface
 
 postmodern get_git http://marijn.haverbeke.nl/git/postmodern #library for interacting with PostgreSQL databases
 arnesi get_darcs http://common-lisp.net/project/bese/repos/arnesi_dev #bits 'n pieces of code
