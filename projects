@@ -50,7 +50,7 @@ babel get_darcs http://common-lisp.net/project/babel/darcs/babel #charset encode
 cffi get_darcs http://common-lisp.net/project/cffi/darcs/cffi #Common Foreign Function Interface
 # cffi get_darcs http://common-lisp.net/~loliveira/darcs/cffi+lotsastuff #Common Foreign Function Interface (lotsastuff fork)
 
-bordeaux-threads get_darcs http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads #threading portability layer
+bordeaux-threads get_git git://gitorious.org/bordeaux-threads/bordeaux-threads.git #threading portability layer
 
 climplayer get_darcs http://common-lisp.net/project/climplayer/darcs/climplayer #CLIM-based graphical frontend for mplayer
 
