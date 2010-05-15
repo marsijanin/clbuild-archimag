@@ -151,7 +151,7 @@ cl-qprint        get_darcs http://common-lisp.net/~dcrampsie/darcs/cl-qprint
 rfc2388-binary   get_darcs http://common-lisp.net/project/ucw/repos/rfc2388-binary
 
 # Lisp on Lines
-lisp-on-lines                   get_darcs http://common-lisp.net/project/lisp-on-lines/repo/lisp-on-lines
+lisp-on-lines                   get_git http://common-lisp.net/project/lisp-on-lines/lisp-on-lines.git
 relational-objects-for-lisp     get_darcs http://common-lisp.net/project/lisp-on-lines/repo/relational-objects-for-lisp
 
 # perfectstorm and related projects
