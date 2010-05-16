@@ -824,24 +824,8 @@ get_clbuild_mirror() {
     get_darcs $1 http://common-lisp.net/project/clbuild/mirror/$1
 }
 
-get_lichteblau_com() {
-    get_git $1 http://www.lichteblau.com/git/$1.git
-}
-
-get_b9_com() {
-    get_git $1 git://git.b9.com/$1.git
-}
-
-get_xach_com() {
-    get_git $1 http://git.xach.com/$1.git
-}
-
 get_tarball_bz2() {
     get_tarball "$1" "$2" j
-}
-
-get_lispbuilder() {
-    get_svn http://lispbuilder.googlecode.com/svn/trunk/${1}/
 }
 
 update_project() {

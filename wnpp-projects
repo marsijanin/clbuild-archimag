@@ -13,8 +13,8 @@
 #
 
 # supposed to work on SBCL "usually", but in a state of flux:
-atdoc      get_lichteblau_com #docstring to HTML converter
-clim-alerts    get_lichteblau_com #CLIM-based mail and blog notifications
+atdoc      get_git http://www.lichteblau.com/git/atdoc.git #docstring to HTML converter
+clim-alerts    get_git http://www.lichteblau.com/git/clim-alerts.git #CLIM-based mail and blog notifications
 
 # SBCL/CMUCL-only, and has trouble with current SBCL
 clg        get_cvs_sfnet  #GTK+ bindings
@@ -51,7 +51,7 @@ cl-html-diff     get_tarball http://lemonodor.com/code/cl-html-diff_0.1.tar.gz
 cl-difflib       get_tarball http://lemonodor.com/code/cl-difflib_0.1.tar.gz
 lml2             get_git git://git.b9.com/lml2.git
 kmrcl            get_tarball http://files.b9.com/kmrcl/kmrcl-latest.tar.gz
-iolib            get_git http://common-lisp.net/project/iolib/git/iolib.git
+iolib            get_git git://gitorious.org/iolib/iolib.git
 swf2             get_git git://repo.or.cz/swf2.git #avm2 bytecode generator
 cl-utilities     get_cvs_clnet cl-utilities
 external-program get_darcs http://common-lisp.net/project/external-program/darcs/external-program/
@@ -65,7 +65,7 @@ cl-interpol      get_ediware #string interpolation
 cl-gd            get_ediware #ffi for GD library
 
 # Projects by Gary King
-lift             get_darcs http://common-lisp.net/project/lift
+lift             get_git git://github.com/gwkkwg/lift 
 metabang-bind    get_darcs http://common-lisp.net/project/metabang-bind
 cl-containers    get_darcs http://common-lisp.net/project/cl-containers
 moptilities      get_darcs http://common-lisp.net/project/moptilities
@@ -151,7 +151,7 @@ cl-qprint        get_darcs http://common-lisp.net/~dcrampsie/darcs/cl-qprint
 rfc2388-binary   get_darcs http://common-lisp.net/project/ucw/repos/rfc2388-binary
 
 # Lisp on Lines
-lisp-on-lines                   get_darcs http://common-lisp.net/project/lisp-on-lines/repo/lisp-on-lines
+lisp-on-lines                   get_git http://common-lisp.net/project/lisp-on-lines/lisp-on-lines.git
 relational-objects-for-lisp     get_darcs http://common-lisp.net/project/lisp-on-lines/repo/relational-objects-for-lisp
 
 # perfectstorm and related projects
@@ -168,20 +168,20 @@ climc get_svn http://climc.googlecode.com/svn/trunk/ #Instant Messaging Client (
 commonqt get_git git://gitorious.org/commonqt/commonqt.git #Qt bindings
 
 # Lispbuilder
-lispbuilder-clawk       get_lispbuilder
-lispbuilder-net         get_lispbuilder
-lispbuilder-openrm      get_lispbuilder
-lispbuilder-sdl         get_lispbuilder
-lispbuilder-sdl-image   get_lispbuilder
-lispbuilder-sdl-ttf     get_lispbuilder
-lispbuilder-yacc        get_lispbuilder
-lispbuilder-cal3d       get_lispbuilder
-lispbuilder-lexer       get_lispbuilder
-lispbuilder-opengl      get_lispbuilder
-lispbuilder-regex       get_lispbuilder
-lispbuilder-sdl-gfx     get_lispbuilder
-lispbuilder-sdl-mixer   get_lispbuilder
-lispbuilder-windows     get_lispbuilder
+lispbuilder-clawk       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-clawk/
+lispbuilder-net         http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-net/
+lispbuilder-openrm      http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-openrm/
+lispbuilder-sdl         http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl/
+lispbuilder-sdl-image   http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-image/
+lispbuilder-sdl-ttf     http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-ttf/
+lispbuilder-yacc        http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-yacc/
+lispbuilder-cal3d       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-cal3d
+lispbuilder-lexer       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-lexer/
+lispbuilder-opengl      http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-opengl/
+lispbuilder-regex       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-regex/
+lispbuilder-sdl-gfx     http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-gfx/
+lispbuilder-sdl-mixer   http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-mixer/
+lispbuilder-windows     http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-windows/
 
 #
 # projects that are currently broken
