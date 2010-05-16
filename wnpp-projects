@@ -65,8 +65,8 @@ cl-interpol      get_ediware #string interpolation
 cl-gd            get_ediware #ffi for GD library
 
 # Projects by Gary King
-lift             get_darcs http://common-lisp.net/project/lift
-metabang-bind    get_darcs http://common-lisp.net/project/metabang-bind
+lift             get_git git://github.com/gwkkwg/lift.git
+metabang-bind    get_git git://github.com/gwkkwg/metabang-bind.git
 cl-containers    get_darcs http://common-lisp.net/project/cl-containers
 moptilities      get_darcs http://common-lisp.net/project/moptilities
 metatilities     get_darcs http://common-lisp.net/project/metatilities
@@ -79,10 +79,10 @@ asdf-status      get_darcs http://common-lisp.net/project/cl-containers/asdf-sta
 asdf-system-connections get_darcs http://common-lisp.net/project/cl-containers/asdf-system-connections/darcs
 defsystem-compatibility get_darcs http://common-lisp.net/project/cl-containers/defsystem-compatibility/darcs
 dynamic-classes  get_darcs http://common-lisp.net/project/dynamic-classes
-log5             get_darcs http://common-lisp.net/project/log5 #A logging framework
+log5             get_git git://github.com/gwkkwg/log5.git
 tinaa            get_darcs http://common-lisp.net/project/tinaa
 trivial-backtrace get_git http://common-lisp.net/project/trivial-backtrace/trivial-backtrace.git
-trivial-shell    get_darcs http://common-lisp.net/project/trivial-shell
+trivial-shell    get_git git://github.com/gwkkwg/trivial-shell.git
 trivial-timeout  get_darcs http://common-lisp.net/project/trivial-timeout
 cl-markdown      get_darcs http://common-lisp.net/project/cl-markdown
 docudown         get_darcs http://common-lisp.net/project/docudown
