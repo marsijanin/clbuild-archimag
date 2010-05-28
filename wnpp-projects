@@ -220,3 +220,38 @@ command-line-arguments get_git http://common-lisp.net/project/qitab/git/command-
 # ?
 lisp-magick get_tarball http://www.nil.at/download/lisp-magick-0.71.tar.gz
 uxul-world get_git git://github.com/dasuxullebt/uxul-world.git
+
+# dwim.hu
+hu.dwim.asdf get_darcs http://dwim.hu/darcs/hu.dwim.asdf
+hu.dwim.blog get_darcs http://dwim.hu/darcs/hu.dwim.blog
+hu.dwim.build get_darcs http://dwim.hu/darcs/hu.dwim.build
+hu.dwim.common get_darcs http://dwim.hu/darcs/hu.dwim.common
+hu.dwim.common-lisp get_darcs http://dwim.hu/darcs/hu.dwim.common-lisp
+hu.dwim.computed-class get_darcs http://dwim.hu/darcs/hu.dwim.computed-class
+hu.dwim.debug get_darcs http://dwim.hu/darcs/hu.dwim.debug
+hu.dwim.def get_darcs http://dwim.hu/darcs/hu.dwim.def
+hu.dwim.defclass-star get_darcs http://dwim.hu/darcs/hu.dwim.defclass-star
+hu.dwim.delico get_darcs http://dwim.hu/darcs/hu.dwim.delico
+hu.dwim.dises get_darcs http://dwim.hu/darcs/hu.dwim.dises
+hu.dwim.environment get_darcs http://dwim.hu/darcs/hu.dwim.environment
+hu.dwim.graphviz get_darcs http://dwim.hu/darcs/hu.dwim.graphviz
+hu.dwim.home get_darcs http://dwim.hu/darcs/hu.dwim.home
+hu.dwim.lazy-eval get_darcs http://dwim.hu/darcs/hu.dwim.lazy-eval
+hu.dwim.logger get_darcs http://dwim.hu/darcs/hu.dwim.logger
+hu.dwim.meta-model get_darcs http://dwim.hu/darcs/hu.dwim.meta-model
+hu.dwim.model get_darcs http://dwim.hu/darcs/hu.dwim.model
+hu.dwim.new-project get_darcs http://dwim.hu/darcs/hu.dwim.new-project
+hu.dwim.partial-eval get_darcs http://dwim.hu/darcs/hu.dwim.partial-eval
+hu.dwim.perec get_darcs http://dwim.hu/darcs/hu.dwim.perec
+hu.dwim.quasi-quote get_darcs http://dwim.hu/darcs/hu.dwim.quasi-quote
+hu.dwim.rdbms get_darcs http://dwim.hu/darcs/hu.dwim.rdbms
+hu.dwim.reader get_darcs http://dwim.hu/darcs/hu.dwim.reader
+hu.dwim.remote-eval get_darcs http://dwim.hu/darcs/hu.dwim.remote-eval
+hu.dwim.serializer get_darcs http://dwim.hu/darcs/hu.dwim.serializer
+hu.dwim.slime get_darcs http://dwim.hu/darcs/hu.dwim.slime
+hu.dwim.stefil get_darcs http://dwim.hu/darcs/hu.dwim.stefil
+hu.dwim.syntax-sugar get_darcs http://dwim.hu/darcs/hu.dwim.syntax-sugar
+hu.dwim.util get_darcs http://dwim.hu/darcs/hu.dwim.util
+hu.dwim.walker get_darcs http://dwim.hu/darcs/hu.dwim.walker
+hu.dwim.wiki get_darcs http://dwim.hu/darcs/hu.dwim.wiki
+hu.dwim.wui get_darcs http://dwim.hu/darcs/hu.dwim.wui
