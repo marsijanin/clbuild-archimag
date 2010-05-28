@@ -608,7 +608,7 @@ get_darcs() {
 	    )
     else
 	dribble_get "darcs get" $name
-	darcs get $url $name
+	darcs get --lazy $url $name
     fi
 }
 
