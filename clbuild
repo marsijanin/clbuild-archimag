@@ -145,6 +145,20 @@ case x$CLIM_BACKEND in
         ;;
 esac
 
+# User defined target_dir, i.e. `target-sbcl' or `target-foo' instad of `target'
+if [ "$1" = "--target" ]; then
+    target_param=$2
+    shift 2
+    if   [ -d "$target_param" ];then
+	target_dir=$target_param
+    elif [ -d "$BASE/target-$target_param" ]; then
+	target_dir=$BASE/target-$target_param
+    else
+	echo "Invalid --target parameter. Should be path to target directory, or target suffix in $BASE"
+	exit 1
+    fi
+fi
+
 if test -n "$windowsp"; then
 	system_namestring="`cygpath -m $system_dir`/"
 	source_namestring="`cygpath -m $source_dir`/"
@@ -155,6 +169,7 @@ else
 	source_namestring="$source_dir/"
 	target_namestring="$target_dir/"
 fi
+
 if test -n "$SETF_CENTRAL_REGISTRY"; then
     set_central_registry="(setq asdf:*central-registry* '(#p\"${system_namestring}\"))"
 else
@@ -1180,6 +1195,13 @@ For all commands, the lisp implementation to be invoked can be specified using
   clbuild --implementation LISP_IMPLEMENTATION COMMAND...
 where LISP_IMPLEMENTATION can be one of sbcl, clisp, ccl or ecl or the path to
 a lisp executable.  Please note that only sbcl is fully supported at this time!
+
+For all commands, the target directory location can be specified using
+  clbuild --target TARGET_DIRECTORY COMMAND...
+where TARGET_DIRECTORY can be full path (i.e. if /opt/sbcl will be specified,
+when clbuild will try to run /opt/sbcl/bin/sbcl), or directory suffix (i.e.
+if sbcl-2.0 will be specified, when clbuild will try to run
+CLBUILD_ROOT/target-sbcl-2.0/bin/sbcl).
 
 Starting applications:
 
