@@ -19,17 +19,25 @@
 
 (defparameter *raw-args*
   #+sbcl (cdr sb-ext:*posix-argv*)
-  #-sbcl (with-open-file (s cl-user::*clbuild-args*)
-	   (loop
-	      for line = (read-line s nil)
-	      while line
-	      collect line)))
+  #+ecl
+  (let* ((argv-list (ext:command-args))
+	 (end-toplevel-optoins-position (position "--" argv-list :test #'string=))
+	 (argv-list-lenth (length argv-list)))
+    (when (and end-toplevel-optoins-position
+	       (> argv-list-lenth end-toplevel-optoins-position))
+      (subseq argv-list (+ end-toplevel-optoins-position 1))))
+  #-(or sbcl ecl)
+  (with-open-file (s cl-user::*clbuild-args*)
+    (loop
+       for line = (read-line s nil)
+       while line
+       collect line)))
 (defparameter *cmd* (car *raw-args*))
 (defparameter *args*
   (loop
      with args = (cdr *raw-args*)
-     while args
      for arg = (pop args)
+     while arg
      if (eql (mismatch arg "--") 2)
      collect (intern (string-upcase (subseq arg 2)) :keyword) into keys
      and collect (pop args) into keys
@@ -41,6 +49,7 @@
 (defun quit (rc)
   (or #+sbcl (sb-ext:quit :unix-status rc)
       #+openmcl (ccl:quit rc)
+      #+ecl (ext:quit)
       (error "not implemented")))
 
 (defun namify (arg)
