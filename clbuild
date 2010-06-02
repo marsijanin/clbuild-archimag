@@ -795,6 +795,25 @@ get_tarball_bz2() {
     get_tarball "$1" "$2" j
 }
 
+get_github() {
+    project="$1"
+    user="$2"
+    repo="${3:-$1}"
+    if test "$GITHUB_USER" = $user; then
+        if test -n "$GITHUB_USE_HTTP"; then
+            get_git $project https://$user@github.com/$user/$repo.git
+        else
+            get_git $project git@github.com:$user/$repo.git
+        fi
+    else
+        if test -n "$GITHUB_USE_HTTP"; then
+            get_git $project http://github.com/$user/$repo.git
+        else
+            get_git $project git://github.com/$user/$repo.git
+        fi
+    fi
+}
+
 update_project() {
     if test x$1 = x--dry-run; then
 	shift
