@@ -85,7 +85,7 @@ dynamic-classes  get_darcs http://common-lisp.net/project/dynamic-classes
 log5             get_darcs http://common-lisp.net/project/log5 #A logging framework
 tinaa            get_darcs http://common-lisp.net/project/tinaa
 trivial-backtrace get_git http://common-lisp.net/project/trivial-backtrace/trivial-backtrace.git
-trivial-shell    get_darcs http://common-lisp.net/project/trivial-shell
+trivial-shell    get_github gwkkwg
 trivial-timeout  get_darcs http://common-lisp.net/project/trivial-timeout
 cl-markdown      get_darcs http://common-lisp.net/project/cl-markdown
 docudown         get_darcs http://common-lisp.net/project/docudown
