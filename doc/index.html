@@ -29,6 +29,7 @@
     (Idea from jhbuild by James Henstridge, a Gnome hacker).
   </p>
 
+<!--
   <p>
     The last time someone updated this web page, the following libraries and
     applications were supported as part of the main project list:
@@ -53,6 +54,7 @@
   <div style="border: 1px dotted #55a6e0;        padding: 1em;">
   cells cells-gtk cffi-net cl-opengl clawk clg cljl eclipse ftd gtk-ffi lisa parse-html ph-maths pod-utils regex s-base64 s-http-client s-sysdeps s-utils s-xml s-xml-rpc xuriella zebu
   </div> 
+-->
 
   <p>
     Please send patches bug reports
@@ -61,26 +63,25 @@
     (<a href="http://common-lisp.net/cgi-bin/mailman/listinfo/clbuild-devel">list information</a>).
   </p>
 
-  <h3>News</h3>
+  <h3>Adding projects</h3>
   <p>
-    <b>2008-01-20</b> 
-    In addition to the main projects list, we now have a list of projects
-    that are not downloaded by default, called WNPP projects (work-needing and
-    prospective projects).  Acceptance criteria for WNPP projects are less
-    strict than for main projects, allowing us to add more projects than
-    previously.
+    Add projects or submit corrections like this, please:
   </p>
-  <p>
-    <b>2007-10-07</b> David's repository moved from 
-    <strike>http://www.lichteblau.com/blubba/clbuild</strike>
-    to
-    <a href="http://common-lisp.net/project/clbuild/clbuild">
-http://common-lisp.net/project/clbuild/clbuild</a>.
-    Project members should be able to push into this repository.
-  </p>
+  <div style="padding: 5px; border: 4px solid #55a6e0">
+    <ol>
+      <li style="margin-top: 3px">Add new projects to <tt>clbuild/wnpp-projects</tt>.
+	Fix <tt>clbuild/projects</tt> or <tt>clbuild/wnpp-projects</tt>
+	for existing projects.</li>
+      <li style="margin-top: 3px">Use <tt>darcs record</tt> to make the change permanent.</li>
+      <li style="margin-top: 3px"><b>Make your repository available over http.</b>  This is where
+	others can get the change from you.</li>
+      <li style="margin-top: 3px">Send a <b>pull request</b> to the list, so that we can pull
+	from the patch from your repository.  This means to send an
+	email stating your repository URL and what you have changed.
+      </li>
+    </ol>
+  </div>
 
-    <a name="faq">
-    </a>
   <h3>FAQ</h3>
 
   <p>
@@ -111,10 +112,7 @@ http://common-lisp.net/project/clbuild/clbuild</a>.
   <p>
     <div>
        <p>
-       Just add it to <tt>clbuild/wnpp-projects</tt>.  Please
-      send a note to the mailing list so that we can include it, too.
-      (See <a href="#faq_dependencies">below</a> for notes on the dependencies
-      file.)
+	 Yes, please see above.
        </p>
     </div>
   </p>
