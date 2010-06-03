@@ -168,20 +168,20 @@ climc get_svn http://climc.googlecode.com/svn/trunk/ #Instant Messaging Client (
 commonqt get_git git://gitorious.org/commonqt/commonqt.git #Qt bindings
 
 # Lispbuilder
-lispbuilder-clawk       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-clawk/
-lispbuilder-net         http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-net/
-lispbuilder-openrm      http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-openrm/
-lispbuilder-sdl         http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl/
-lispbuilder-sdl-image   http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-image/
-lispbuilder-sdl-ttf     http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-ttf/
-lispbuilder-yacc        http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-yacc/
-lispbuilder-cal3d       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-cal3d
-lispbuilder-lexer       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-lexer/
-lispbuilder-opengl      http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-opengl/
-lispbuilder-regex       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-regex/
-lispbuilder-sdl-gfx     http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-gfx/
-lispbuilder-sdl-mixer   http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-mixer/
-lispbuilder-windows     http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-windows/
+lispbuilder-clawk       get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-clawk/
+lispbuilder-net         get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-net/
+lispbuilder-openrm      get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-openrm/
+lispbuilder-sdl         get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl/
+lispbuilder-sdl-image   get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-image/
+lispbuilder-sdl-ttf     get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-ttf/
+lispbuilder-yacc        get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-yacc/
+lispbuilder-cal3d       get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-cal3d
+lispbuilder-lexer       get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-lexer/
+lispbuilder-opengl      get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-opengl/
+lispbuilder-regex       get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-regex/
+lispbuilder-sdl-gfx     get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-gfx/
+lispbuilder-sdl-mixer   get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-mixer/
+lispbuilder-windows     get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-windows/
 
 #
 # projects that are currently broken
