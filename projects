@@ -109,6 +109,7 @@ salza2           get_git http://git.xach.com/salza2.git  #ZLIB and DEFLATE compr
 zpng             get_git http://git.xach.com/zpng.git  #PNG creator
 vecto            get_git http://git.xach.com/vecto.git  #cl-pdf-like API for cl-vectors
 zpb-ttf          get_git http://git.xach.com/zpb-ttf.git  #TrueType font parser
+zpb-exif         get_git http://git.xach.com/zpb-exif.git  #EXIF header parser
 zs3              get_git http://git.xach.com/zs3.git  #Amazon S3 Interface
 
 postmodern get_git http://marijn.haverbeke.nl/git/postmodern #library for interacting with PostgreSQL databases
