@@ -1849,8 +1849,8 @@ EOF
 	    common_options="$core_option "$BASE"/monster.core $common_options"
 	fi
         clbuild_lisp "$@" \
-	    $eval "(asdf:operate 'asdf:load-op :prepl)" \
-	    $eval "(prepl:repl)"
+	    $eval "(asdf:operate 'asdf:load-op :hemlock.tty)" \
+	    $eval "(hemlock:repl)"
         ;;
     preloaded)
 	shift;
