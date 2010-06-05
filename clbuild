@@ -1130,8 +1130,8 @@ Usage:
   skip PROJECT_NAME
                 mark this project as done for the purposes of update --resume
 
-  recompile PROJECT_SPEC compile fasls
-  dumpcore PROJECT_SPEC  recompile and dump a core file for faster startup
+  recompile SYSTEMS compile fasls
+  dumpcore SYSTEMS  recompile and dump a core file for faster startup
 
   diff          show local changes (for all version-controlled projects)
   check-urls    compared installed repository urls agains current locations

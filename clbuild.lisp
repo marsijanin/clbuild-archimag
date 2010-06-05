@@ -762,25 +762,13 @@
       ;; blacklist funny test systems for no particular reason:
       "babel-tests" "clpython-test"))
 
-(with-application (projects-string &key dump verbose force)
-  (let ((projects (cl-ppcre:split "\\s+" projects-string))
-	;; the perpetual fixme list:
-	(blacklisted-systems (unless force *blacklisted-systems*))
-	(skipped-systems '())
+(with-application (systems-string &key dump verbose force)
+  (let ((systems (cl-ppcre:split "\\s+" systems-string))
 	(*package* (find-package :cl-user)))
-    ;; FIXME: it would be cooler to guess dependencies just like we do
-    ;; above, and then process the projects in topological order, so
-    ;; that, say, "Loading mcclim" is printed before "Loading beirc".
-    (setf projects (sort projects #'string-lessp))
     (flet ((build ()
-	     (dolist (project projects)
-	       (dolist (system (project-to-systems project))
-		 (cond
-		   ((find system blacklisted-systems :test #'equal)
-		    (push system skipped-systems))
-		   (t
-		    (format t "Loading ~A...~%" system)
-		    (asdf:operate 'asdf:load-op system :verbose verbose)))))))
+	     (dolist (system systems)
+	       (format t "Loading ~A...~%" system)
+	       (asdf:operate 'asdf:load-op system :verbose verbose))))
       (if verbose
 	  (build)
 	  (handler-bind
@@ -792,11 +780,6 @@
 		  (*load-verbose* nil)
 		  (*load-print* nil))
 	      (build)))))
-    (when skipped-systems
-      (format t "WARNING: The following black-listed systems were skipped: ~
-                 ~{~A~^, ~}~%~
-                Try --force t to include them.~%"
-	      skipped-systems))
     (when dump
       (format t "Dumping monster.core...~%")
       (force-output)
