@@ -251,7 +251,6 @@ hu.dwim.rdbms get_darcs http://dwim.hu/darcs/hu.dwim.rdbms
 hu.dwim.reader get_darcs http://dwim.hu/darcs/hu.dwim.reader
 hu.dwim.remote-eval get_darcs http://dwim.hu/darcs/hu.dwim.remote-eval
 hu.dwim.serializer get_darcs http://dwim.hu/darcs/hu.dwim.serializer
-hu.dwim.slime get_darcs http://dwim.hu/darcs/hu.dwim.slime
 hu.dwim.stefil get_darcs http://dwim.hu/darcs/hu.dwim.stefil
 hu.dwim.syntax-sugar get_darcs http://dwim.hu/darcs/hu.dwim.syntax-sugar
 hu.dwim.util get_darcs http://dwim.hu/darcs/hu.dwim.util
