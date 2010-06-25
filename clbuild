@@ -155,6 +155,13 @@ set_lisp_command() {
                 set_lisp_warning sbcl
             fi
             ;;
+        alisp)
+            if which alisp >/dev/null ; then
+                export ALISP="$(which alisp)"
+            else
+                set_lisp_warning alisp
+            fi
+            ;;
         cmu)
 	    if which lisp >/dev/null ; then
                 export CMU="$(which lisp)"
@@ -285,6 +292,32 @@ configure_clisp() {
     fi
 }
 
+configure_alisp() {
+    if [ -z "$ALISP" ]; then
+        set_lisp_command alisp
+    fi
+    lisp={$1:-$ALISP}
+
+    lisp="$ALISP"
+
+    noinform="" #fixme
+    end_toplevel_options="" #fixme
+    quit="(excl:exit)"
+    eval="-e"
+    require_asdf="(require :sdf)"
+    core_option="-I"
+
+    if test -n "$USER_INIT"; then
+	common_options="-qq -L $USER_INIT"
+    else
+	common_options=""
+    fi
+
+    # fixme
+    build_options="$common_options"
+    run_options="$common_options"
+}
+
 configure_sbcl() {
     if [ -z "$SBCL" ]; then
         set_lisp_command sbcl
@@ -357,7 +390,7 @@ configure_ecl() {
     require_asdf="(require :asdf)"
     core_option="-c"
     
-    if test -n "$USER_INIT"; then
+    if test -n "$USER_INIT" -a x"$USER_INIT" != x/dev/null; then
         common_options="-load $USER_INIT"
     else
         common_options=""
@@ -368,7 +401,7 @@ configure_ecl() {
 }
 
 configure_lisp_implementation() {
-    # Get the implementation type (member sbcl ccl clisp ecl cmu)
+    # Get the implementation type (member sbcl ccl clisp alisp ecl cmu)
     implementation=${1}
 
     # if the given parameter specifies a lisp implementation by name, the name
@@ -381,6 +414,8 @@ configure_lisp_implementation() {
             implementation=ccl
         elif [ -n "${CLISP}" ]; then
             implementation=clisp
+        elif [ -n "${ALISP}" ]; then
+            implementation=alisp
         elif [ -n "${ECL}" ]; then
             implementation=ecl
         elif [ -n "${CMU}" ]; then
@@ -1164,8 +1199,9 @@ For update/recompile/dumpcore a PROJECT_SPEC can be used:
 
 For all commands, the lisp implementation to be invoked can be specified using
   clbuild --implementation LISP_IMPLEMENTATION COMMAND...
-where LISP_IMPLEMENTATION can be one of sbcl, clisp, ccl or ecl or the path to
-a lisp executable.  Please note that only sbcl is fully supported at this time!
+where LISP_IMPLEMENTATION can be one of sbcl, clisp, ccl, ecl, or alisp or
+the path to a lisp executable.  Please note that only sbcl is fully supported
+at this time!
 
 Starting applications:
 
