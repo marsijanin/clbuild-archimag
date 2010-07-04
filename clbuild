@@ -68,17 +68,6 @@ if test -f "$HOME/.clbuild.conf"; then
     source "$HOME/.clbuild.conf"
 fi
 
-#share usege requre asdf-binary-locations usage
-#asdf-binary-locations support by David Lichteblau:
-LOAD_ASDF_BIN_LOCATIONS_CFG="nil"
-if test -f "$BASE/abl-cfg.lisp" ; then
-    LOAD_ASDF_BIN_LOCATIONS_CFG="(load \"$BASE/abl-cfg.lisp\")"
-fi
-#and use defined config
-if test -f "$HOME/.abl-cfg.lisp" ; then
-    LOAD_ASDF_BIN_LOCATIONS_CFG="(load \"$HOME/.abl-cfg.lisp\")"
-fi
-
 #Check write permitions for $BASE
 if touch $BASE/.test &> /dev/null; then
     START_SLIME_EL=$BASE/.start-slime.el
@@ -461,7 +450,6 @@ clbuild_lisp() {
     ${lisp} $common_options \
 	$eval "$require_asdf" \
 	$eval "$set_central_registry" \
-        $eval "$LOAD_ASDF_BIN_LOCATIONS_CFG" \
 	$eval "$EXTRA_CLIM_FEATURES" \
 	"$@"
 }
@@ -479,7 +467,6 @@ lisp_trampoline() {
 	    $options \
 	    $eval "$require_asdf" \
 	    $eval "$set_central_registry" \
-	    $eval "$LOAD_ASDF_BIN_LOCATIONS_CFG" \
 	    $eval "$EXTRA_CLIM_FEATURES" \
 	    $eval "(load \"$BASE/clbuild.lisp\")" \
 	    $end_toplevel_options \
@@ -503,7 +490,6 @@ lisp_trampoline() {
 	    $options \
 	    $eval "$require_asdf" \
 	    $eval "$set_central_registry" \
-	    $eval "$LOAD_ASDF_BIN_LOCATIONS_CFG" \
 	    $eval "$EXTRA_CLIM_FEATURES" \
 	    $eval "(defparameter cl-user::*clbuild-args* \"$TMPDIR/args\")" \
 	    $eval "(load \"$BASE/clbuild.lisp\")"
@@ -1570,17 +1556,10 @@ EOF
     clean)
 	clean_fasls() {
 	    echo cleaning fasls in `pwd`
-	    if [ "$LOAD_ASDF_BIN_LOCATIONS_CFG" = "nil" ] ; then
-		find . -name "*.fasl" -exec rm {} \;
-		find . -name "*.lx64fsl" -exec rm {} \;
-		find . -name "*.lx32fsl" -exec rm {} \;
-		find . -name "*.fas" -or -name "*.lib" -exec rm {} \;
-	    else 
-		#Regexps are not my strong point
-		find . -type d -name 'sbcl-*-*-*'  | xargs rm -rf 
-		find . -type d -name 'ccl-*-*-*'   | xargs rm -rf
-		find . -type d -name 'clisp-*-*-*' | xargs rm -rf 
-	    fi
+	    find . -name "*.fasl" -exec rm {} \;
+	    find . -name "*.lx64fsl" -exec rm {} \;
+	    find . -name "*.lx32fsl" -exec rm {} \;
+	    find . -name "*.fas" -or -name "*.lib" -exec rm {} \;
 	}
 	if test $# -gt 1; then
 	    while test $# -gt 1; do
