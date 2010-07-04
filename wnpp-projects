@@ -30,7 +30,8 @@ clawk      get_darcs http://www.foldr.org/~michaelw/projects/clawk  #AWK embedde
 # defines a package called GL, which conflicts with CLX
 # cl-opengl        get_darcs http://common-lisp.net/~loliveira/darcs/cl-opengl-thomas # FFI bindings for OpenGL (thomas fork) 
 # cl-opengl        get_svn svn://erleuchtet.org/cl-opengl-thomas # FFI bindings for OpenGL (erleuchtet fork of thomas fork) 
-cl-opengl get_darcs http://www.common-lisp.net/project/cl-opengl/darcs/cl-opengl # FFI bindings for OpenGL (c-l.net project)
+# cl-opengl get_darcs http://www.common-lisp.net/project/cl-opengl/darcs/cl-opengl # FFI bindings for OpenGL (old c-l.net darcs repo)
+cl-opengl           get_github  3b # FFI bindings for OpenGL
 
 # disabled, because the directory has disappeared
 # zebu             get_svn https://cl-net-snmp.svn.sourceforge.net/svnroot/cl-net-snmp/zebu/trunk
@@ -52,7 +53,9 @@ cl-difflib       get_tarball http://lemonodor.com/code/cl-difflib_0.1.tar.gz
 lml2             get_git git://git.b9.com/lml2.git
 kmrcl            get_tarball http://files.b9.com/kmrcl/kmrcl-latest.tar.gz
 iolib            get_git git://gitorious.org/iolib/iolib.git
-swf2             get_git git://repo.or.cz/swf2.git #avm2 bytecode generator
+# swf2             get_git git://repo.or.cz/swf2.git #avm2 bytecode generator
+3bil             get_github 3b # avm2 bytecode generator (was swf2)
+3b-swf           get_github 3b # .swf file format lib used by 3bil
 cl-utilities     get_cvs_clnet cl-utilities
 external-program get_darcs http://common-lisp.net/project/external-program/darcs/external-program/
 contextl         get_darcs http://common-lisp.net/project/closer/repos/contextl
@@ -65,8 +68,8 @@ cl-interpol      get_ediware #string interpolation
 cl-gd            get_ediware #ffi for GD library
 
 # Projects by Gary King
-lift             get_git git://github.com/gwkkwg/lift.git
-metabang-bind    get_git git://github.com/gwkkwg/metabang-bind.git
+lift             get_git git://github.com/gwkkwg/lift 
+metabang-bind    get_darcs http://common-lisp.net/project/metabang-bind
 cl-containers    get_darcs http://common-lisp.net/project/cl-containers
 moptilities      get_darcs http://common-lisp.net/project/moptilities
 metatilities     get_darcs http://common-lisp.net/project/metatilities
@@ -79,10 +82,10 @@ asdf-status      get_darcs http://common-lisp.net/project/cl-containers/asdf-sta
 asdf-system-connections get_darcs http://common-lisp.net/project/cl-containers/asdf-system-connections/darcs
 defsystem-compatibility get_darcs http://common-lisp.net/project/cl-containers/defsystem-compatibility/darcs
 dynamic-classes  get_darcs http://common-lisp.net/project/dynamic-classes
-log5             get_git git://github.com/gwkkwg/log5.git
+log5             get_darcs http://common-lisp.net/project/log5 #A logging framework
 tinaa            get_darcs http://common-lisp.net/project/tinaa
 trivial-backtrace get_git http://common-lisp.net/project/trivial-backtrace/trivial-backtrace.git
-trivial-shell    get_git git://github.com/gwkkwg/trivial-shell.git
+trivial-shell    get_github gwkkwg
 trivial-timeout  get_darcs http://common-lisp.net/project/trivial-timeout
 cl-markdown      get_darcs http://common-lisp.net/project/cl-markdown
 docudown         get_darcs http://common-lisp.net/project/docudown
@@ -168,20 +171,20 @@ climc get_svn http://climc.googlecode.com/svn/trunk/ #Instant Messaging Client (
 commonqt get_git git://gitorious.org/commonqt/commonqt.git #Qt bindings
 
 # Lispbuilder
-lispbuilder-clawk       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-clawk/
-lispbuilder-net         http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-net/
-lispbuilder-openrm      http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-openrm/
-lispbuilder-sdl         http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl/
-lispbuilder-sdl-image   http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-image/
-lispbuilder-sdl-ttf     http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-ttf/
-lispbuilder-yacc        http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-yacc/
-lispbuilder-cal3d       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-cal3d
-lispbuilder-lexer       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-lexer/
-lispbuilder-opengl      http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-opengl/
-lispbuilder-regex       http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-regex/
-lispbuilder-sdl-gfx     http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-gfx/
-lispbuilder-sdl-mixer   http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-mixer/
-lispbuilder-windows     http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-windows/
+lispbuilder-clawk       get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-clawk/
+lispbuilder-net         get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-net/
+lispbuilder-openrm      get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-openrm/
+lispbuilder-sdl         get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl/
+lispbuilder-sdl-image   get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-image/
+lispbuilder-sdl-ttf     get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-ttf/
+lispbuilder-yacc        get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-yacc/
+lispbuilder-cal3d       get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-cal3d
+lispbuilder-lexer       get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-lexer/
+lispbuilder-opengl      get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-opengl/
+lispbuilder-regex       get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-regex/
+lispbuilder-sdl-gfx     get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-gfx/
+lispbuilder-sdl-mixer   get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-sdl-mixer/
+lispbuilder-windows     get_svn http://lispbuilder.googlecode.com/svn/trunk/lispbuilder-windows/
 
 #
 # projects that are currently broken
@@ -221,13 +224,36 @@ command-line-arguments get_git http://common-lisp.net/project/qitab/git/command-
 lisp-magick get_tarball http://www.nil.at/download/lisp-magick-0.71.tar.gz
 uxul-world get_git git://github.com/dasuxullebt/uxul-world.git
 
-# archimag
-cl-routes get_tarball_bz2 http://cl-routes.googlecode.com/files/cl-routes-0.2.2.tar.bz2
-wiki-parser get_tarball_bz2 http://cl-closure-template.googlecode.com/files/wiki-parser-0.1.1.tar.bz2
-cl-closure-template get_tarball_bz2 http://cl-closure-template.googlecode.com/files/cl-closure-template-0.1.5.tar.bz2
-garbage-pools get_tarball_bz2 http://garbage-pools.googlecode.com/files/garbage-pools-0.1.2.tar.bz2
-restas get_tarball_bz2 http://restas.googlecode.com/files/restas-0.0.8.tar.bz2
-
-# marsijanin
-iolib.termios get_git git://github.com/marsijanin/iolib.termios.git #iolib extention for serial devices
-iolib.ieee1284 get_git git://github.com/marsijanin/iolib.ieee1284.git #iolib extention for parallel (ieee1284) devices
+# dwim.hu
+hu.dwim.asdf get_darcs http://dwim.hu/darcs/hu.dwim.asdf
+hu.dwim.blog get_darcs http://dwim.hu/darcs/hu.dwim.blog
+hu.dwim.build get_darcs http://dwim.hu/darcs/hu.dwim.build
+hu.dwim.common get_darcs http://dwim.hu/darcs/hu.dwim.common
+hu.dwim.common-lisp get_darcs http://dwim.hu/darcs/hu.dwim.common-lisp
+hu.dwim.computed-class get_darcs http://dwim.hu/darcs/hu.dwim.computed-class
+hu.dwim.debug get_darcs http://dwim.hu/darcs/hu.dwim.debug
+hu.dwim.def get_darcs http://dwim.hu/darcs/hu.dwim.def
+hu.dwim.defclass-star get_darcs http://dwim.hu/darcs/hu.dwim.defclass-star
+hu.dwim.delico get_darcs http://dwim.hu/darcs/hu.dwim.delico
+hu.dwim.dises get_darcs http://dwim.hu/darcs/hu.dwim.dises
+hu.dwim.environment get_darcs http://dwim.hu/darcs/hu.dwim.environment
+hu.dwim.graphviz get_darcs http://dwim.hu/darcs/hu.dwim.graphviz
+hu.dwim.home get_darcs http://dwim.hu/darcs/hu.dwim.home
+hu.dwim.lazy-eval get_darcs http://dwim.hu/darcs/hu.dwim.lazy-eval
+hu.dwim.logger get_darcs http://dwim.hu/darcs/hu.dwim.logger
+hu.dwim.meta-model get_darcs http://dwim.hu/darcs/hu.dwim.meta-model
+hu.dwim.model get_darcs http://dwim.hu/darcs/hu.dwim.model
+hu.dwim.new-project get_darcs http://dwim.hu/darcs/hu.dwim.new-project
+hu.dwim.partial-eval get_darcs http://dwim.hu/darcs/hu.dwim.partial-eval
+hu.dwim.perec get_darcs http://dwim.hu/darcs/hu.dwim.perec
+hu.dwim.quasi-quote get_darcs http://dwim.hu/darcs/hu.dwim.quasi-quote
+hu.dwim.rdbms get_darcs http://dwim.hu/darcs/hu.dwim.rdbms
+hu.dwim.reader get_darcs http://dwim.hu/darcs/hu.dwim.reader
+hu.dwim.remote-eval get_darcs http://dwim.hu/darcs/hu.dwim.remote-eval
+hu.dwim.serializer get_darcs http://dwim.hu/darcs/hu.dwim.serializer
+hu.dwim.stefil get_darcs http://dwim.hu/darcs/hu.dwim.stefil
+hu.dwim.syntax-sugar get_darcs http://dwim.hu/darcs/hu.dwim.syntax-sugar
+hu.dwim.util get_darcs http://dwim.hu/darcs/hu.dwim.util
+hu.dwim.walker get_darcs http://dwim.hu/darcs/hu.dwim.walker
+hu.dwim.wiki get_darcs http://dwim.hu/darcs/hu.dwim.wiki
+hu.dwim.wui get_darcs http://dwim.hu/darcs/hu.dwim.wui

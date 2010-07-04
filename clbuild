@@ -158,7 +158,6 @@ else
 	source_namestring="$source_dir/"
 	target_namestring="$target_dir/"
 fi
-
 if test -n "$SETF_CENTRAL_REGISTRY"; then
     set_central_registry="(setq asdf:*central-registry* '(#p\"${system_namestring}\"))"
 else
@@ -183,6 +182,13 @@ set_lisp_command() {
                 export SBCL="$(which sbcl)"
             else
                 set_lisp_warning sbcl
+            fi
+            ;;
+        alisp)
+            if which alisp >/dev/null ; then
+                export ALISP="$(which alisp)"
+            else
+                set_lisp_warning alisp
             fi
             ;;
         cmu)
@@ -319,6 +325,32 @@ configure_clisp() {
     fi
 }
 
+configure_alisp() {
+    if [ -z "$ALISP" ]; then
+        set_lisp_command alisp
+    fi
+    lisp={$1:-$ALISP}
+
+    lisp="$ALISP"
+
+    noinform="" #fixme
+    end_toplevel_options="" #fixme
+    quit="(excl:exit)"
+    eval="-e"
+    require_asdf="(require :sdf)"
+    core_option="-I"
+
+    if test -n "$USER_INIT"; then
+	common_options="-qq -L $USER_INIT"
+    else
+	common_options=""
+    fi
+
+    # fixme
+    build_options="$common_options"
+    run_options="$common_options"
+}
+
 configure_sbcl() {
     if [ -z "$SBCL" ]; then
         set_lisp_command sbcl
@@ -391,7 +423,7 @@ configure_ecl() {
     require_asdf="(require :asdf)"
     core_option="-c"
     
-    if test -n "$USER_INIT"; then
+    if test -n "$USER_INIT" -a x"$USER_INIT" != x/dev/null; then
         common_options="-load $USER_INIT"
     else
         common_options=""
@@ -402,7 +434,7 @@ configure_ecl() {
 }
 
 configure_lisp_implementation() {
-    # Get the implementation type (member sbcl ccl clisp ecl cmu)
+    # Get the implementation type (member sbcl ccl clisp alisp ecl cmu)
     implementation=${1}
 
     # if the given parameter specifies a lisp implementation by name, the name
@@ -415,6 +447,8 @@ configure_lisp_implementation() {
             implementation=ccl
         elif [ -n "${CLISP}" ]; then
             implementation=clisp
+        elif [ -n "${ALISP}" ]; then
+            implementation=alisp
         elif [ -n "${ECL}" ]; then
             implementation=ecl
         elif [ -n "${CMU}" ]; then
@@ -642,7 +676,7 @@ get_darcs() {
 	    )
     else
 	dribble_get "darcs get" $name
-	darcs get $url $name
+	darcs get --lazy $url $name
     fi
 }
 
@@ -827,6 +861,25 @@ get_clbuild_mirror() {
 
 get_tarball_bz2() {
     get_tarball "$1" "$2" j
+}
+
+get_github() {
+    project="$1"
+    user="$2"
+    repo="${3:-$1}"
+    if test "$GITHUB_USER" = $user; then
+        if test -n "$GITHUB_USE_HTTP"; then
+            get_git $project https://$user@github.com/$user/$repo.git
+        else
+            get_git $project git@github.com:$user/$repo.git
+        fi
+    else
+        if test -n "$GITHUB_USE_HTTP"; then
+            get_git $project http://github.com/$user/$repo.git
+        else
+            get_git $project git://github.com/$user/$repo.git
+        fi
+    fi
 }
 
 update_project() {
@@ -1145,8 +1198,8 @@ Usage:
   skip PROJECT_NAME
                 mark this project as done for the purposes of update --resume
 
-  recompile PROJECT_SPEC compile fasls
-  dumpcore PROJECT_SPEC  recompile and dump a core file for faster startup
+  recompile SYSTEMS compile fasls
+  dumpcore SYSTEMS  recompile and dump a core file for faster startup
 
   diff          show local changes (for all version-controlled projects)
   check-urls    compared installed repository urls agains current locations
@@ -1179,8 +1232,9 @@ For update/recompile/dumpcore a PROJECT_SPEC can be used:
 
 For all commands, the lisp implementation to be invoked can be specified using
   clbuild --implementation LISP_IMPLEMENTATION COMMAND...
-where LISP_IMPLEMENTATION can be one of sbcl, clisp, ccl or ecl or the path to
-a lisp executable.  Please note that only sbcl is fully supported at this time!
+where LISP_IMPLEMENTATION can be one of sbcl, clisp, ccl, ecl, or alisp or
+the path to a lisp executable.  Please note that only sbcl is fully supported
+at this time!
 
 For all commands, the target directory location can be specified using
   clbuild --target TARGET_DIRECTORY COMMAND...
@@ -1873,8 +1927,8 @@ EOF
 	    common_options="$core_option "$BASE"/monster.core $common_options"
 	fi
         clbuild_lisp "$@" \
-	    $eval "(asdf:operate 'asdf:load-op :prepl)" \
-	    $eval "(prepl:repl)"
+	    $eval "(asdf:operate 'asdf:load-op :hemlock.tty)" \
+	    $eval "(hemlock:repl)"
         ;;
     preloaded)
 	shift;
